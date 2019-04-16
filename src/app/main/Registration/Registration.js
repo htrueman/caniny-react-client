@@ -23,6 +23,9 @@ import * as Actions from 'app/auth/store/actions';
 import Formsy from 'formsy-react';
 import {TextFieldFormsy} from '@fuse';
 import {Button} from '@material-ui/core';
+import GoogleLogin from 'react-google-login';
+import InstagramLogin from 'react-instagram-login';
+import FacebookLogin from 'react-facebook-login';
 
 const styles = theme => ({
     root: {
@@ -76,11 +79,23 @@ class Register extends Component {
         this.setState({selectOrganization: e.target.value});
     };
 
+    responseGoogle = res => {
+        console.log(res);
+    };
+
+    responseInstagram = res => {
+        console.log(res);
+    };
+
+    responseFacebook = res => {
+        console.log(res);
+    };
+
     renderForm = () => {
         if (this.state.step === 0) {
             return (
                 <Fragment>
-                    <FormControl className="flex w-full sm:w-320" variant="outlined">
+                    <FormControl className="flex w-full" variant="outlined">
                         <InputLabel htmlFor="category-label-placeholder">
                             Organization
                         </InputLabel>
@@ -190,18 +205,45 @@ class Register extends Component {
         } else if (this.state.step === 2) {
             return (
                 <Fragment>
+                    <div className='social-login'>
+                        <GoogleLogin
+                            clientId="901607497184-hacbsio74tfqtub0cmn3karb4jrhpmgk.apps.googleusercontent.com"
+                            // buttonText=""
+                            onSuccess={this.responseGoogle}
+                            onFailure={this.responseGoogle}
+                            cookiePolicy={'single_host_origin'}
+                        />
+
+                        <InstagramLogin
+                            clientId="f3348e7068014838b57204b555950e39"
+                            // buttonText=""
+                            onSuccess={this.responseInstagram}
+                            onFailure={this.responseInstagram}
+                            cookiePolicy={'single_host_origin'}
+                        >
+
+                        </InstagramLogin>
+
+                        <FacebookLogin
+                            appId="409332796524821"
+                            autoLoad={false}
+                            fields="name,email,picture"
+                            onClick={this.componentClicked}
+                            callback={this.responseFacebook}
+                        />
+                    </div>
+
                     <TextFieldFormsy
                         className="mb-16"
                         type="text"
                         name="name"
                         label="Name"
-                        validations="isName"
                         validationErrors={{
                             isEmail: 'Please enter a name'
                         }}
                         InputProps={{
                             endAdornment: <InputAdornment position="end"><Icon className="text-20"
-                                                                               color="action">user</Icon></InputAdornment>
+                                                                               color="action">perm_identity</Icon></InputAdornment>
                         }}
                         variant="outlined"
                         required
@@ -229,10 +271,9 @@ class Register extends Component {
                         type="text"
                         name="description"
                         label="Description"
-                        validations="isEmail"
                         InputProps={{
                             endAdornment: <InputAdornment position="end"><Icon className="text-20"
-                                                                               color="action">email</Icon></InputAdornment>
+                                                                               color="action">description</Icon></InputAdornment>
                         }}
                         variant="outlined"
                     />
@@ -279,23 +320,18 @@ class Register extends Component {
 
         return (
             <div className={classNames(classes.root, "flex flex-col flex-1 flex-no-shrink p-24 md:flex-row md:p-0")}>
-
                 <div
                     className="flex flex-col flex-no-grow items-center text-white p-16 text-center md:p-128 md:items-start md:flex-no-shrink md:flex-1 md:text-left">
-
                     <FuseAnimate animation="transition.slideUpIn" delay={300}>
                         <Typography variant="h3" color="inherit" className="font-light">
-                            Welcome to the K9 Digital!
+                            Welcome to the Caniny!
                         </Typography>
                     </FuseAnimate>
                 </div>
 
                 <FuseAnimate animation={{translateX: [0, '100%']}}>
-
                     <Card className="w-full max-w-400 mx-auto m-16 md:m-0" square>
-
                         <CardContent className="flex flex-col items-center justify-center p-32 md:p-48 md:pt-128 ">
-
                             <Typography variant="h6" className="md:w-full mb-32">CREATE AN ACCOUNT</Typography>
 
                             <Formsy

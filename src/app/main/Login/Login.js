@@ -73,7 +73,7 @@ class Login extends Component {
 
                     <FuseAnimate animation="transition.slideUpIn" delay={300}>
                         <Typography variant="h3" color="inherit" className="font-light">
-                            Welcome to the K9 Digital!
+                            Welcome to the Caniny!
                         </Typography>
                     </FuseAnimate>
 
