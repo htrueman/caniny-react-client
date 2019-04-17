@@ -19,13 +19,18 @@ import {bindActionCreators} from 'redux';
 import {Link, withRouter} from 'react-router-dom';
 import classNames from 'classnames';
 import * as Actions from 'app/auth/store/actions';
-
+import instance from '../../services/auth0Service';
 import Formsy from 'formsy-react';
 import {TextFieldFormsy} from '@fuse';
 import {Button} from '@material-ui/core';
 import GoogleLogin from 'react-google-login';
 import InstagramLogin from 'react-instagram-login';
-import FacebookLogin from 'react-facebook-login';
+// import FacebookLogin from 'react-facebook-login';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+
+import googleIcon from '../../../img/search.svg';
+import facebookIcon from '../../../img/facebook.svg';
+import instagramIcon from '../../../img/instagram.svg';
 
 const styles = theme => ({
     root: {
@@ -47,7 +52,7 @@ const organizations = [
         id: 3,
         name: 'Test3'
     },
-]
+];
 
 
 class Register extends Component {
@@ -55,8 +60,8 @@ class Register extends Component {
         tabValue: 0,
         canSubmit: false,
 
-        step: 0,
-        selectOrganization: ''
+        step: 2,
+        selectOrganization: 'new'
     };
 
     onSubmit = () => {
@@ -79,17 +84,46 @@ class Register extends Component {
         this.setState({selectOrganization: e.target.value});
     };
 
+    //-----------------------------------------------------------------------
+
     responseGoogle = res => {
-        console.log(res);
+        const user = {
+            accessToken: res.tokenObj.login_hint,
+            email: res.profileObj.email,
+            firstName: res.profileObj.givenName,
+            lastName: res.profileObj.familyName,
+            imageUrl: res.profileObj.imageUrl,
+        };
+        console.log(user);
+    };
+
+    responseFacebook = res => {
+        const url_string = window.location.href;
+        const code = new URL(url_string).searchParams.get("code");
+        if(!code) {
+            const user = {
+                accessToken: res.accessToken,
+                email: res.email,
+                firstName: res.name ? res.name.split(" ")[0] : '',
+                lastName: res.name ? res.name.split(" ")[1] : '',
+                imageUrl: res.picture.data.url,
+            };
+            console.log(user);
+        }
+
     };
 
     responseInstagram = res => {
         console.log(res);
     };
 
-    responseFacebook = res => {
-        console.log(res);
-    };
+    componentDidMount() {
+        const url_string = window.location.href;
+        const code = new URL(url_string).searchParams.get("code");
+        if(code) {
+
+        }
+    }
 
     renderForm = () => {
         if (this.state.step === 0) {
@@ -212,6 +246,19 @@ class Register extends Component {
                             onSuccess={this.responseGoogle}
                             onFailure={this.responseGoogle}
                             cookiePolicy={'single_host_origin'}
+                            render={renderProps => (
+                                <img onClick={renderProps.onClick} src={googleIcon} alt="" className='social-icon'/>
+                            )}
+                        />
+
+                        <FacebookLogin
+                            appId="409332796524821"
+                            autoLoad={false}
+                            fields="name,email,picture"
+                            callback={this.responseFacebook}
+                            render={renderProps => (
+                                <img onClick={renderProps.onClick} src={facebookIcon} alt="" className='social-icon'/>
+                            )}
                         />
 
                         <InstagramLogin
@@ -219,18 +266,11 @@ class Register extends Component {
                             // buttonText=""
                             onSuccess={this.responseInstagram}
                             onFailure={this.responseInstagram}
-                            cookiePolicy={'single_host_origin'}
                         >
-
+                            <img src={instagramIcon} alt="" className='social-icon'/>
                         </InstagramLogin>
 
-                        <FacebookLogin
-                            appId="409332796524821"
-                            autoLoad={false}
-                            fields="name,email,picture"
-                            onClick={this.componentClicked}
-                            callback={this.responseFacebook}
-                        />
+
                     </div>
 
                     <TextFieldFormsy
@@ -292,7 +332,7 @@ class Register extends Component {
                 </Fragment>
             )
         }
-    }
+    };
 
     componentDidUpdate(prevProps, prevState) {
         if (this.props.login.error && (this.props.login.error.displayName || this.props.login.error.password || this.props.login.error.email)) {
