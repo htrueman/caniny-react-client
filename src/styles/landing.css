@@ -32,12 +32,14 @@
 .landing-page h2 {
     color: #fff;
     font-size: 2vw;
+    letter-spacing: 10px;
 }
 
 .landing-page h1 {
     color: #fff;
     font-size: 6vw;
     font-weight: bold;
+    letter-spacing: 15px;
 }
 
 .landing-page .images {
