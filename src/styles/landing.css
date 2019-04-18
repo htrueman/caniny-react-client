@@ -1,0 +1,138 @@
+.landing-page .banner-area {
+    background: url(../img/banner-bg.jpg) center;
+    background-size: cover;
+    height: 100vh;
+    z-index: 10;
+}
+
+.landing-page .container {
+    height: 100%;
+}
+
+.banner-area .overlay-bg {
+    background-color: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.banner-content {
+    width: 80%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 0 auto;
+    z-index: 100;
+}
+
+.landing-page h2 {
+    color: #fff;
+    font-size: 2vw;
+}
+
+.landing-page h1 {
+    color: #fff;
+    font-size: 6vw;
+    font-weight: bold;
+}
+
+.landing-page .images {
+    display: flex;
+    justify-content: space-around;
+    margin: -100px 0 100px 0;
+}
+
+.landing-page .images > div {
+    width: 12vw;
+    height: 12vw;
+    border-radius: 50%;
+    overflow: hidden;
+    z-index: 10000;
+}
+
+.landing-page .images img {
+    width: 100% !important;
+    z-index: 1000;
+}
+
+.footer-area {
+    background: #303030;
+    padding: 50px 0 0 0;
+}
+
+.footer-area .content {
+    display: flex;
+    justify-content: space-around;
+}
+
+.footer-area .single-footer-widget h6 {
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 40px;
+}
+
+.footer-area .single-footer-widget .footer-nav li {
+    margin-bottom: 12px;
+}
+
+.footer-area .single-footer-widget .footer-nav li a {
+    color: #777777;
+    -webkit-transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -o-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+}
+
+.footer-area .single-footer-widget .footer-nav li a:hover {
+    color: #fab700;
+}
+
+.footer-area .single-footer-widget .list-contact .lnr {
+    color: #fff;
+    font-size: 18px;
+}
+
+.footer-area .single-footer-widget .list-contact .detail h4 {
+    font-size: 14px;
+    font-weight: 400;
+    margin-left: 20px;
+    color: #fff;
+}
+
+.footer-area .single-footer-widget .list-contact .detail p {
+    margin-left: 20px;
+    margin-top: 8px;
+}
+
+@media (max-width: 960px) {
+    .footer-area .single-footer-widget {
+        margin-bottom: 30px;
+    }
+}
+
+.footer-area .copyright-text {
+    background-color: #1e1c27;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer-area .copyright-text a {
+    color: #fab700;
+}
+
+.footer-area .copyright-text .footer-social {
+    text-align: right;
+}
+
+.footer-area .copyright-text .footer-social a {
+    color: #777777;
+    margin-left: 20px;
+}
+
+.footer-area .copyright-text .footer-social a:hover {
+    color: #fab700;
+}

@@ -60,15 +60,18 @@ class Register extends Component {
         tabValue: 0,
         canSubmit: false,
 
-        step: 2,
+        step: 0,
         selectOrganization: 'new'
     };
 
-    onSubmit = () => {
+    onSubmit = (user) => {
+        console.log(user);
+
         this.setState({
             step: this.state.selectOrganization === 'new' ? 1 : 2
         })
-        // this.props.registerWithFirebase(model);
+
+        this.props.submitRegister(user);
     };
 
     disableButton = () => {
@@ -269,8 +272,6 @@ class Register extends Component {
                         >
                             <img src={instagramIcon} alt="" className='social-icon'/>
                         </InstagramLogin>
-
-
                     </div>
 
                     <TextFieldFormsy
@@ -401,7 +402,7 @@ class Register extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        registerWithFirebase: Actions.registerWithFirebase
+        submitRegister: Actions.submitRegister
     }, dispatch);
 }
 

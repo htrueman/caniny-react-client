@@ -5,7 +5,9 @@ import {FuseAnimate, TextFieldFormsy} from '@fuse';
 import {Link, withRouter} from 'react-router-dom';
 import classNames from 'classnames';
 import Formsy from 'formsy-react';
-
+import connect from 'react-redux/es/connect/connect';
+import {bindActionCreators} from 'redux';
+import * as authActions from 'app/auth/store/actions';
 
 const styles = theme => ({
     root: {
@@ -38,6 +40,7 @@ class Login extends Component {
     };
 
     onSubmit = (model) => {
+        console.log(model);
         this.props.submitLogin(model);
     };
 
@@ -186,4 +189,15 @@ class Login extends Component {
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(Login));
+
+const mapStateToProps = () => {
+};
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        submitLogin: authActions.submitLogin
+    }, dispatch);
+};
+
+
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(Login)));

@@ -6,8 +6,7 @@ import * as Actions from 'app/store/actions';
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 
-export function submitLogin({email, password})
-{
+export function submitLogin({email, password}) {
     return (dispatch) =>
         jwtService.signInWithEmailAndPassword(email, password)
             .then((user) => {
@@ -20,14 +19,13 @@ export function submitLogin({email, password})
             )
             .catch(error => {
                 return dispatch({
-                    type   : LOGIN_ERROR,
+                    type: LOGIN_ERROR,
                     payload: error
                 });
             });
 }
 
-export function submitLoginWithFireBase({username, password})
-{
+export function submitLoginWithFireBase({username, password}) {
     return (dispatch) =>
         firebaseService.auth && firebaseService.auth.signInWithEmailAndPassword(username, password)
             .then(() => {
@@ -53,13 +51,12 @@ export function submitLoginWithFireBase({username, password})
                     password: passwordErrorCodes.includes(error.code) ? error.message : null
                 };
 
-                if ( error.code === 'auth/invalid-api-key' )
-                {
+                if (error.code === 'auth/invalid-api-key') {
                     dispatch(Actions.showMessage({message: error.message}));
                 }
 
                 return dispatch({
-                    type   : LOGIN_ERROR,
+                    type: LOGIN_ERROR,
                     payload: response
                 });
             });

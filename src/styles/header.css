@@ -1,3 +1,11 @@
+header {
+    background-color: #303030 !important;
+    color: #fff !important;
+}
+
+
+
 .header-navigation a {
     margin: 0 20px;
+    color: #fff !important;
 }
