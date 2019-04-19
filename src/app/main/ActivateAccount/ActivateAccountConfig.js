@@ -1,7 +1,7 @@
-import LP from './LP';
+import ActivateAccount from './ActivateAccount';
 import {authRoles} from 'app/auth';
 
-export const LPConfig = {
+export const ActivateAccountConfig = {
     settings: {
         layout: {
             config: {
@@ -26,9 +26,8 @@ export const LPConfig = {
     auth: authRoles.onlyGuest,
     routes: [
         {
-            path: '/',
-            exact    : true,
-            component: LP
+            path: '/activate',
+            component: ActivateAccount
         }
     ]
 };

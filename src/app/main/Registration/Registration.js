@@ -25,9 +25,8 @@ import {TextFieldFormsy} from '@fuse';
 import {Button} from '@material-ui/core';
 import GoogleLogin from 'react-google-login';
 import InstagramLogin from 'react-instagram-login';
-// import FacebookLogin from 'react-facebook-login';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
-
+import axios from 'axios';
 import googleIcon from '../../../img/search.svg';
 import facebookIcon from '../../../img/facebook.svg';
 import instagramIcon from '../../../img/instagram.svg';
@@ -39,39 +38,33 @@ const styles = theme => ({
     }
 });
 
-const organizations = [
-    {
-        id: 1,
-        name: 'Test1'
-    },
-    {
-        id: 2,
-        name: 'Test2'
-    },
-    {
-        id: 3,
-        name: 'Test3'
-    },
-];
-
-
 class Register extends Component {
     state = {
         tabValue: 0,
         canSubmit: false,
 
         step: 0,
+        organizations: [],
         selectOrganization: 'new'
     };
 
     onSubmit = (user) => {
-        console.log(user);
+        if (user.email) {
+            if (this.state.selectOrganization !== 'new') {
+                this.props.RegisterInOrganization({
+                    email: user.email,
+                    firstName: user.name,
+                    description: user.description,
+                    organization: this.state.selectOrganization
+                })
+            } else {
+                this.props.Register(user)
+            }
+        }
 
         this.setState({
             step: this.state.selectOrganization === 'new' ? 1 : 2
         })
-
-        this.props.submitRegister(user);
     };
 
     disableButton = () => {
@@ -91,48 +84,55 @@ class Register extends Component {
 
     responseGoogle = res => {
         const user = {
-            accessToken: res.tokenObj.login_hint,
+            googleKey: res.tokenObj.login_hint,
             email: res.profileObj.email,
             firstName: res.profileObj.givenName,
             lastName: res.profileObj.familyName,
-            imageUrl: res.profileObj.imageUrl,
+            // imageUrl: res.profileObj.imageUrl,
         };
-        console.log(user);
+
+        this.props.googleRegister(user, 'google')
     };
 
     responseFacebook = res => {
         const url_string = window.location.href;
         const code = new URL(url_string).searchParams.get("code");
-        if(!code) {
+        if (!code) {
             const user = {
-                accessToken: res.accessToken,
+                facebookKey: res.accessToken,
                 email: res.email,
                 firstName: res.name ? res.name.split(" ")[0] : '',
                 lastName: res.name ? res.name.split(" ")[1] : '',
-                imageUrl: res.picture.data.url,
+                // imageUrl: res.picture.data.url,
             };
-            console.log(user);
-        }
 
+            this.props.facebookRegister(user, 'facebook')
+        }
     };
 
     responseInstagram = res => {
         console.log(res);
+        this.props.instagramRegister({
+            token: res
+        }, 'instagram')
     };
 
-    componentDidMount() {
+    async componentDidMount() {
         const url_string = window.location.href;
         const code = new URL(url_string).searchParams.get("code");
-        if(code) {
 
-        }
+        const res = await axios.get('http://165.22.152.38:8000/api/v1/organizations/');
+
+        this.setState({
+            organizations: res.data.results
+        })
     }
 
     renderForm = () => {
         if (this.state.step === 0) {
             return (
                 <Fragment>
-                    <FormControl className="flex w-full" variant="outlined">
+                    <FormControl className="flex w-full mt-32" variant="outlined">
                         <InputLabel htmlFor="category-label-placeholder">
                             Organization
                         </InputLabel>
@@ -151,7 +151,7 @@ class Register extends Component {
                                 <em>New organization</em>
                             </MenuItem>
 
-                            {organizations.map(category => (
+                            {this.state.organizations.map(category => (
                                 <MenuItem
                                     value={category.id}
                                     key={category.id}
@@ -174,72 +174,6 @@ class Register extends Component {
                 </Fragment>
             )
         } else if (this.state.step === 1) {
-            return (
-                <Fragment>
-                    <TextFieldFormsy
-                        className="mb-16"
-                        type="text"
-                        name="email"
-                        label="Email"
-                        validations="isEmail"
-                        validationErrors={{
-                            isEmail: 'Please enter a valid email'
-                        }}
-                        InputProps={{
-                            endAdornment: <InputAdornment position="end"><Icon className="text-20"
-                                                                               color="action">email</Icon></InputAdornment>
-                        }}
-                        variant="outlined"
-                        required
-                    />
-
-                    <TextFieldFormsy
-                        className="mb-16"
-                        type="password"
-                        name="password"
-                        label="Password"
-                        validations="equalsField:password-confirm"
-                        validationErrors={{
-                            equalsField: 'Passwords do not match'
-                        }}
-                        InputProps={{
-                            endAdornment: <InputAdornment position="end"><Icon className="text-20"
-                                                                               color="action">vpn_key</Icon></InputAdornment>
-                        }}
-                        variant="outlined"
-                        required
-                    />
-
-                    <TextFieldFormsy
-                        className="mb-16"
-                        type="password"
-                        name="password-confirm"
-                        label="Confirm Password"
-                        validations="equalsField:password"
-                        validationErrors={{
-                            equalsField: 'Passwords do not match'
-                        }}
-                        InputProps={{
-                            endAdornment: <InputAdornment position="end"><Icon className="text-20"
-                                                                               color="action">vpn_key</Icon></InputAdornment>
-                        }}
-                        variant="outlined"
-                        required
-                    />
-
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        className="w-full mx-auto mt-16 normal-case"
-                        aria-label="REGISTER WITH FIREBASE"
-                        disabled={!this.state.canSubmit}
-                    >
-                        Sign Up
-                    </Button>
-                </Fragment>
-            )
-        } else if (this.state.step === 2) {
             return (
                 <Fragment>
                     <div className='social-login'>
@@ -277,6 +211,72 @@ class Register extends Component {
                     <TextFieldFormsy
                         className="mb-16"
                         type="text"
+                        name="email"
+                        label="Email"
+                        validations="isEmail"
+                        validationErrors={{
+                            isEmail: 'Please enter a valid email'
+                        }}
+                        InputProps={{
+                            endAdornment: <InputAdornment position="end"><Icon className="text-20"
+                                                                               color="action">email</Icon></InputAdornment>
+                        }}
+                        variant="outlined"
+                        required
+                    />
+
+                    <TextFieldFormsy
+                        className="mb-16"
+                        type="password"
+                        name="password1"
+                        label="Password"
+                        validations="equalsField:password2"
+                        validationErrors={{
+                            equalsField: 'Passwords do not match'
+                        }}
+                        InputProps={{
+                            endAdornment: <InputAdornment position="end"><Icon className="text-20"
+                                                                               color="action">vpn_key</Icon></InputAdornment>
+                        }}
+                        variant="outlined"
+                        required
+                    />
+
+                    <TextFieldFormsy
+                        className="mb-16"
+                        type="password"
+                        name="password2"
+                        label="Confirm Password"
+                        validations="equalsField:password1"
+                        validationErrors={{
+                            equalsField: 'Passwords do not match'
+                        }}
+                        InputProps={{
+                            endAdornment: <InputAdornment position="end"><Icon className="text-20"
+                                                                               color="action">vpn_key</Icon></InputAdornment>
+                        }}
+                        variant="outlined"
+                        required
+                    />
+
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        className="w-full mx-auto mt-16 normal-case"
+                        aria-label="REGISTER WITH FIREBASE"
+                        disabled={!this.state.canSubmit}
+                    >
+                        Sign Up
+                    </Button>
+                </Fragment>
+            )
+        } else if (this.state.step === 2) {
+            return (
+                <div className='mt-32 w-full'>
+                    <TextFieldFormsy
+                        className="mb-16 w-full"
+                        type="text"
                         name="name"
                         label="Name"
                         validationErrors={{
@@ -291,7 +291,7 @@ class Register extends Component {
                     />
 
                     <TextFieldFormsy
-                        className="mb-16"
+                        className="mb-16 w-full"
                         type="text"
                         name="email"
                         label="Email"
@@ -307,8 +307,8 @@ class Register extends Component {
                         required
                     />
 
-                     <TextFieldFormsy
-                        className="mb-16"
+                    <TextFieldFormsy
+                        className="mb-16 w-full"
                         type="text"
                         name="description"
                         label="Description"
@@ -330,7 +330,7 @@ class Register extends Component {
                     >
                         Request
                     </Button>
-                </Fragment>
+                </div>
             )
         }
     };
@@ -373,7 +373,7 @@ class Register extends Component {
                 <FuseAnimate animation={{translateX: [0, '100%']}}>
                     <Card className="w-full max-w-400 mx-auto m-16 md:m-0" square>
                         <CardContent className="flex flex-col items-center justify-center p-32 md:p-48 md:pt-128 ">
-                            <Typography variant="h6" className="md:w-full mb-32">CREATE AN ACCOUNT</Typography>
+                            <Typography variant="h6" className="md:w-full">CREATE AN ACCOUNT</Typography>
 
                             <Formsy
                                 onValidSubmit={this.onSubmit}
@@ -402,7 +402,11 @@ class Register extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        submitRegister: Actions.submitRegister
+        Register: Actions.Register,
+        RegisterInOrganization: Actions.RegisterInOrganization,
+        googleRegister: Actions.googleRegister,
+        facebookRegister: Actions.facebookRegister,
+        instagramRegister: Actions.instagramRegister,
     }, dispatch);
 }
 

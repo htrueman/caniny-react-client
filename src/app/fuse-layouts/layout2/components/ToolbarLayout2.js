@@ -47,7 +47,9 @@ const ToolbarLayout2 = ({classes, settings, toolbarTheme, login}) => {
                     :
                     <Toolbar className="container p-0 lg:px-24">
                         <div className="flex flex-1">
-                            LOGO
+                            <NavLink to='/'>
+                                LOGO
+                            </NavLink>
                         </div>
 
                         <div className="flex header-navigation">

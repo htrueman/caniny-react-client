@@ -5,9 +5,16 @@ import {FuseAnimate, TextFieldFormsy} from '@fuse';
 import {Link, withRouter} from 'react-router-dom';
 import classNames from 'classnames';
 import Formsy from 'formsy-react';
-import connect from 'react-redux/es/connect/connect';
+import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as authActions from 'app/auth/store/actions';
+import GoogleLogin from 'react-google-login';
+import InstagramLogin from 'react-instagram-login';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+
+import googleIcon from '../../../img/search.svg';
+import facebookIcon from '../../../img/facebook.svg';
+import instagramIcon from '../../../img/instagram.svg';
 
 const styles = theme => ({
     root: {
@@ -41,28 +48,40 @@ class Login extends Component {
 
     onSubmit = (model) => {
         console.log(model);
-        this.props.submitLogin(model);
+        this.props.defaultLogin(model);
     };
 
-    // componentDidUpdate(prevProps, prevState)
-    // {
-    //     if ( this.props.login.error && (this.props.login.error.email || this.props.login.error.password) )
-    //     {
-    //         this.form.updateInputsWithError({
-    //             ...this.props.login.error
-    //         });
-    //
-    //         this.props.login.error = null;
-    //         this.disableButton();
-    //     }
-    //
-    //     return null;
-    // }
+    responseGoogle = res => {
+        const user = {
+            googleKey: res.tokenObj.login_hint,
+        };
+
+        this.props.googleLogin(user)
+    };
+
+    responseFacebook = res => {
+        const url_string = window.location.href;
+        const code = new URL(url_string).searchParams.get("code");
+        if (!code) {
+            const user = {
+                facebookKey: res.accessToken,
+            };
+
+            this.props.facebookLogin(user)
+        }
+    };
+
+    responseInstagram = res => {
+        console.log(res);
+        this.props.instagramLogin({
+            token: res
+        })
+    };
 
 
     render() {
         const {classes} = this.props;
-        const {tabValue, canSubmit} = this.state;
+        const {canSubmit} = this.state;
 
         return (
             <div className={classNames(classes.root, "flex flex-col flex-1 flex-no-shrink p-24 md:flex-row md:p-0")}>
@@ -95,7 +114,7 @@ class Login extends Component {
 
                         <CardContent className="flex flex-col items-center justify-center p-32 md:p-48 md:pt-128 ">
 
-                            <Typography variant="h6" className="text-center md:w-full mb-48">LOGIN TO YOUR
+                            <Typography variant="h6" className="text-center md:w-full">LOGIN TO YOUR
                                 ACCOUNT</Typography>
 
                             <Formsy
@@ -105,6 +124,42 @@ class Login extends Component {
                                 ref={(form) => this.form = form}
                                 className="flex flex-col justify-center w-full"
                             >
+
+                                <div className='social-login'>
+                                    <GoogleLogin
+                                        clientId="901607497184-hacbsio74tfqtub0cmn3karb4jrhpmgk.apps.googleusercontent.com"
+                                        // buttonText=""
+                                        onSuccess={this.responseGoogle}
+                                        onFailure={this.responseGoogle}
+                                        cookiePolicy={'single_host_origin'}
+                                        render={renderProps => (
+                                            <img onClick={renderProps.onClick} src={googleIcon} alt=""
+                                                 className='social-icon'/>
+                                        )}
+                                    />
+
+                                    <FacebookLogin
+                                        appId="409332796524821"
+                                        autoLoad={false}
+                                        fields="name,email,picture"
+                                        callback={this.responseFacebook}
+                                        render={renderProps => (
+                                            <img onClick={renderProps.onClick} src={facebookIcon} alt=""
+                                                 className='social-icon'/>
+                                        )}
+                                    />
+
+                                    <InstagramLogin
+                                        clientId="f3348e7068014838b57204b555950e39"
+                                        // buttonText=""
+                                        onSuccess={this.responseInstagram}
+                                        onFailure={this.responseInstagram}
+                                    >
+                                        <img src={instagramIcon} alt="" className='social-icon'/>
+                                    </InstagramLogin>
+                                </div>
+
+
                                 <TextFieldFormsy
                                     className="mb-16"
                                     type="text"
@@ -121,7 +176,6 @@ class Login extends Component {
                                                                                            color="action">account_balance</Icon></InputAdornment>
                                     }}
                                     variant="outlined"
-                                    required
                                 />
 
                                 <TextFieldFormsy
@@ -179,6 +233,9 @@ class Login extends Component {
                             <div className="flex flex-col items-center justify-center pt-32">
                                 <span className="font-medium">Don't have an account?</span>
                                 <Link className="font-medium" to="/registration">Create an account</Link>
+                                <div className='mt-32'>
+                                    <Link className="font-medium" to="/reset_password">Reset password</Link>
+                                </div>
                             </div>
 
                         </CardContent>
@@ -189,15 +246,17 @@ class Login extends Component {
     }
 }
 
-
 const mapStateToProps = () => {
+    return {}
 };
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
-        submitLogin: authActions.submitLogin
+        defaultLogin: authActions.defaultLogin,
+        googleLogin: authActions.googleLogin,
+        facebookLogin: authActions.facebookLogin,
+        instagramLogin: authActions.instagramLogin,
     }, dispatch);
 };
-
 
 export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(Login)));
