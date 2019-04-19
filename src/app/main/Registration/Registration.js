@@ -10,16 +10,15 @@ import {
     FormControl,
     InputLabel,
     InputAdornment,
-    Icon
+    Icon,
 } from '@material-ui/core';
-import {darken} from '@material-ui/core/styles/colorManipulator';
+import {darken, showMessage} from '@material-ui/core/styles/colorManipulator';
 import {FuseAnimate} from '@fuse';
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux';
 import {Link, withRouter} from 'react-router-dom';
 import classNames from 'classnames';
 import * as Actions from 'app/auth/store/actions';
-import instance from '../../services/auth0Service';
 import Formsy from 'formsy-react';
 import {TextFieldFormsy} from '@fuse';
 import {Button} from '@material-ui/core';
@@ -62,6 +61,7 @@ class Register extends Component {
             }
         }
 
+
         this.setState({
             step: this.state.selectOrganization === 'new' ? 1 : 2
         })
@@ -80,7 +80,7 @@ class Register extends Component {
         this.setState({selectOrganization: e.target.value});
     };
 
-    //-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 
     responseGoogle = res => {
         const user = {
@@ -121,7 +121,8 @@ class Register extends Component {
         const url_string = window.location.href;
         const code = new URL(url_string).searchParams.get("code");
 
-        const res = await axios.get('http://165.22.152.38:8000/api/v1/organizations/');
+        const res = await
+            axios.get('http://165.22.152.38:8000/api/v1/organizations/');
 
         this.setState({
             organizations: res.data.results
