@@ -89,7 +89,7 @@ class ToolbarLayout2 extends Component {
 
                             <div className="flex header-navigation">
                                 {/*<NavLink to='/#about'>About</NavLink>*/}
-                                <a onClick={() => scroll.scrollTo(100)}>About</a>
+                                <a href='/#about'>About</a>
                                 <NavLink to='/registration'>Sign Up</NavLink>
                                 <NavLink exact to='/'>Login</NavLink>
                             </div>
