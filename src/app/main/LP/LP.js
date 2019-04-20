@@ -47,6 +47,8 @@ const styles = theme => ({
     }
 });
 
+let interval = '';
+
 class LP extends Component {
     state = {canSubmit: false};
 
@@ -65,9 +67,13 @@ class LP extends Component {
     };
 
     componentDidMount() {
-        setInterval(() => {
+        interval = setInterval(() => {
             this.refs.player.load();
         }, 12000)
+    }
+
+    componentWillUnmount() {
+        clearInterval(interval)
     }
 
     render() {
@@ -233,7 +239,6 @@ class LP extends Component {
                         <div className="overlay overlay-bg">
                             <Player
                                 autoPlay={true}
-                                preload
                                 ref="player"
                                 muted
                                 playsInline
