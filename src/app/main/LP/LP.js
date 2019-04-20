@@ -1,6 +1,16 @@
 import React, {Component} from 'react';
 import {FuseAnimate, TextFieldFormsy} from '@fuse';
-import {withStyles, Card, CardContent, Typography, Button, InputAdornment, Icon} from '@material-ui/core';
+import {
+    withStyles,
+    Card,
+    CardContent,
+    Typography,
+    Button,
+    InputAdornment,
+    Icon,
+    FormControl,
+    FormControlLabel, Checkbox
+} from '@material-ui/core';
 import Formsy from 'formsy-react';
 import GoogleLogin from 'react-google-login';
 import InstagramLogin from 'react-instagram-login';
@@ -9,8 +19,12 @@ import {Link, withRouter} from 'react-router-dom';
 import * as authActions from 'app/auth/store/actions';
 
 import googleIcon from '../../../img/search.svg';
+import googleIcon2 from '../../../img/search2.svg';
 import facebookIcon from '../../../img/facebook.svg';
+import facebookIcon2 from '../../../img/facebook2.svg';
 import instagramIcon from '../../../img/instagram.svg';
+import instagramIcon2 from '../../../img/instagram2.svg';
+
 import video from '../../../img/video/Pexels Videos 2716.mp4';
 import img1 from '../../../img/c1.jpg';
 import img2 from '../../../img/c2.jpg';
@@ -46,6 +60,10 @@ class LP extends Component {
         this.props.defaultLogin(model);
     };
 
+    componentDidMount() {
+        window.scrollTo (0,200)
+    }
+
     render() {
         const {canSubmit} = this.state;
 
@@ -73,8 +91,12 @@ class LP extends Component {
                                     onFailure={this.responseGoogle}
                                     cookiePolicy={'single_host_origin'}
                                     render={renderProps => (
-                                        <img onClick={renderProps.onClick} src={googleIcon} alt=""
-                                             className='social-icon'/>
+                                        <div className='icon-block'>
+                                            <img onClick={renderProps.onClick} src={googleIcon} alt=""
+                                                 className='social-icon default'/>
+                                            <img onClick={renderProps.onClick} src={googleIcon2} alt=""
+                                                 className='social-icon hover'/>
+                                        </div>
                                     )}
                                 />
 
@@ -84,8 +106,12 @@ class LP extends Component {
                                     fields="name,email,picture"
                                     callback={this.responseFacebook}
                                     render={renderProps => (
-                                        <img onClick={renderProps.onClick} src={facebookIcon} alt=""
-                                             className='social-icon'/>
+                                        <div className='icon-block'>
+                                            <img onClick={renderProps.onClick} src={facebookIcon} alt=""
+                                                 className='social-icon default'/>
+                                            <img onClick={renderProps.onClick} src={facebookIcon2} alt=""
+                                                 className='social-icon hover'/>
+                                        </div>
                                     )}
                                 />
 
@@ -95,7 +121,10 @@ class LP extends Component {
                                     onSuccess={this.responseInstagram}
                                     onFailure={this.responseInstagram}
                                 >
-                                    <img src={instagramIcon} alt="" className='social-icon'/>
+                                    <div className='icon-block'>
+                                        <img src={instagramIcon} alt="" className='social-icon default'/>
+                                        <img src={instagramIcon2} alt="" className='social-icon hover'/>
+                                    </div>
                                 </InstagramLogin>
                             </div>
 
@@ -155,6 +184,18 @@ class LP extends Component {
                                 variant="outlined"
                                 required
                             />
+
+                            <FormControl>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            name="remember"
+                                            // checked={remember}
+                                            onChange={this.handleChange}/>
+                                    }
+                                    label="Remember Me"
+                                />
+                            </FormControl>
 
                             <Button
                                 type="submit"
@@ -230,27 +271,27 @@ class LP extends Component {
 
 
                 <footer className="footer-area">
-                    <div className="container">
-                        <div className="row pt-120 pb-80 content">
-                            <div className="col-lg-4 col-md-6">
-                                <div className="single-footer-widget">
-                                    <h6>About Us</h6>
-                                </div>
-                            </div>
-                            <div className="col-lg-4 col-md-6">
-                                <div className="single-footer-widget">
-                                    <h6>Useful Links</h6>
-                                </div>
-                            </div>
-                            <div className="col-lg-4  col-md-6">
-                                <div className="single-footer-widget mail-chimp">
-                                    <h6 className="mb-20">Contact Us</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {/*<div className="container">*/}
+                        {/*<div className="row pt-120 pb-80 content">*/}
+                            {/*<div className="col-lg-4 col-md-6">*/}
+                                {/*<div className="single-footer-widget">*/}
+                                    {/*<h6>About Us</h6>*/}
+                                {/*</div>*/}
+                            {/*</div>*/}
+                            {/*<div className="col-lg-4 col-md-6">*/}
+                                {/*<div className="single-footer-widget">*/}
+                                    {/*<h6>Useful Links</h6>*/}
+                                {/*</div>*/}
+                            {/*</div>*/}
+                            {/*<div className="col-lg-4  col-md-6">*/}
+                                {/*<div className="single-footer-widget mail-chimp">*/}
+                                    {/*<h6 className="mb-20">Contact Us</h6>*/}
+                                {/*</div>*/}
+                            {/*</div>*/}
+                        {/*</div>*/}
+                    {/*</div>*/}
                     <div className="copyright-text">
-                        <div className="container">
+                        <div className="container flex-row justify-center">
                             <div className="row footer-bottom d-flex justify-content-between">
                                 <p className="col-lg-8 col-sm-6 footer-text m-0 text-white">
                                     &copy; 2019 Nexu

@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import {withStyles, Card, CardContent,FormControl, FormControlLabel, Checkbox, Typography, Button, InputAdornment, Icon} from '@material-ui/core';
 
 import {darken} from '@material-ui/core/styles/colorManipulator';
@@ -16,6 +16,9 @@ import * as Actions from 'app/auth/store/actions';
 import googleIcon from '../../../img/search.svg';
 import facebookIcon from '../../../img/facebook.svg';
 import instagramIcon from '../../../img/instagram.svg';
+import googleIcon2 from "../../../img/search2.svg";
+import facebookIcon2 from "../../../img/facebook2.svg";
+import instagramIcon2 from "../../../img/instagram2.svg";
 
 const styles = theme => ({
     root: {
@@ -157,8 +160,12 @@ class Login extends Component {
                                         onFailure={this.responseGoogle}
                                         cookiePolicy={'single_host_origin'}
                                         render={renderProps => (
-                                            <img onClick={renderProps.onClick} src={googleIcon} alt=""
-                                                 className='social-icon'/>
+                                            <div className='icon-block'>
+                                                <img onClick={renderProps.onClick} src={googleIcon} alt=""
+                                                     className='social-icon default'/>
+                                                <img onClick={renderProps.onClick} src={googleIcon2} alt=""
+                                                     className='social-icon hover'/>
+                                            </div>
                                         )}
                                     />
 
@@ -168,8 +175,12 @@ class Login extends Component {
                                         fields="name,email,picture"
                                         callback={this.responseFacebook}
                                         render={renderProps => (
-                                            <img onClick={renderProps.onClick} src={facebookIcon} alt=""
-                                                 className='social-icon'/>
+                                            <div className='icon-block'>
+                                                <img onClick={renderProps.onClick} src={facebookIcon} alt=""
+                                                     className='social-icon default'/>
+                                                <img onClick={renderProps.onClick} src={facebookIcon2} alt=""
+                                                     className='social-icon hover'/>
+                                            </div>
                                         )}
                                     />
 
@@ -179,7 +190,10 @@ class Login extends Component {
                                         onSuccess={this.responseInstagram}
                                         onFailure={this.responseInstagram}
                                     >
-                                        <img src={instagramIcon} alt="" className='social-icon'/>
+                                        <div className='icon-block'>
+                                            <img src={instagramIcon} alt="" className='social-icon default'/>
+                                            <img src={instagramIcon2} alt="" className='social-icon hover'/>
+                                        </div>
                                     </InstagramLogin>
                                 </div>
 

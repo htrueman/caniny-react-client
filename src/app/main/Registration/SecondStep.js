@@ -21,10 +21,14 @@ import {Button} from '@material-ui/core';
 import GoogleLogin from 'react-google-login';
 import InstagramLogin from 'react-instagram-login';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+
 import googleIcon from '../../../img/search.svg';
+import googleIcon2 from '../../../img/search2.svg';
 import facebookIcon from '../../../img/facebook.svg';
+import facebookIcon2 from '../../../img/facebook2.svg';
 import instagramIcon from '../../../img/instagram.svg';
-import axios from 'axios';
+import instagramIcon2 from '../../../img/instagram2.svg';
+
 
 const styles = theme => ({
     root: {
@@ -112,15 +116,18 @@ class Register extends Component {
                     if (res.type === 'REGISTER_SUCCESS') {
                         this.props.showMessage({
                             message: 'Your request has\n' +
-                            'been sent to the\n' +
-                            'administrator',
+                                'been sent to the\n' +
+                                'administrator',
                             variant: 'success'
                         })
                     } else {
-                        this.props.showMessage({
-                            message: res.payload.data.detail,
-                            variant: 'error'
-                        })
+                        for (let key in res.payload.data) {
+                            console.log(res.payload.data[key]);
+                            this.props.showMessage({
+                                message: res.payload.data[key][0],
+                                variant: 'error'
+                            })
+                        }
                     }
                 })
         } else {
@@ -137,10 +144,12 @@ class Register extends Component {
                             variant: 'success'
                         })
                     } else {
-                        this.props.showMessage({
-                            message: res.payload.data.detail,
-                            variant: 'error'
-                        })
+                        for (let key in res.payload.data) {
+                            this.props.showMessage({
+                                message: res.payload.data[key][0],
+                                variant: 'error'
+                            })
+                        }
                     }
                 })
         }
@@ -203,7 +212,7 @@ class Register extends Component {
         if (this.state.step === 1) {
             return (
                 <Fragment>
-                    <Typography variant="h6" className="md:w-full mb-8">Sign Up</Typography>
+                    <Typography variant="h6" className="md:w-full mb-8">SIGN UP</Typography>
 
                     <div className='social-login'>
                         <GoogleLogin
@@ -213,7 +222,12 @@ class Register extends Component {
                             onFailure={this.responseGoogle}
                             cookiePolicy={'single_host_origin'}
                             render={renderProps => (
-                                <img onClick={renderProps.onClick} src={googleIcon} alt="" className='social-icon'/>
+                                <div className='icon-block'>
+                                    <img onClick={renderProps.onClick} src={googleIcon} alt=""
+                                         className='social-icon default'/>
+                                    <img onClick={renderProps.onClick} src={googleIcon2} alt=""
+                                         className='social-icon hover'/>
+                                </div>
                             )}
                         />
 
@@ -223,7 +237,12 @@ class Register extends Component {
                             fields="name,email,picture"
                             callback={this.responseFacebook}
                             render={renderProps => (
-                                <img onClick={renderProps.onClick} src={facebookIcon} alt="" className='social-icon'/>
+                                <div className='icon-block'>
+                                    <img onClick={renderProps.onClick} src={facebookIcon} alt=""
+                                         className='social-icon default'/>
+                                    <img onClick={renderProps.onClick} src={facebookIcon2} alt=""
+                                         className='social-icon hover'/>
+                                </div>
                             )}
                         />
 
@@ -233,7 +252,10 @@ class Register extends Component {
                             onSuccess={this.responseInstagram}
                             onFailure={this.responseInstagram}
                         >
-                            <img src={instagramIcon} alt="" className='social-icon'/>
+                            <div className='icon-block'>
+                                <img src={instagramIcon} alt="" className='social-icon default'/>
+                                <img src={instagramIcon2} alt="" className='social-icon hover'/>
+                            </div>
                         </InstagramLogin>
                     </div>
 
@@ -303,7 +325,7 @@ class Register extends Component {
         } else if (this.state.step === 2) {
             return (
                 <div className='mt-32 w-full'>
-                    <Typography variant="h6" className="md:w-full mb-32">Request an Account</Typography>
+                    <Typography variant="h6" className="md:w-full mb-32">REQUEST AN ACCOUNT</Typography>
 
                     <TextFieldFormsy
                         className="mb-16 w-full"
@@ -344,8 +366,7 @@ class Register extends Component {
                         rows={7}
                         multiline={true}
                         name="description"
-                        label="Description"
-                        placeholder="Tell us about yourself (Optional)"
+                        label="Tell us about yourself (Optional)"
                         variant="outlined"
                     />
 

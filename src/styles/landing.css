@@ -21,7 +21,7 @@
     z-index: 100;
     height: calc(100vh - 64px);
     top: 0;;
-    right: 5vw;
+    right: 2.4rem;
     background: rgba(255, 255, 255, 0.64);
 }
 
@@ -86,7 +86,7 @@
 .landing-page .images {
     display: flex;
     justify-content: space-around;
-    margin: 100px 0 100px 0;
+    margin: 100px 0 -100px 0;
     z-index: 10000;
 }
 
@@ -105,10 +105,11 @@
 
 .footer-area {
     background: #303030;
-    padding: 50px 0 0 0;
+    padding: 200px 0 0 0;
 }
 
 .footer-area .content {
+    width: 100%;
     display: flex;
     justify-content: space-around;
 }

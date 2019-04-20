@@ -73,7 +73,7 @@ a[role=button] {
 
 /*login*/
 .login-page .background {
-    background: url("../img/loginBag.png") no-repeat -15vw center fixed;
+    background: url("../img/registrationBag.jpg") no-repeat -5vw 10px fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -82,7 +82,7 @@ a[role=button] {
 
 /*registration*/
 .registration-page .background {
-    background: url("../img/registrationBag.png") no-repeat -10vw center fixed;
+    background: url("../img/registrationBag.jpg")  no-repeat -5vw 10px fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -91,9 +91,9 @@ a[role=button] {
 
 .login-page .background h3,
 .registration-page .background h3 {
-    color: #33adff !important;
+    color: #fff !important;
     display: block;
-    margin: 0 0 0 auto;
+    margin: 0 auto;
 }
 
 .social-login {
@@ -108,10 +108,28 @@ a[role=button] {
     width: max-content !important;
 }
 
+.icon-block {
+    display: flex;
+    align-items: center;
+}
+
+.icon-block .hover {
+    display: none;
+}
+
+.icon-block:hover .hover {
+    display: block;
+}
+.icon-block:hover .default {
+    display: none;
+}
+
 .social-login .social-icon {
     width: 50px;
     cursor: pointer;
 }
+
+
 
 /* Medium Devices, Desktops Only */
 @media only screen and (min-width: 992px) {
@@ -168,8 +186,16 @@ body {
     line-height: 1;
 }
 
+.MuiButton-containedPrimary-148 {
+    background-color: #32ADFF !important;
+}
+
+.MuiButton-root-136.MuiButton-disabled-156 {
+    background-color: rgba(0, 0, 0, 0.12) !important;
+}
+
 .organization-status {
-    color: #292929;
+    color: #32ADFF;
     margin: 10px 0 0 0;
     text-align: center;
 }
