@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
-import {withStyles, Card, CardContent, Typography, Button, InputAdornment, Icon} from '@material-ui/core';
+import {withStyles, Card, CardContent,FormControl, FormControlLabel, Checkbox, Typography, Button, InputAdornment, Icon} from '@material-ui/core';
+
 import {darken} from '@material-ui/core/styles/colorManipulator';
 import {FuseAnimate, TextFieldFormsy} from '@fuse';
 import {Link, withRouter} from 'react-router-dom';
@@ -11,7 +12,7 @@ import * as authActions from 'app/auth/store/actions';
 import GoogleLogin from 'react-google-login';
 import InstagramLogin from 'react-instagram-login';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
-
+import * as Actions from 'app/auth/store/actions';
 import googleIcon from '../../../img/search.svg';
 import facebookIcon from '../../../img/facebook.svg';
 import instagramIcon from '../../../img/instagram.svg';
@@ -46,9 +47,22 @@ class Login extends Component {
         this.setState({canSubmit: true});
     };
 
-    onSubmit = (model) => {
-        console.log(model);
-        this.props.defaultLogin(model);
+    onSubmit = async (model) => {
+        await this.props.defaultLogin(model)
+            .then(res => {
+                console.log(res);
+                if (res.type === "LOGIN_ERROR") {
+                    this.props.showMessage({
+                        message: res.payload.data.detail,
+                        variant: 'error'
+                    })
+                } else {
+                    console.log('qfef')
+                    this.props.history.push('/home')
+                }
+                console.log(res);
+            })
+
     };
 
     responseGoogle = res => {
@@ -57,6 +71,9 @@ class Login extends Component {
         };
 
         this.props.googleLogin(user)
+            .then(() => {
+                this.props.history.push('/home')
+            })
     };
 
     responseFacebook = res => {
@@ -68,6 +85,9 @@ class Login extends Component {
             };
 
             this.props.facebookLogin(user)
+                .then(() => {
+                    this.props.history.push('/home')
+                })
         }
     };
 
@@ -76,6 +96,9 @@ class Login extends Component {
         this.props.instagramLogin({
             token: res
         })
+            // .then(() => {
+            //     this.props.history.push('/home')
+            // })
     };
 
 
@@ -84,10 +107,11 @@ class Login extends Component {
         const {canSubmit} = this.state;
 
         return (
-            <div className={classNames(classes.root, "flex flex-col flex-1 flex-no-shrink p-24 md:flex-row md:p-0")}>
+            <div
+                className={classNames(classes.root, "flex flex-col flex-1 flex-no-shrink p-24 md:flex-row md:p-0 login-page")}>
 
                 <div
-                    className="flex flex-col flex-no-grow items-center text-white p-16 text-center md:p-128 md:items-start md:flex-no-shrink md:flex-1 md:text-left">
+                    className="background flex flex-col flex-no-grow items-center text-white p-16 text-center md:p-128 md:items-start md:flex-no-shrink md:flex-1 md:text-left">
 
                     {/*<FuseAnimate animation="transition.expandIn">*/}
                     {/*<img className="w-128 mb-32" src="assets/images/logos/fuse.svg" alt="logo"/>*/}
@@ -216,6 +240,19 @@ class Login extends Component {
                                     required
                                 />
 
+                                <FormControl>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                name="remember"
+                                                // checked={remember}
+                                                onChange={this.handleChange}/>
+                                        }
+                                        label="Remember Me"
+                                    />
+                                </FormControl>
+
+
                                 <Button
                                     type="submit"
                                     variant="contained"
@@ -256,6 +293,7 @@ const mapDispatchToProps = dispatch => {
         googleLogin: authActions.googleLogin,
         facebookLogin: authActions.facebookLogin,
         instagramLogin: authActions.instagramLogin,
+        showMessage: Actions.showMessage,
     }, dispatch);
 };
 

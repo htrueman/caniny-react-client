@@ -14,7 +14,7 @@ const routeConfigs = [
     RegistrationConfig,
     LPConfig,
     ResetPasswordConfig,
-    ActivateAccountConfig
+    ActivateAccountConfig,
 ];
 
  const routes = [

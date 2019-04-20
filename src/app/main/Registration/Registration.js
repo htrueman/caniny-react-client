@@ -4,14 +4,10 @@ import {
     Card,
     CardContent,
     Typography,
-    Select,
-    MenuItem,
-    OutlinedInput,
     FormControl,
-    InputLabel,
-    InputAdornment,
-    Icon,
 } from '@material-ui/core';
+import Autosuggest from 'react-autosuggest';
+
 import {darken, showMessage} from '@material-ui/core/styles/colorManipulator';
 import {FuseAnimate} from '@fuse';
 import {connect} from 'react-redux'
@@ -22,13 +18,8 @@ import * as Actions from 'app/auth/store/actions';
 import Formsy from 'formsy-react';
 import {TextFieldFormsy} from '@fuse';
 import {Button} from '@material-ui/core';
-import GoogleLogin from 'react-google-login';
-import InstagramLogin from 'react-instagram-login';
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import axios from 'axios';
-import googleIcon from '../../../img/search.svg';
-import facebookIcon from '../../../img/facebook.svg';
-import instagramIcon from '../../../img/instagram.svg';
+
 
 const styles = theme => ({
     root: {
@@ -37,34 +28,108 @@ const styles = theme => ({
     }
 });
 
+const users = [
+    {
+        nickname: 'crazyfrog',
+        email: 'frog@foobar.com'
+    },
+    {
+        nickname: 'tatanka',
+        email: 'ttt@hotmail.com'
+    },
+    {
+        nickname: 'wild',
+        email: 'www@mail.ru'
+    },
+    {
+        nickname: 'race car',
+        email: 'racing@gmail.com'
+    },
+    {
+        nickname: 'cook',
+        email: 'cooking@yahoo.com'
+    },
+];
+
+
 class Register extends Component {
     state = {
-        tabValue: 0,
         canSubmit: false,
 
-        step: 0,
         organizations: [],
-        selectOrganization: 'new'
+        selectOrganization: 'new',
+
+        nicknameValue: '',
+        nicknameSuggestions: [],
+        newOrganization: true
     };
 
     onSubmit = (user) => {
-        if (user.email) {
-            if (this.state.selectOrganization !== 'new') {
-                this.props.RegisterInOrganization({
-                    email: user.email,
-                    firstName: user.name,
-                    description: user.description,
-                    organization: this.state.selectOrganization
+        const {nicknameValue, newOrganization, selectOrganization} = this.state;
+
+        this.props.history.push(`/registration/${newOrganization ? 'new/' + nicknameValue : 'request/' + selectOrganization.id}`)
+    };
+
+    escapeRegexCharacters = (str) => {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    };
+
+    getSuggestions = (value) => {
+        const escapedValue = this.escapeRegexCharacters(value.trim());
+        const regex = new RegExp('^' + escapedValue, 'i');
+
+        const arr = this.state.organizations.filter(item => regex.test(item.name));
+
+        arr.forEach(item => {
+            if (item.name.toLowerCase() === value.toLowerCase()) {
+                this.setState({
+                    newOrganization: false,
+                    selectOrganization: item
                 })
             } else {
-                this.props.Register(user)
+                this.setState({
+                    newOrganization: true
+                })
+
             }
-        }
+        });
 
+        return arr;
+    };
 
+    getSuggestionNickname = (suggestion) => {
+        return suggestion.name;
+    };
+
+    renderSuggestion = (suggestion) => {
+        return (
+            <span style={{color: '#000000'}}>{suggestion.name}</span>
+        )
+    };
+
+    onNicknameChange = (event, {newValue}) => {
         this.setState({
-            step: this.state.selectOrganization === 'new' ? 1 : 2
-        })
+            nicknameValue: newValue
+        });
+    };
+
+    onNicknameSuggestionsFetchRequested = ({value}) => {
+        this.setState({
+            nicknameSuggestions: this.getSuggestions(value)
+        });
+    };
+
+    onNicknameSuggestionsClearRequested = () => {
+        this.setState({
+            nicknameSuggestions: []
+        });
+    };
+
+    onNicknameSuggestionSelected = (event, {suggestion}) => {
+        this.setState({
+            selectOrganization: suggestion,
+            newOrganization: false
+        });
     };
 
     disableButton = () => {
@@ -75,47 +140,7 @@ class Register extends Component {
         this.setState({canSubmit: true});
     };
 
-    setOrganization = (e) => {
-        console.log(e.target.value);
-        this.setState({selectOrganization: e.target.value});
-    };
-
 //-----------------------------------------------------------------------
-
-    responseGoogle = res => {
-        const user = {
-            googleKey: res.tokenObj.login_hint,
-            email: res.profileObj.email,
-            firstName: res.profileObj.givenName,
-            lastName: res.profileObj.familyName,
-            // imageUrl: res.profileObj.imageUrl,
-        };
-
-        this.props.googleRegister(user, 'google')
-    };
-
-    responseFacebook = res => {
-        const url_string = window.location.href;
-        const code = new URL(url_string).searchParams.get("code");
-        if (!code) {
-            const user = {
-                facebookKey: res.accessToken,
-                email: res.email,
-                firstName: res.name ? res.name.split(" ")[0] : '',
-                lastName: res.name ? res.name.split(" ")[1] : '',
-                // imageUrl: res.picture.data.url,
-            };
-
-            this.props.facebookRegister(user, 'facebook')
-        }
-    };
-
-    responseInstagram = res => {
-        console.log(res);
-        this.props.instagramRegister({
-            token: res
-        }, 'instagram')
-    };
 
     async componentDidMount() {
         const url_string = window.location.href;
@@ -127,214 +152,11 @@ class Register extends Component {
         this.setState({
             organizations: res.data.results
         })
-    }
 
-    renderForm = () => {
-        if (this.state.step === 0) {
-            return (
-                <Fragment>
-                    <FormControl className="flex w-full mt-32" variant="outlined">
-                        <InputLabel htmlFor="category-label-placeholder">
-                            Organization
-                        </InputLabel>
-                        <Select
-                            value={this.state.selectOrganization}
-                            onChange={this.setOrganization}
-                            input={
-                                <OutlinedInput
-                                    labelWidth={("Organization".length * 9)}
-                                    name="organization"
-                                    id="category-label-placeholder"
-                                />
-                            }
-                        >
-                            <MenuItem value="new">
-                                <em>New organization</em>
-                            </MenuItem>
-
-                            {this.state.organizations.map(category => (
-                                <MenuItem
-                                    value={category.id}
-                                    key={category.id}
-                                >
-                                    {category.name}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        className="w-full mx-auto mt-16 normal-case"
-                        aria-label="REGISTER WITH FIREBASE"
-                    >
-                        Check Availability
-                    </Button>
-                </Fragment>
-            )
-        } else if (this.state.step === 1) {
-            return (
-                <Fragment>
-                    <div className='social-login'>
-                        <GoogleLogin
-                            clientId="901607497184-hacbsio74tfqtub0cmn3karb4jrhpmgk.apps.googleusercontent.com"
-                            // buttonText=""
-                            onSuccess={this.responseGoogle}
-                            onFailure={this.responseGoogle}
-                            cookiePolicy={'single_host_origin'}
-                            render={renderProps => (
-                                <img onClick={renderProps.onClick} src={googleIcon} alt="" className='social-icon'/>
-                            )}
-                        />
-
-                        <FacebookLogin
-                            appId="409332796524821"
-                            autoLoad={false}
-                            fields="name,email,picture"
-                            callback={this.responseFacebook}
-                            render={renderProps => (
-                                <img onClick={renderProps.onClick} src={facebookIcon} alt="" className='social-icon'/>
-                            )}
-                        />
-
-                        <InstagramLogin
-                            clientId="f3348e7068014838b57204b555950e39"
-                            // buttonText=""
-                            onSuccess={this.responseInstagram}
-                            onFailure={this.responseInstagram}
-                        >
-                            <img src={instagramIcon} alt="" className='social-icon'/>
-                        </InstagramLogin>
-                    </div>
-
-                    <TextFieldFormsy
-                        className="mb-16"
-                        type="text"
-                        name="email"
-                        label="Email"
-                        validations="isEmail"
-                        validationErrors={{
-                            isEmail: 'Please enter a valid email'
-                        }}
-                        InputProps={{
-                            endAdornment: <InputAdornment position="end"><Icon className="text-20"
-                                                                               color="action">email</Icon></InputAdornment>
-                        }}
-                        variant="outlined"
-                        required
-                    />
-
-                    <TextFieldFormsy
-                        className="mb-16"
-                        type="password"
-                        name="password1"
-                        label="Password"
-                        validations="equalsField:password2"
-                        validationErrors={{
-                            equalsField: 'Passwords do not match'
-                        }}
-                        InputProps={{
-                            endAdornment: <InputAdornment position="end"><Icon className="text-20"
-                                                                               color="action">vpn_key</Icon></InputAdornment>
-                        }}
-                        variant="outlined"
-                        required
-                    />
-
-                    <TextFieldFormsy
-                        className="mb-16"
-                        type="password"
-                        name="password2"
-                        label="Confirm Password"
-                        validations="equalsField:password1"
-                        validationErrors={{
-                            equalsField: 'Passwords do not match'
-                        }}
-                        InputProps={{
-                            endAdornment: <InputAdornment position="end"><Icon className="text-20"
-                                                                               color="action">vpn_key</Icon></InputAdornment>
-                        }}
-                        variant="outlined"
-                        required
-                    />
-
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        className="w-full mx-auto mt-16 normal-case"
-                        aria-label="REGISTER WITH FIREBASE"
-                        disabled={!this.state.canSubmit}
-                    >
-                        Sign Up
-                    </Button>
-                </Fragment>
-            )
-        } else if (this.state.step === 2) {
-            return (
-                <div className='mt-32 w-full'>
-                    <TextFieldFormsy
-                        className="mb-16 w-full"
-                        type="text"
-                        name="name"
-                        label="Name"
-                        validationErrors={{
-                            isEmail: 'Please enter a name'
-                        }}
-                        InputProps={{
-                            endAdornment: <InputAdornment position="end"><Icon className="text-20"
-                                                                               color="action">perm_identity</Icon></InputAdornment>
-                        }}
-                        variant="outlined"
-                        required
-                    />
-
-                    <TextFieldFormsy
-                        className="mb-16 w-full"
-                        type="text"
-                        name="email"
-                        label="Email"
-                        validations="isEmail"
-                        validationErrors={{
-                            isEmail: 'Please enter a valid email'
-                        }}
-                        InputProps={{
-                            endAdornment: <InputAdornment position="end"><Icon className="text-20"
-                                                                               color="action">email</Icon></InputAdornment>
-                        }}
-                        variant="outlined"
-                        required
-                    />
-
-                    <TextFieldFormsy
-                        className="mb-16 w-full"
-                        type="text"
-                        name="description"
-                        label="Description"
-                        InputProps={{
-                            endAdornment: <InputAdornment position="end"><Icon className="text-20"
-                                                                               color="action">description</Icon></InputAdornment>
-                        }}
-                        variant="outlined"
-                    />
-
-
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        className="w-full mx-auto mt-16 normal-case"
-                        aria-label="REGISTER WITH FIREBASE"
-                        disabled={!this.state.canSubmit}
-                    >
-                        Request
-                    </Button>
-                </div>
-            )
+        if (this.props.match.params.organization) {
+            console.log('run')
         }
-    };
+    }
 
     componentDidUpdate(prevProps, prevState) {
         if (this.props.login.error && (this.props.login.error.displayName || this.props.login.error.password || this.props.login.error.email)) {
@@ -355,15 +177,28 @@ class Register extends Component {
         return null;
     }
 
+
     render() {
         const {classes} = this.props;
-        const {step, canSubmit, selectOrganization} = this.state;
+
+        const {
+            nicknameValue,
+            nicknameSuggestions,
+            newOrganization
+        } = this.state;
+
+        const nicknameInputProps = {
+            placeholder: "",
+            value: nicknameValue,
+            onChange: this.onNicknameChange
+        };
 
 
         return (
-            <div className={classNames(classes.root, "flex flex-col flex-1 flex-no-shrink p-24 md:flex-row md:p-0")}>
+            <div
+                className={classNames(classes.root, "flex flex-col flex-1 flex-no-shrink p-24 md:flex-row md:p-0 registration-page")}>
                 <div
-                    className="flex flex-col flex-no-grow items-center text-white p-16 text-center md:p-128 md:items-start md:flex-no-shrink md:flex-1 md:text-left">
+                    className="background flex flex-col flex-no-grow items-center text-white p-16 text-center md:p-128 md:items-start md:flex-no-shrink md:flex-1 md:text-left">
                     <FuseAnimate animation="transition.slideUpIn" delay={300}>
                         <Typography variant="h3" color="inherit" className="font-light">
                             Welcome to the Caniny!
@@ -383,7 +218,57 @@ class Register extends Component {
                                 ref={(form) => this.form = form}
                                 className="flex flex-col justify-center w-full"
                             >
-                                {this.renderForm()}
+                                <Fragment>
+                                    <FormControl className="flex w-full mt-32 autocom" variant="outlined">
+                                        <label htmlFor="org-label">
+                                            Organization
+                                        </label>
+
+                                        <Autosuggest
+                                            suggestions={nicknameSuggestions}
+                                            onSuggestionsFetchRequested={this.onNicknameSuggestionsFetchRequested}
+                                            onSuggestionsClearRequested={this.onNicknameSuggestionsClearRequested}
+                                            onSuggestionSelected={this.onNicknameSuggestionSelected}
+                                            getSuggestionValue={this.getSuggestionNickname}
+                                            renderSuggestion={this.renderSuggestion}
+                                            inputProps={nicknameInputProps}
+                                        />
+                                    </FormControl>
+
+                                    {nicknameValue.length > 0 ? (newOrganization ?
+                                            <span className='organization-status'>
+                                                The name is available. You can
+                                                register your organization
+                                             </span>
+                                            :
+                                            <span className='organization-status'>
+                                                 The name exists. You can request an
+                                                 account from the organization Admin
+                                            </span>
+                                    ) : ''}
+
+
+                                    <Button
+                                        type="submit"
+                                        variant="contained"
+                                        color="primary"
+                                        className="w-full mx-auto mt-16 normal-case"
+                                        disabled={nicknameValue.length > 0 ? !newOrganization : true}
+                                    >
+                                        Register
+                                    </Button>
+
+                                    <Button
+                                        type="submit"
+                                        variant="contained"
+                                        color="primary"
+                                        className="w-full mx-auto mt-16 normal-case"
+                                        disabled={newOrganization}
+                                    >
+                                        Request Account
+                                    </Button>
+                                </Fragment>
+
                             </Formsy>
 
                             <div className="flex flex-col items-center justify-center pt-32 pb-24">

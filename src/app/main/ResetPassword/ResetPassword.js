@@ -9,6 +9,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as authActions from 'app/auth/store/actions';
 import jwtService from 'app/services/jwtService';
+import * as Actions from 'app/auth/store/actions';
 
 const styles = theme => ({
     root: {
@@ -38,16 +39,22 @@ class ResetPassword extends Component {
     };
 
     onSubmit = (model) => {
-        console.log(model);
         const url_string = window.location.href;
         const id = new URL(url_string).searchParams.get("id");
         const token = new URL(url_string).searchParams.get("token");
 
-        if(!this.state.newPass) {
-            jwtService.resetPassword(model);
+        if (!this.state.newPass) {
+            jwtService.resetPassword(model)
+                .then((res) => {
+                    console.log(res);
+                    this.props.showMessage({
+                        message: 'Email sent. Check your inbox.',
+                        variant: 'success'
+                    })
+                })
         } else {
             jwtService.updatePassword(model, id, token)
-                .then(() => {
+                .then((res) => {
                     this.props.history.push('/login')
                 })
         }
@@ -113,11 +120,9 @@ class ResetPassword extends Component {
                                             type="text"
                                             name="email"
                                             label="Email"
-                                            validations={{
-                                                minLength: 4
-                                            }}
+                                            validations="isEmail"
                                             validationErrors={{
-                                                minLength: 'Min character length is 4'
+                                                isEmail: 'Please enter a valid email'
                                             }}
                                             InputProps={{
                                                 endAdornment: <InputAdornment position="end"><Icon className="text-20"
@@ -209,7 +214,9 @@ const mapStateToProps = () => {
 };
 
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({}, dispatch);
+    return bindActionCreators({
+        showMessage: Actions.showMessage,
+    }, dispatch);
 };
 
 export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(ResetPassword)));

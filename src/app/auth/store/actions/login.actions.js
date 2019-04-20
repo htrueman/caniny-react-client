@@ -2,6 +2,7 @@ import firebaseService from 'app/services/firebaseService';
 import jwtService from 'app/services/jwtService';
 import {setUserData} from './user.actions';
 import * as Actions from 'app/store/actions';
+import {SHOW_MESSAGE} from "./message.actions";
 
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -10,18 +11,19 @@ export function defaultLogin(user) {
     return (dispatch) =>
         jwtService.signInWithEmailAndPassword(user)
             .then((user) => {
-                    dispatch(setUserData(user));
+                    // dispatch(setUserData(user));
 
                     return dispatch({
-                        type: LOGIN_SUCCESS
+                        type: 'LOGIN_SUCCESS'
                     });
                 }
             )
             .catch(error => {
                 return dispatch({
-                    type: LOGIN_ERROR,
-                    payload: error
-                });
+                        type: LOGIN_ERROR,
+                        payload: error
+                    },
+                );
             });
 }
 
@@ -81,6 +83,7 @@ export function instagramLogin(user) {
                 });
             });
 }
+
 //
 // export function submitLoginWithFireBase({username, password}) {
 //     return (dispatch) =>

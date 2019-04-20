@@ -1,5 +1,6 @@
 import {authRoles} from 'app/auth';
 import Register from './Registration';
+import Step from './SecondStep';
 
 export const RegistrationConfig = {
     settings: {
@@ -27,8 +28,15 @@ export const RegistrationConfig = {
     routes: [
         {
             path: '/registration',
+            exact: true,
             component: Register
+        },
+        {
+            path: '/registration/:type/:id',
+            exact: true,
+            component: Step
         }
+
     ]
 };
 

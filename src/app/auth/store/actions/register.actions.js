@@ -26,7 +26,7 @@ export function Register(user) {
 
 export function RegisterInOrganization(user) {
     return (dispatch) =>
-        jwtService.createUser(user, 'request-access')
+        jwtService.createUser(user, 'request_access')
             .then((user) => {
                     dispatch(UserActions.setUserData(user));
                     return dispatch({

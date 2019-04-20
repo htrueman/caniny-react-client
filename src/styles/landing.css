@@ -1,12 +1,53 @@
+.landing-page {
+    background-color: #fff;
+}
+
 .landing-page .banner-area {
-    background: url(../img/banner-bg.jpg) center;
     background-size: cover;
-    height: 100vh;
+    height: calc(100vh - 64px);
+    overflow: hidden;
     z-index: 10;
 }
 
 .landing-page .container {
     height: 100%;
+}
+
+.landing-page .login-form {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 100;
+    height: calc(100vh - 64px);
+    top: 0;;
+    right: 5vw;
+    background: rgba(255, 255, 255, 0.64);
+}
+
+.landing-page .login-form .social-login {
+    height: max-content;
+    margin: 20px 0;
+}
+
+.landing-page .login-form .social-login img,
+.landing-page .login-form .social-login button {
+    width: 30px;
+    height: 30px;
+    padding: 0 !important;
+}
+
+.about {
+    margin-top: 100px !important;
+    display: flex;
+    justify-content: space-between;
+}
+.about .about-description {
+  flex: 1;
+}
+
+.about h2 {
+    color: #33ADFF !important;
 }
 
 .banner-area .overlay-bg {
@@ -45,7 +86,8 @@
 .landing-page .images {
     display: flex;
     justify-content: space-around;
-    margin: -100px 0 100px 0;
+    margin: 100px 0 100px 0;
+    z-index: 10000;
 }
 
 .landing-page .images > div {
@@ -53,12 +95,12 @@
     height: 12vw;
     border-radius: 50%;
     overflow: hidden;
-    z-index: 10000;
+    z-index: 10;
 }
 
 .landing-page .images img {
     width: 100% !important;
-    z-index: 1000;
+    z-index: 10;
 }
 
 .footer-area {

@@ -48,13 +48,10 @@ class jwtService extends FuseUtils.EventEmitter {
         return new Promise((resolve, reject) => {
                 axios.post(`${baseUrl}register/${type ? `${type}/` : ''}`, user)
                     .then(response => {
-                        if (response.data.user) {
-                            this.setSession(response.data.access_token);
-                            resolve(response.data.user);
-                        }
-                        else {
-                            reject(response.data.error);
-                        }
+                        resolve(response);
+                    })
+                    .catch(error => {
+                        reject(error.response);
                     });
             }
         );
@@ -64,12 +61,12 @@ class jwtService extends FuseUtils.EventEmitter {
         return new Promise((resolve, reject) => {
                 axios.post(`${baseUrl}password-reset/`, email)
                     .then(response => {
-                        if (response.data.user) {
-                            this.setSession(response.data.access_token);
-                            resolve(response.data.user);
+                        if (response.data) {
+                            // this.setSession(response.data.access_token);
+                            resolve(response.data);
                         }
                         else {
-                            reject(response.data.error);
+                            reject(response.data);
                         }
                     });
             }
@@ -80,12 +77,11 @@ class jwtService extends FuseUtils.EventEmitter {
         return new Promise((resolve, reject) => {
                 axios.post(`${baseUrl}password-reset-confirm/${id}/${token}/`, pass)
                     .then(response => {
-                        if (response.data.user) {
-                            this.setSession(response.data.access_token);
-                            resolve(response.data.user);
+                        if (response.data) {
+                            resolve(response.data);
                         }
                         else {
-                            reject(response.data.error);
+                            reject(response.data);
                         }
                     });
             }
@@ -112,35 +108,51 @@ class jwtService extends FuseUtils.EventEmitter {
         return new Promise((resolve, reject) => {
             axios.post(`${baseUrl}login/`, user)
                 .then(response => {
-                    if (response.data.user) {
-                        this.setSession(response.data.access_token);
-                        resolve(response.data.user);
-                    }
-                    else {
-                        reject(response.data.error);
-                    }
-                });
+                    console.log(response);
+                    this.setSession(response.data.access_token);
+                    resolve(response);
+                })
+                .catch(error => {
+                    reject(error.response);
+                })
         });
     };
 
-    signInWithToken = () => {
+    createOrganization = (organization) => {
         return new Promise((resolve, reject) => {
-            axios.get('/api/auth/access-token', {
-                data: {
-                    access_token: this.getAccessToken()
-                }
-            })
+            axios.post(`${baseUrl}organizations/`, organization)
                 .then(response => {
                     if (response.data.user) {
                         this.setSession(response.data.access_token);
                         resolve(response.data.user);
                     }
                     else {
-                        reject(response.data.error);
+                        reject(response.data);
                     }
                 });
         });
     };
+
+
+    // signInWithToken = () => {
+    //     return new Promise((resolve, reject) => {
+    //         axios.get('/api/v1/auth/access-token', {
+    //             data: {
+    //                 access_token: this.getAccessToken()
+    //             }
+    //         })
+    //             .then(response => {
+    //                 if (response.data.user) {
+    //                     this.setSession(response.data.access_token);
+    //                     resolve(response.data.user);
+    //                 }
+    //                 else {
+    //                     reject(response.data.error);
+    //                 }
+    //             });
+    //     });
+    // };
+
 
     updateUserData = (user) => {
         return axios.post('/api/auth/user/update', {
