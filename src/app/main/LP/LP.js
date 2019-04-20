@@ -11,6 +11,10 @@ import {
     FormControl,
     FormControlLabel, Checkbox
 } from '@material-ui/core';
+
+import "video-react/dist/video-react.css"; // import css
+import { Player } from 'video-react';
+
 import Formsy from 'formsy-react';
 import GoogleLogin from 'react-google-login';
 import InstagramLogin from 'react-instagram-login';
@@ -25,7 +29,7 @@ import facebookIcon2 from '../../../img/facebook2.svg';
 import instagramIcon from '../../../img/instagram.svg';
 import instagramIcon2 from '../../../img/instagram2.svg';
 
-import video from '../../../img/video/Pexels Videos 2716.mp4';
+import video from '../../../img/video/Dog portrait in 4K.mp4';
 import img1 from '../../../img/c1.jpg';
 import img2 from '../../../img/c2.jpg';
 import img3 from '../../../img/dg4.jpg';
@@ -61,7 +65,9 @@ class LP extends Component {
     };
 
     componentDidMount() {
-        window.scrollTo (0,200)
+        setInterval(() => {
+            this.refs.player.load();
+        }, 12000)
     }
 
     render() {
@@ -225,17 +231,29 @@ class LP extends Component {
                 <section className="banner-area relative" id="home">
                     <div className="container">
                         <div className="overlay overlay-bg">
-                            <video src={video} autoPlay loop="loop" preload='auto'></video>
+                            <Player
+                                autoPlay={true}
+                                preload
+                                ref="player"
+                                muted
+                                playsInline
+                                poster="/assets/poster.png"
+                                src={video}
+                            />
                         </div>
 
                         <div className="row fullscreen d-flex align-items-center justify-content-start banner-content">
-                            <div className="banner-content col-lg-8 col-md-12">
-                                <h2 className="text-uppercase">ANIMALS NEED</h2>
-                                <h1 className="text-uppercase">Your Help!</h1>
-                                <p className="text-white sub-head">
-                                    You can chip in with money & effort! Cats, Dogs and <br/> Even Raccoons Adopt Any
-                                    Pet You Like!
-                                </p>
+                            <div className="banner-content ">
+                                <div className='testBaner'>
+                                    <h2 className="text-uppercase">WELCOME TO</h2>
+                                    <h1 className="text-uppercase">Caniny</h1>
+                                    <p className="text-white sub-head">
+                                        We seek to enhance the animal’s lives by <br/>
+                                        organizing and managing their information
+                                    </p>
+
+                                    <h3>FREE SIGN UP</h3>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -244,6 +262,44 @@ class LP extends Component {
                 <section className="about size-container" id="about">
                     <div className='about-description'>
                         <h2>ABOUT US</h2>
+
+                        <p>
+                            Caniny is an initiative done by volunteers who care about
+                            animal’s lives and wellbeing.
+                        </p>
+
+                        <p>
+                            The application provides animal rescuers, shelters, vets,
+                            governments or any animal related services an easy to use
+                            database to enter, search, retrieve and manage the animal’s
+                            information.
+                        </p>
+
+                        <p>
+                            Caniny is an evolving initiative and is intended to grow
+                            bigger in the future by sharing more services, while
+                            enriching the animal’s quality of life.
+                        </p>
+
+                        <p>
+                            Caniny shares the following values:
+                        </p>
+
+                        <p>
+                            <span>
+                                “Animals are put in the centrum and should be treated with respect”
+                            </span>
+                        </p>
+                        <p>
+                            <span>
+                                “Every animal deserves a better chance in life”
+                            </span>
+                        </p>
+                        <p>
+                            <span>
+                                “No animal should be left behind”
+                            </span>
+                        </p>
                     </div>
 
                     <div className='image'>
@@ -272,23 +328,23 @@ class LP extends Component {
 
                 <footer className="footer-area">
                     {/*<div className="container">*/}
-                        {/*<div className="row pt-120 pb-80 content">*/}
-                            {/*<div className="col-lg-4 col-md-6">*/}
-                                {/*<div className="single-footer-widget">*/}
-                                    {/*<h6>About Us</h6>*/}
-                                {/*</div>*/}
-                            {/*</div>*/}
-                            {/*<div className="col-lg-4 col-md-6">*/}
-                                {/*<div className="single-footer-widget">*/}
-                                    {/*<h6>Useful Links</h6>*/}
-                                {/*</div>*/}
-                            {/*</div>*/}
-                            {/*<div className="col-lg-4  col-md-6">*/}
-                                {/*<div className="single-footer-widget mail-chimp">*/}
-                                    {/*<h6 className="mb-20">Contact Us</h6>*/}
-                                {/*</div>*/}
-                            {/*</div>*/}
-                        {/*</div>*/}
+                    {/*<div className="row pt-120 pb-80 content">*/}
+                    {/*<div className="col-lg-4 col-md-6">*/}
+                    {/*<div className="single-footer-widget">*/}
+                    {/*<h6>About Us</h6>*/}
+                    {/*</div>*/}
+                    {/*</div>*/}
+                    {/*<div className="col-lg-4 col-md-6">*/}
+                    {/*<div className="single-footer-widget">*/}
+                    {/*<h6>Useful Links</h6>*/}
+                    {/*</div>*/}
+                    {/*</div>*/}
+                    {/*<div className="col-lg-4  col-md-6">*/}
+                    {/*<div className="single-footer-widget mail-chimp">*/}
+                    {/*<h6 className="mb-20">Contact Us</h6>*/}
+                    {/*</div>*/}
+                    {/*</div>*/}
+                    {/*</div>*/}
                     {/*</div>*/}
                     <div className="copyright-text">
                         <div className="container flex-row justify-center">

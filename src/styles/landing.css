@@ -42,12 +42,28 @@
     display: flex;
     justify-content: space-between;
 }
+
 .about .about-description {
-  flex: 1;
+    flex: 1;
+}
+
+.about .about-description p {
+    font-size: 18px;
+    color: #3e3e3e;
+    margin: 0 0 30px 0;
+}
+
+.about .about-description p span {
+    font-size: 18px;
+    margin: 0 0 30px 0;
+    color: #33ADFF !important;
+    font-weight: bold;
+    font-style: italic;
 }
 
 .about h2 {
     color: #33ADFF !important;
+    margin: 0 0 30px 0;
 }
 
 .banner-area .overlay-bg {
@@ -68,6 +84,20 @@
     align-items: flex-start;
     margin: 0 auto;
     z-index: 100;
+}
+.banner-content .testBaner {
+    background: rgba(0, 0, 0, 0.54);
+    border-radius: 20px;
+    padding: 50px;
+}
+.banner-content .testBaner h3 {
+   color: #fff !important;
+    font-size: 23px;
+    margin: 30px 0 0 0;
+    letter-spacing: 8px;
+}
+.banner-content .testBaner p {
+    font-size: 18px;
 }
 
 .landing-page h2 {

@@ -6959,6 +6959,11 @@ lodash.templatesettings@^4.0.0:
   dependencies:
     lodash._reinterpolate "~3.0.0"
 
+lodash.throttle@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
+  integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
+
 lodash.toarray@^4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/lodash.toarray/-/lodash.toarray-4.4.0.tgz#24c4bfcd6b2fba38bfd0594db1179d8e9b656561"
@@ -11504,6 +11509,17 @@ vfile@^3.0.0, vfile@^3.0.1:
     replace-ext "1.0.0"
     unist-util-stringify-position "^1.0.0"
     vfile-message "^1.0.0"
+
+video-react@^0.13.6:
+  version "0.13.6"
+  resolved "https://registry.yarnpkg.com/video-react/-/video-react-0.13.6.tgz#f5a61862936ed63b472f4a566eb73ba2b1a8d61d"
+  integrity sha512-DyZxsK3xU5mxteF0A2SnS6BDXGv+dnBmibadJiqnjWFHShXkPpqUq5F//iSAlOARgk9kIu/GWiOdhVhPd6KJZg==
+  dependencies:
+    "@babel/runtime" "^7.2.0"
+    classnames "^2.2.6"
+    lodash.throttle "^4.1.1"
+    prop-types "^15.6.2"
+    redux "^4.0.1"
 
 vm-browserify@0.0.4:
   version "0.0.4"
