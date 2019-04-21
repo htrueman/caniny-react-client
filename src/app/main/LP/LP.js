@@ -242,7 +242,7 @@ class LP extends Component {
                                 ref="player"
                                 fluid={false}
                                 muted
-                                height='100%'
+                                height='120%'
                                 playsInline
                                 poster="/assets/poster.png"
                                 src={video}
