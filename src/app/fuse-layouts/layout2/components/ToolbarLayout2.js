@@ -6,8 +6,9 @@ import connect from 'react-redux/es/connect/connect';
 import {withRouter} from 'react-router-dom';
 import UserMenu from 'app/fuse-layouts/shared-components/UserMenu';
 import logo from '../../../../img/Caniny_Logo.png';
+
 import * as Scroll from 'react-scroll';
-import { Link, DirectLink, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+import {Link, DirectLink, Element, Events, animateScroll as scroll, scrollSpy, scroller} from 'react-scroll'
 
 
 const styles = theme => ({
@@ -22,27 +23,47 @@ class ToolbarLayout2 extends Component {
 
     componentDidMount() {
 
-        Events.scrollEvent.register('begin', function(to, element) {
+        Events.scrollEvent.register('begin', function (to, element) {
             console.log("begin", arguments);
         });
 
-        Events.scrollEvent.register('end', function(to, element) {
+        Events.scrollEvent.register('end', function (to, element) {
             console.log("end", arguments);
         });
 
         scrollSpy.update();
+    };
+
+    handleSetActive = (e) => {
+        document.querySelector('.login-link').classList.remove("active");
+    };
+
+    handleSetInactive = (e) => {
+        document.querySelector('.login-link').classList.add("active");
+    };
+
+    handleClearAboutLink = () => {
+        document.querySelector('.about-link').classList.remove("active");
+    };
+
+    handleRedirect = () => {
+        this.props.history.push('/#about')
+
+        setTimeout(() => {
+            scroller.scrollTo('about', {
+                duration: 100,
+                offset: -120,
+                delay: 0,
+                smooth: 'easeInOutQuart'
+            });
+        })
 
     };
-    scrollTo() {
-        scroller.scrollTo('scroll-to-element', {
-            duration: 800,
-            delay: 0,
-            smooth: 'easeInOutQuart'
-        })
-    };
+
     componentWillUnmount() {
         Events.scrollEvent.remove('begin');
         Events.scrollEvent.remove('end');
+
     };
 
     render() {
@@ -89,9 +110,26 @@ class ToolbarLayout2 extends Component {
 
                             <div className="flex header-navigation">
                                 {/*<NavLink to='/#about'>About</NavLink>*/}
-                                <a href='/#about'>About</a>
-                                <NavLink to='/registration'>Sign Up</NavLink>
-                                <NavLink exact to='/'>Login</NavLink>
+                                <Link activeClass="active"
+                                      to="about"
+                                      spy={true}
+                                      smooth={true}
+                                      hashSpy={true}
+                                      offset={-120}
+                                      duration={100}
+                                      delay={0}
+                                      isDynamic={true}
+                                      onSetActive={this.handleSetActive}
+                                      onSetInactive={this.handleSetInactive}
+                                      ignoreCancelEvents={false}
+                                      className='about-link'
+                                      onClick={this.handleRedirect}
+                                >
+                                    About
+                                </Link>
+
+                                <NavLink to='/registration' onClick={this.handleClearAboutLink}>Sign Up</NavLink>
+                                <NavLink exact to='/' className='login-link'>Login</NavLink>
                             </div>
                         </Toolbar>
                     }
@@ -99,7 +137,7 @@ class ToolbarLayout2 extends Component {
             </MuiThemeProvider>
         );
     }
-};
+}
 
 function mapStateToProps({fuse, auth}) {
     return {

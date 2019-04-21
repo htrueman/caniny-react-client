@@ -74,17 +74,11 @@ const styles = theme => ({
         flex    : '1 1 auto',
         overflow: 'visible!important',
         minWidth: 0,
-        '&.ps'  : {
-            overflow: 'visible!important'
-        }
     },
     contentCardWrapperInnerSidebar: {
         display                     : 'block',
         overflow                    : 'auto!important',
         '-webkit-overflow-scrolling': 'touch',
-        '&.ps'                      : {
-            overflow: 'hidden!important'
-        },
         '& $contentCard'            : {
             borderRadius: 8
         }

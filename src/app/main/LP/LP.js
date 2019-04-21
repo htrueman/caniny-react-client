@@ -51,6 +51,7 @@ let interval = '';
 
 class LP extends Component {
     state = {canSubmit: false};
+    myRef = React.createRef();
 
     disableButton = () => {
         this.setState({canSubmit: false});
@@ -242,7 +243,7 @@ class LP extends Component {
                                 ref="player"
                                 fluid={false}
                                 muted
-                                height='120%'
+                                height='130%'
                                 playsInline
                                 poster="/assets/poster.png"
                                 src={video}

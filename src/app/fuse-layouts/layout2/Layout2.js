@@ -20,7 +20,7 @@ const styles = theme => ({
         flexDirection: 'row',
         width        : '100%',
         height       : '100%',
-        overflow     : 'hidden',
+        overflow     : 'initial',
         '&.boxed'    : {
             maxWidth : 1280,
             margin   : '0 auto',
@@ -76,7 +76,7 @@ const Layout2 = ({classes, settings, children}) => {
                         <LeftSideLayout2/>
                     )}
 
-                    <div className="flex flex-1 flex-col overflow-hidden relative">
+                    <div className="flex flex-1 flex-col relative" style={{height: 'max-content'}}>
 
                         {layoutConfig.toolbar.display && layoutConfig.toolbar.position === 'above' && (
                             <ToolbarLayout2/>

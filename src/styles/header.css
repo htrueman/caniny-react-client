@@ -1,15 +1,16 @@
 header {
     background-color: #303030 !important;
     color: #fff !important;
+    position: fixed !important;
 }
 
 .header-navigation {
-    height: 100%;
+    height: 64px;
 }
 
 .header-navigation a {
     color: #f2f2f2 !important;
-
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;

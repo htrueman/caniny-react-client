@@ -31,16 +31,16 @@
     }
 
     /* General styles */
-    #fuse-toolbar,
-    #fuse-footer,
-    #fuse-navbar,
-    #fuse-settings,
-    #fuse-layout .ps > .ps__rail-x,
-    #fuse-layout .ps > .ps__rail-y {
-        display: none !important;
-    }
+    /*#fuse-toolbar,*/
+    /*#fuse-footer,*/
+    /*#fuse-navbar,*/
+    /*#fuse-settings,*/
+    /*#fuse-layout .ps > .ps__rail-x,*/
+    /*#fuse-layout .ps > .ps__rail-y {*/
+        /*display: none !important;*/
+    /*}*/
 
-    #fuse-layout .ps {
-        overflow: visible !important;
-    }
+    /*#fuse-layout .ps {*/
+        /*overflow: visible !important;*/
+    /*}*/
 }
