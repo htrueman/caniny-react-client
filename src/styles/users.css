@@ -1,0 +1,47 @@
+.header-users-page {
+    display: flex;
+    align-items: center;
+}
+
+.header-users-page h4 {
+    width: 35%;
+    font-size: 25px;
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+}
+
+.header-users-page h4 span {
+    font-size: 35px;
+    margin: 0 10px 0 0;
+}
+
+.header-users-page .search-block {
+    position: relative;
+    width: 50%;
+}
+
+.header-users-page .search-block input {
+    width: 70%;
+    height: 40px;
+    border-radius: 5px;
+    padding: 0 0 0 40px;
+}
+
+.header-users-page .search-block span {
+    color: #565656;
+    position: absolute;
+    left: 10px;
+    top: 8px;
+}
+
+/*----------------------------------------*/
+.toolbar-users-page {
+    width: 100%;
+    margin: 50px 0 0 0;
+
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+
+}

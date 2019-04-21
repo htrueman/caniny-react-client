@@ -11,6 +11,7 @@ import {
     FormControl,
     FormControlLabel, Checkbox
 } from '@material-ui/core';
+import * as Actions from 'app/auth/store/actions';
 
 import "video-react/dist/video-react.css"; // import css
 
@@ -63,7 +64,20 @@ class LP extends Component {
 
     onSubmit = (model) => {
         console.log(model);
-        this.props.defaultLogin(model);
+        this.props.defaultLogin(model)
+            .then(res => {
+                console.log(res);
+                if (res.type === "LOGIN_ERROR") {
+                    this.props.showMessage({
+                        message: res.payload.data.detail,
+                        variant: 'error'
+                    })
+                } else {
+                    this.props.history.push('/users')
+                }
+                console.log(res);
+            })
+
     };
 
     componentDidMount() {
@@ -242,7 +256,7 @@ class LP extends Component {
                 <section className="banner-area relative" id="home">
                     <div className="container">
                         <div className="overlay overlay-bg">
-                            <video loop={true} preload={true} autoPlay={true} muted height='auto' width='100%'>
+                            <video loop={true} autoPlay={true} muted height='auto' width='100%'>
                                 <source src={video}/>
                             </video>
                         </div>
@@ -380,6 +394,8 @@ const mapDispatchToProps = dispatch => {
         googleLogin: authActions.googleLogin,
         facebookLogin: authActions.facebookLogin,
         instagramLogin: authActions.instagramLogin,
+        showMessage: Actions.showMessage,
+
     }, dispatch);
 };
 

@@ -6,6 +6,7 @@
 @import 'tailwind.css';
 @import 'header.css';
 @import 'landing.css';
+@import 'users.css';
 
 * {
     outline: none !important;

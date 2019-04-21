@@ -60,8 +60,7 @@ class Login extends Component {
                         variant: 'error'
                     })
                 } else {
-                    console.log('qfef')
-                    this.props.history.push('/home')
+                    this.props.history.push('/users')
                 }
                 console.log(res);
             })
@@ -75,7 +74,7 @@ class Login extends Component {
 
         this.props.googleLogin(user)
             .then(() => {
-                this.props.history.push('/home')
+                this.props.history.push('/users')
             })
     };
 
@@ -89,7 +88,7 @@ class Login extends Component {
 
             this.props.facebookLogin(user)
                 .then(() => {
-                    this.props.history.push('/home')
+                    this.props.history.push('/users')
                 })
         }
     };
@@ -100,7 +99,7 @@ class Login extends Component {
             token: res
         })
             // .then(() => {
-            //     this.props.history.push('/home')
+            //     this.props.history.push('/users')
             // })
     };
 

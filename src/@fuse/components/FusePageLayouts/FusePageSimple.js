@@ -95,7 +95,8 @@ const styles = theme => ({
         height: toolbarHeight,
         minHeight: toolbarHeight,
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        width: '20%'
     },
     content: {
         flex: '1 0 auto'
