@@ -29,7 +29,7 @@ import facebookIcon2 from '../../../img/facebook2.svg';
 import instagramIcon from '../../../img/instagram.svg';
 import instagramIcon2 from '../../../img/instagram2.svg';
 
-import video from '../../../img/video/Dog portrait in 4K.mp4';
+import video from '../../../img/video/dog video background 1.mp4';
 import img1 from '../../../img/c1.jpg';
 import img2 from '../../../img/c2.jpg';
 import img3 from '../../../img/dg4.jpg';
@@ -249,7 +249,7 @@ class LP extends Component {
                                 {/*src={video}*/}
                             {/*/>*/}
 
-                            <video loop={true} preload={true} autoPlay={true} muted height='120%'>
+                            <video loop={true} preload={true} autoPlay={true} muted height='auto' width='100%'>
                                 <source src={video} />
                             </video>
 
