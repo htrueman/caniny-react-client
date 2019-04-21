@@ -67,9 +67,9 @@ class LP extends Component {
     };
 
     componentDidMount() {
-        // interval = setInterval(() => {
-        //     this.refs.player.load();
-        // }, 12000)
+        interval = setInterval(() => {
+            this.refs.player.load();
+        }, 12000)
     }
 
     componentWillUnmount() {
