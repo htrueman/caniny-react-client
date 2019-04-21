@@ -13,7 +13,6 @@ import {
 } from '@material-ui/core';
 
 import "video-react/dist/video-react.css"; // import css
-import {Player} from 'video-react';
 
 import Formsy from 'formsy-react';
 import GoogleLogin from 'react-google-login';
@@ -243,17 +242,6 @@ class LP extends Component {
                 <section className="banner-area relative" id="home">
                     <div className="container">
                         <div className="overlay overlay-bg">
-                            {/*<Player*/}
-                            {/*autoPlay={true}*/}
-                            {/*ref="player"*/}
-                            {/*fluid={false}*/}
-                            {/*muted*/}
-                            {/*height='130%'*/}
-                            {/*playsInline*/}
-                            {/*poster="/assets/poster.png"*/}
-                            {/*src={video}*/}
-                            {/*/>*/}
-
                             <video loop={true} preload={true} autoPlay={true} muted height='auto' width='100%'>
                                 <source src={video}/>
                             </video>
