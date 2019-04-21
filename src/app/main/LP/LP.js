@@ -68,9 +68,9 @@ class LP extends Component {
     };
 
     componentDidMount() {
-        interval = setInterval(() => {
-            this.refs.player.load();
-        }, 12000)
+        // interval = setInterval(() => {
+        //     this.refs.player.load();
+        // }, 12000)
     }
 
     componentWillUnmount() {
@@ -238,16 +238,22 @@ class LP extends Component {
                 <section className="banner-area relative" id="home">
                     <div className="container">
                         <div className="overlay overlay-bg">
-                            <Player
-                                autoPlay={true}
-                                ref="player"
-                                fluid={false}
-                                muted
-                                height='130%'
-                                playsInline
-                                poster="/assets/poster.png"
-                                src={video}
-                            />
+                            {/*<Player*/}
+                                {/*autoPlay={true}*/}
+                                {/*ref="player"*/}
+                                {/*fluid={false}*/}
+                                {/*muted*/}
+                                {/*height='130%'*/}
+                                {/*playsInline*/}
+                                {/*poster="/assets/poster.png"*/}
+                                {/*src={video}*/}
+                            {/*/>*/}
+
+                            <video loop={true} preload={true} autoPlay={true} muted height='120%'>
+                                <source src={video} />
+                            </video>
+
+                            <div className='overlay-bg2'></div>
                         </div>
 
                         <div className="row fullscreen d-flex align-items-center justify-content-start banner-content">

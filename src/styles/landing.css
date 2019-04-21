@@ -71,12 +71,22 @@ html {
 }
 
 .banner-area .overlay-bg {
-    background-color: rgba(0, 0, 0, 0.4);
     position: absolute;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
+    z-index: 100;
+}
+
+.banner-area .overlay-bg2 {
+    background-color: rgba(0, 0, 0, 0.4) !important;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
 }
 
 .banner-content {
