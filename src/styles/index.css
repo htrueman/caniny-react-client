@@ -186,11 +186,12 @@ body {
     line-height: 1;
 }
 
-.MuiButton-containedPrimary-148 {
+
+form button {
     background-color: #32ADFF !important;
 }
 
-.MuiButton-root-136.MuiButton-disabled-156 {
+form button[disabled] {
     background-color: rgba(0, 0, 0, 0.12) !important;
 }
 

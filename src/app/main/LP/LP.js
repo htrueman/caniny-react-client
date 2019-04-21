@@ -67,9 +67,9 @@ class LP extends Component {
     };
 
     componentDidMount() {
-        interval = setInterval(() => {
-            this.refs.player.load();
-        }, 12000)
+        // interval = setInterval(() => {
+        //     this.refs.player.load();
+        // }, 12000)
     }
 
     componentWillUnmount() {
@@ -240,7 +240,9 @@ class LP extends Component {
                             <Player
                                 autoPlay={true}
                                 ref="player"
+                                fluid={false}
                                 muted
+                                height='100%'
                                 playsInline
                                 poster="/assets/poster.png"
                                 src={video}

@@ -104,7 +104,7 @@ class Register extends Component {
     };
 
 
-    onSubmit = (user) => {
+    onSubmit = async (user) => {
         if (this.props.match.params.type !== 'new') {
             this.props.RegisterInOrganization({
                 email: user.email,
@@ -116,10 +116,13 @@ class Register extends Component {
                     if (res.type === 'REGISTER_SUCCESS') {
                         this.props.showMessage({
                             message: 'Your request has\n' +
-                                'been sent to the\n' +
-                                'administrator',
+                            'been sent to the\n' +
+                            'administrator',
                             variant: 'success'
-                        })
+                        });
+                        setTimeout(() => {
+                            // this.props.history.push('/')
+                        }, 1000)
                     } else {
                         for (let key in res.payload.data) {
                             console.log(res.payload.data[key]);
@@ -143,6 +146,9 @@ class Register extends Component {
                             message: 'Email sent. Check your inbox.',
                             variant: 'success'
                         })
+                        setTimeout(() => {
+                            // this.props.history.push('/')
+                        }, 1000)
                     } else {
                         for (let key in res.payload.data) {
                             this.props.showMessage({
@@ -425,7 +431,7 @@ class Register extends Component {
                     className="background flex flex-col flex-no-grow items-center text-white p-16 text-center md:p-128 md:items-start md:flex-no-shrink md:flex-1 md:text-left">
                     <FuseAnimate animation="transition.slideUpIn" delay={300}>
                         <Typography variant="h3" color="inherit" className="font-light">
-                            Welcome to the Caniny!
+                            Welcome to Caniny
                         </Typography>
                     </FuseAnimate>
                 </div>

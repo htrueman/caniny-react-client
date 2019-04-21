@@ -80,20 +80,27 @@ class Register extends Component {
 
         const arr = this.state.organizations.filter(item => regex.test(item.name));
 
-        arr.forEach(item => {
-            if (item.name.toLowerCase() === value.toLowerCase()) {
-                this.setState({
-                    newOrganization: false,
-                    selectOrganization: item
-                })
-            } else {
-                this.setState({
-                    newOrganization: true
-                })
+        if (arr.length === 0) {
+            this.setState({
+                newOrganization: true
+            })
+        } else {
+            arr.forEach(item => {
+                console.log(item.name.toLowerCase() === value.toLowerCase())
 
-            }
-        });
+                if (item.name.toLowerCase() === value.toLowerCase()) {
+                    this.setState({
+                        newOrganization: false,
+                        selectOrganization: item
+                    })
+                } else {
+                    this.setState({
+                        newOrganization: true
+                    })
 
+                }
+            });
+        }
         return arr;
     };
 
@@ -200,7 +207,7 @@ class Register extends Component {
                 <div
                     className="background flex flex-col flex-no-grow items-center text-white p-16 text-center md:p-128 md:items-start md:flex-no-shrink md:flex-1 md:text-center">
                     <FuseAnimate animation="transition.slideUpIn" delay={300}>
-                        <Typography variant="h3" color="inherit" className="font-light" >
+                        <Typography variant="h3" color="inherit" className="font-light">
                             Welcome to Caniny
                         </Typography>
                     </FuseAnimate>
