@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 
 import "video-react/dist/video-react.css"; // import css
-import { Player } from 'video-react';
+import {Player} from 'video-react';
 
 import Formsy from 'formsy-react';
 import GoogleLogin from 'react-google-login';
@@ -29,7 +29,7 @@ import facebookIcon2 from '../../../img/facebook2.svg';
 import instagramIcon from '../../../img/instagram.svg';
 import instagramIcon2 from '../../../img/instagram2.svg';
 
-import video from '../../../img/video/CaninyIntro1.mp4';
+import video from '../../../img/video/CaninyIntro.mp4';
 import img1 from '../../../img/c1.jpg';
 import img2 from '../../../img/c2.jpg';
 import img3 from '../../../img/dg4.jpg';
@@ -227,9 +227,14 @@ class LP extends Component {
                         </Formsy>
 
                         <div className="flex flex-col items-center justify-center pt-32">
-                            <Link className="font-medium" to="/registration">Create an account</Link>
-                            <div className='mt-16' onClick={() => document.querySelector('.login-link').classList.remove("active")}>
+                            <div onClick={() => document.querySelector('.login-link').classList.remove("active")}>
                                 <Link className="font-medium" to="/reset_password">Reset password</Link>
+                            </div>
+
+
+                            <div className='mt-16'
+                                 onClick={() => document.querySelector('.login-link').classList.remove("active")}>
+                                <Link className="font-medium" to="/registration">Create an account</Link>
                             </div>
                         </div>
                     </CardContent>
@@ -239,22 +244,22 @@ class LP extends Component {
                     <div className="container">
                         <div className="overlay overlay-bg">
                             {/*<Player*/}
-                                {/*autoPlay={true}*/}
-                                {/*ref="player"*/}
-                                {/*fluid={false}*/}
-                                {/*muted*/}
-                                {/*height='130%'*/}
-                                {/*playsInline*/}
-                                {/*poster="/assets/poster.png"*/}
-                                {/*src={video}*/}
+                            {/*autoPlay={true}*/}
+                            {/*ref="player"*/}
+                            {/*fluid={false}*/}
+                            {/*muted*/}
+                            {/*height='130%'*/}
+                            {/*playsInline*/}
+                            {/*poster="/assets/poster.png"*/}
+                            {/*src={video}*/}
                             {/*/>*/}
 
                             <video loop={true} preload={true} autoPlay={true} muted height='auto' width='100%'>
-                                <source src={video} />
+                                <source src={video}/>
                             </video>
-
-                            <div className='overlay-bg2'></div>
                         </div>
+
+                        <div className='overlay-bg2'></div>
 
                         <div className="row fullscreen d-flex align-items-center justify-content-start banner-content">
                             <div className="banner-content ">
