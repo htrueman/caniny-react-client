@@ -29,7 +29,7 @@ import facebookIcon2 from '../../../img/facebook2.svg';
 import instagramIcon from '../../../img/instagram.svg';
 import instagramIcon2 from '../../../img/instagram2.svg';
 
-import video from '../../../img/video/dog video background 1.mp4';
+import video from '../../../img/video/CaninyIntro1.mp4';
 import img1 from '../../../img/c1.jpg';
 import img2 from '../../../img/c2.jpg';
 import img3 from '../../../img/dg4.jpg';
@@ -225,13 +225,11 @@ class LP extends Component {
                         </Formsy>
 
                         <div className="flex flex-col items-center justify-center pt-32">
-                            {/*<span className="font-medium">Don't have an account?</span>*/}
                             <Link className="font-medium" to="/registration">Create an account</Link>
-                            {/*<div className='mt-32'>*/}
-                            {/*<Link className="font-medium" to="/reset_password">Reset password</Link>*/}
-                            {/*</div>*/}
+                            <div className='mt-16' onClick={() => document.querySelector('.login-link').classList.remove("active")}>
+                                <Link className="font-medium" to="/reset_password">Reset password</Link>
+                            </div>
                         </div>
-
                     </CardContent>
                 </div>
 

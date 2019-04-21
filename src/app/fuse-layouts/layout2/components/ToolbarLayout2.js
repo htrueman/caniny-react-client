@@ -35,15 +35,16 @@ class ToolbarLayout2 extends Component {
     };
 
     handleSetActive = (e) => {
-        document.querySelector('.login-link').classList.remove("active");
+        // document.querySelector('.login-link').classList.remove("active");
     };
 
     handleSetInactive = (e) => {
-        document.querySelector('.login-link').classList.add("active");
+        // document.querySelector('.login-link').classList.add("active");
     };
 
     handleClearAboutLink = () => {
         document.querySelector('.about-link').classList.remove("active");
+        document.querySelector('.login-link').classList.remove("active");
     };
 
     handleRedirect = () => {
@@ -58,6 +59,10 @@ class ToolbarLayout2 extends Component {
             });
         })
 
+    };
+    handleRedirectToHome = () => {
+        this.props.history.push('/');
+        document.querySelector('.login-link').classList.add("active");
     };
 
     componentWillUnmount() {
@@ -129,7 +134,24 @@ class ToolbarLayout2 extends Component {
                                 </Link>
 
                                 <NavLink to='/registration' onClick={this.handleClearAboutLink}>Sign Up</NavLink>
-                                <NavLink exact to='/' className='login-link'>Login</NavLink>
+
+                                <Link activeClass="active"
+                                      to="home"
+                                      spy={true}
+                                      smooth={true}
+                                      hashSpy={true}
+                                      offset={-120}
+                                      duration={100}
+                                      delay={0}
+                                      isDynamic={true}
+                                      onSetActive={this.handleSetActive}
+                                      onSetInactive={this.handleSetInactive}
+                                      ignoreCancelEvents={false}
+                                      className='login-link'
+                                      onClick={this.handleRedirectToHome}
+                                >
+                                    Login
+                                </Link>
                             </div>
                         </Toolbar>
                     }

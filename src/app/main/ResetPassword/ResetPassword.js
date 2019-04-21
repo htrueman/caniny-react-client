@@ -76,10 +76,10 @@ class ResetPassword extends Component {
         const {canSubmit, newPass} = this.state;
 
         return (
-            <div className={classNames(classes.root, "flex flex-col flex-1 flex-no-shrink p-24 md:flex-row md:p-0")}>
+            <div className={classNames(classes.root, "flex flex-col flex-1 flex-no-shrink p-24 md:flex-row md:p-0 registration-page full-height")}>
 
                 <div
-                    className="flex flex-col flex-no-grow items-center text-white p-16 text-center md:p-128 md:items-start md:flex-no-shrink md:flex-1 md:text-left">
+                    className="background flex flex-col flex-no-grow items-center text-white p-16 text-center md:p-128 md:items-start md:flex-no-shrink md:flex-1 md:text-left">
 
                     {/*<FuseAnimate animation="transition.expandIn">*/}
                     {/*<img className="w-128 mb-32" src="assets/images/logos/fuse.svg" alt="logo"/>*/}
@@ -87,7 +87,7 @@ class ResetPassword extends Component {
 
                     <FuseAnimate animation="transition.slideUpIn" delay={300}>
                         <Typography variant="h3" color="inherit" className="font-light">
-                            Welcome to the Caniny!
+                            Welcome to Caniny
                         </Typography>
                     </FuseAnimate>
 
@@ -105,7 +105,7 @@ class ResetPassword extends Component {
                     <Card className="w-full max-w-400 mx-auto m-16 md:m-0" square>
 
                         <CardContent className="flex flex-col items-center justify-center p-32 md:p-48 md:pt-128 ">
-                            <Typography variant="h6" className="text-center md:w-full mb-32">Reset Password</Typography>
+                            <Typography variant="h6" className="text-center md:w-full mb-32">RESET PASSWORD</Typography>
                             <Formsy
                                 onValidSubmit={this.onSubmit}
                                 onValid={this.enableButton}
