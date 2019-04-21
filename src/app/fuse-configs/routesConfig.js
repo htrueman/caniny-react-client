@@ -7,6 +7,7 @@ import {LPConfig} from 'app/main/LP/LpConfig';
 import {RegistrationConfig} from 'app/main/Registration/RegistrationConfig';
 import {ResetPasswordConfig} from 'app/main/ResetPassword/ResetPasswordConfig';
 import {ActivateAccountConfig} from 'app/main/ActivateAccount/ActivateAccountConfig';
+import {UsersConfig} from 'app/main/Users/UsersConfig';
 
 const routeConfigs = [
     ExampleConfig,
@@ -15,6 +16,7 @@ const routeConfigs = [
     LPConfig,
     ResetPasswordConfig,
     ActivateAccountConfig,
+    UsersConfig,
 ];
 
  const routes = [

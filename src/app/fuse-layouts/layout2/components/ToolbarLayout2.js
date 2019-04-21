@@ -22,8 +22,6 @@ const styles = theme => ({
 class ToolbarLayout2 extends Component {
 
     componentDidMount() {
-        document.querySelector('.login-link').classList.add("active");
-
         Events.scrollEvent.register('begin', function (to, element) {
             console.log("begin", arguments);
         });

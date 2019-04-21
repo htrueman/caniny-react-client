@@ -86,8 +86,8 @@ class ResetPassword extends Component {
                     {/*</FuseAnimate>*/}
 
                     <FuseAnimate animation="transition.slideUpIn" delay={300}>
-                        <Typography variant="h3" color="inherit" className="font-light">
-                            Welcome to Caniny
+                        <Typography variant="h2" color="inherit" className="font-light welcome-title">
+                            WELCOME TO Caniny
                         </Typography>
                     </FuseAnimate>
 

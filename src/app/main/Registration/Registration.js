@@ -207,8 +207,8 @@ class Register extends Component {
                 <div
                     className="background flex flex-col flex-no-grow items-center text-white p-16 text-center md:p-128 md:items-start md:flex-no-shrink md:flex-1 md:text-center">
                     <FuseAnimate animation="transition.slideUpIn" delay={300}>
-                        <Typography variant="h3" color="inherit" className="font-light">
-                            Welcome to Caniny
+                        <Typography variant="h2" color="inherit" className="font-light welcome-title">
+                            WELCOME TO Caniny
                         </Typography>
                     </FuseAnimate>
                 </div>

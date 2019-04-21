@@ -68,6 +68,8 @@ class LP extends Component {
     };
 
     componentDidMount() {
+        document.querySelector('.login-link').classList.add("active");
+
         // interval = setInterval(() => {
         //     this.refs.player.load();
         // }, 12000)

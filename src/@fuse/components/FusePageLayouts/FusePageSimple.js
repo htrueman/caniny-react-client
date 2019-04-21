@@ -6,17 +6,17 @@ import PropTypes from 'prop-types';
 import connect from 'react-redux/es/connect/connect';
 
 const propTypes = {
-    leftSidebarHeader  : PropTypes.node,
-    leftSidebarContent : PropTypes.node,
-    leftSidebarVariant : PropTypes.node,
-    rightSidebarHeader : PropTypes.node,
+    leftSidebarHeader: PropTypes.node,
+    leftSidebarContent: PropTypes.node,
+    leftSidebarVariant: PropTypes.node,
+    rightSidebarHeader: PropTypes.node,
     rightSidebarContent: PropTypes.node,
     rightSidebarVariant: PropTypes.node,
-    header             : PropTypes.node,
-    content            : PropTypes.node,
-    contentToolbar     : PropTypes.node,
-    sidebarInner       : PropTypes.bool,
-    innerScroll        : PropTypes.bool
+    header: PropTypes.node,
+    content: PropTypes.node,
+    contentToolbar: PropTypes.node,
+    sidebarInner: PropTypes.bool,
+    innerScroll: PropTypes.bool
 };
 
 const defaultProps = {};
@@ -26,128 +26,128 @@ const headerHeight = 120;
 const toolbarHeight = 64;
 
 const styles = theme => ({
-    root                          : {
-        display        : 'flex',
-        flexDirection  : 'column',
-        minHeight      : '100%',
-        position       : 'relative',
-        flex           : '1 0 auto',
-        height         : 'auto',
+    root: {
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100%',
+        position: 'relative',
+        flex: '1 0 auto',
+        height: 'auto',
         backgroundColor: theme.palette.background.default
     },
-    innerScroll                   : {
-        flex  : '1 1 auto',
+    innerScroll: {
+        flex: '1 1 auto',
         height: '100%'
     },
-    contentWrapper                : {
-        display        : 'flex',
-        flexDirection  : 'row',
-        flex           : '1 1 auto',
-        zIndex         : 2,
-        maxWidth       : '100%',
-        minWidth       : 0,
-        height         : '100%',
+    contentWrapper: {
+        display: 'flex',
+        flexDirection: 'row',
+        flex: '1 1 auto',
+        zIndex: 2,
+        maxWidth: '100%',
+        minWidth: 0,
+        height: '100%',
         backgroundColor: theme.palette.background.default
     },
-    header                        : {
-        height         : headerHeight,
-        minHeight      : headerHeight,
-        display        : 'flex',
-        background     : 'linear-gradient(to right, ' + theme.palette.primary.dark + ' 0%, ' + theme.palette.primary.main + ' 100%)',
-        color          : theme.palette.primary.contrastText,
-        backgroundSize : 'cover',
+    header: {
+        height: headerHeight,
+        minHeight: headerHeight,
+        display: 'flex',
+        background: 'linear-gradient(to right, ' + theme.palette.primary.dark + ' 0%, ' + theme.palette.primary.main + ' 100%)',
+        color: theme.palette.primary.contrastText,
+        backgroundSize: 'cover',
         backgroundColor: theme.palette.primary.dark
     },
-    topBg                         : {
-        position     : 'absolute',
-        left         : 0,
-        right        : 0,
-        top          : 0,
-        height       : headerHeight,
+    topBg: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        height: headerHeight,
         pointerEvents: 'none'
     },
-    headerSidebarToggleButton     : {
+    headerSidebarToggleButton: {
         color: theme.palette.primary.contrastText
     },
-    contentCardWrapper            : {
-        display : 'flex ',
-        flex    : '1 1 auto',
+    contentCardWrapper: {
+        display: 'flex ',
+        flex: '1 1 auto',
         overflow: 'visible!important',
         minWidth: 0,
     },
     contentCardWrapperInnerSidebar: {
-        display                     : 'block',
-        overflow                    : 'auto!important',
+        display: 'block',
+        overflow: 'auto!important',
         '-webkit-overflow-scrolling': 'touch',
-        '& $contentCard'            : {
+        '& $contentCard': {
             borderRadius: 8
         }
     },
-    contentCard                   : {
-        display                     : 'flex',
-        flexDirection               : 'column',
-        flex                        : '1 1 auto',
-        overflow                    : 'auto',
+    contentCard: {
+        display: 'flex',
+        flexDirection: 'column',
+        flex: '1 1 auto',
+        overflow: 'auto',
         '-webkit-overflow-scrolling': 'touch',
-        zIndex                      : 9999
+        zIndex: 9999
     },
-    toolbar                       : {
-        height    : toolbarHeight,
-        minHeight : toolbarHeight,
-        display   : 'flex',
+    toolbar: {
+        height: toolbarHeight,
+        minHeight: toolbarHeight,
+        display: 'flex',
         alignItems: 'center'
     },
-    content                       : {
+    content: {
         flex: '1 0 auto'
     },
-    sidebarWrapper                : {
-        overflow       : 'hidden',
+    sidebarWrapper: {
+        overflow: 'hidden',
         backgroundColor: 'transparent',
-        position       : 'absolute',
-        '&.permanent'  : {
+        position: 'absolute',
+        '&.permanent': {
             [theme.breakpoints.up('lg')]: {
                 position: 'relative'
             }
         }
     },
-    sidebar                       : {
-        position     : 'absolute',
+    sidebar: {
+        position: 'absolute',
         '&.permanent': {
             [theme.breakpoints.up('lg')]: {
                 backgroundColor: theme.palette.background.default,
-                color          : theme.palette.text.primary,
-                position       : 'relative'
+                color: theme.palette.text.primary,
+                position: 'relative'
             }
         },
-        width        : drawerWidth,
-        height       : '100%'
+        width: drawerWidth,
+        height: '100%'
     },
-    leftSidebar                   : {
+    leftSidebar: {
         [theme.breakpoints.up('lg')]: {
             borderRight: '1px solid ' + theme.palette.divider,
-            borderLeft : 0
+            borderLeft: 0
         }
     },
-    rightSidebar                  : {
+    rightSidebar: {
         [theme.breakpoints.up('lg')]: {
-            borderLeft : '1px solid ' + theme.palette.divider,
+            borderLeft: '1px solid ' + theme.palette.divider,
             borderRight: 0
         }
     },
-    sidebarHeader                 : {
-        height         : headerHeight,
-        minHeight      : headerHeight,
+    sidebarHeader: {
+        height: headerHeight,
+        minHeight: headerHeight,
         backgroundColor: theme.palette.primary.dark,
-        color          : theme.palette.primary.contrastText
+        color: theme.palette.primary.contrastText
     },
-    sidebarHeaderInnerSidebar     : {
+    sidebarHeaderInnerSidebar: {
         backgroundColor: 'transparent',
-        color          : 'inherit',
-        height         : 'auto',
-        minHeight      : 'auto'
+        color: 'inherit',
+        height: 'auto',
+        minHeight: 'auto'
     },
-    sidebarContent                : {},
-    backdrop                      : {
+    sidebarContent: {},
+    backdrop: {
         position: 'absolute'
     }
 });
@@ -155,22 +155,18 @@ const styles = theme => ({
 class FusePageSimple extends React.Component {
 
     state = {
-        leftSidebar : false,
+        leftSidebar: false,
         rightSidebar: false
     };
 
-    componentDidMount()
-    {
-        if ( this.props.onRef )
-        {
+    componentDidMount() {
+        if (this.props.onRef) {
             this.props.onRef(this);
         }
     }
 
-    componentWillUnmount()
-    {
-        if ( this.props.onRef )
-        {
+    componentWillUnmount() {
+        if (this.props.onRef) {
             this.props.onRef(undefined)
         }
     }
@@ -191,8 +187,7 @@ class FusePageSimple extends React.Component {
         this.handleDrawerToggle(id);
     };
 
-    render()
-    {
+    render() {
         const {classes, mainThemeDark, leftSidebarHeader, leftSidebarContent, leftSidebarVariant, rightSidebarHeader, rightSidebarContent, rightSidebarVariant, header, content, contentToolbar, sidebarInner, innerScroll} = this.props;
         const isRightSidebar = rightSidebarHeader || rightSidebarContent;
         const isLeftSidebar = leftSidebarHeader || leftSidebarContent;
@@ -201,7 +196,8 @@ class FusePageSimple extends React.Component {
             <FuseScrollbars enable={innerScroll}>
                 {header && (
                     <MuiThemeProvider theme={mainThemeDark}>
-                        <div className={classNames(classes.sidebarHeader, variant, sidebarInner && classes.sidebarHeaderInnerSidebar)}>
+                        <div
+                            className={classNames(classes.sidebarHeader, variant, sidebarInner && classes.sidebarHeaderInnerSidebar)}>
                             {header}
                         </div>
                     </MuiThemeProvider>
@@ -294,17 +290,19 @@ class FusePageSimple extends React.Component {
 
                                 {header && !sidebarInner && headerContent}
 
-                                {contentToolbar && (
-                                    <div className={classes.toolbar}>
-                                        {contentToolbar}
-                                    </div>
-                                )}
+                                <div className='flex size-container'>
+                                    {contentToolbar && (
+                                        <div className={classes.toolbar}>
+                                            {contentToolbar}
+                                        </div>
+                                    )}
 
-                                {content && (
-                                    <div className={classes.content}>
-                                        {content}
-                                    </div>
-                                )}
+                                    {content && (
+                                        <div className={classes.content}>
+                                            {content}
+                                        </div>
+                                    )}
+                                </div>
                             </FuseScrollbars>
                         </FuseScrollbars>
 
@@ -320,8 +318,7 @@ class FusePageSimple extends React.Component {
 FusePageSimple.propTypes = propTypes;
 FusePageSimple.defaultProps = defaultProps;
 
-function mapStateToProps({fuse})
-{
+function mapStateToProps({fuse}) {
     return {
         mainThemeDark: fuse.settings.mainThemeDark
     }
