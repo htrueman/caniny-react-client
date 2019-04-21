@@ -35,4 +35,5 @@ header {
     width: 8vw;
     display: flex;
     flex-direction: column;
+    cursor: pointer;
 }

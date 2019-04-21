@@ -121,9 +121,10 @@ class Login extends Component {
                     {/*</FuseAnimate>*/}
 
                     <FuseAnimate animation="transition.slideUpIn" delay={300}>
-                        <Typography variant="h2" color="inherit" className="font-light welcome-title">
-                            WELCOME TO Caniny
-                        </Typography>
+                        <div className='welcome-title'>
+                            <h2 className="text-uppercase">WELCOME TO</h2>
+                            <h1 className="text-uppercase">Caniny</h1>
+                        </div>
                     </FuseAnimate>
 
                     {/*<FuseAnimate delay={400}>*/}
@@ -139,7 +140,7 @@ class Login extends Component {
 
                     <Card className="w-full max-w-400 mx-auto m-16 md:m-0" square>
 
-                        <CardContent className="flex flex-col items-center justify-center p-32 md:p-48 md:pt-128 ">
+                        <CardContent className="flex flex-col items-center justify-center p-32 md:p-48 md:pt-128 login-form-side">
 
                             <Typography variant="h6" className="text-center md:w-full">LOGIN TO YOUR
                                 ACCOUNT</Typography>
@@ -282,11 +283,11 @@ class Login extends Component {
                             </Formsy>
 
                             <div className="flex flex-col items-center justify-center pt-32">
-                                <span className="font-medium">Don't have an account?</span>
-                                <Link className="font-medium" to="/registration">Create an account</Link>
-                                <div className='mt-32'>
+                                <div className='mb-16'>
                                     <Link className="font-medium" to="/reset_password">Reset password</Link>
                                 </div>
+
+                                <Link className="font-medium" to="/registration">Create an account</Link>
                             </div>
 
                         </CardContent>

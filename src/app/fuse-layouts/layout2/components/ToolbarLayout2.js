@@ -107,9 +107,23 @@ class ToolbarLayout2 extends Component {
                         :
                         <Toolbar className="container p-0 lg:px-24">
                             <div className="flex flex-1">
-                                <a href='/#home' className='header-logo'>
+                                <Link activeClass="active"
+                                      to="home"
+                                      spy={true}
+                                      smooth={true}
+                                      hashSpy={true}
+                                      offset={-120}
+                                      duration={100}
+                                      delay={0}
+                                      isDynamic={true}
+                                      onSetActive={this.handleSetActive}
+                                      onSetInactive={this.handleSetInactive}
+                                      ignoreCancelEvents={false}
+                                      className='header-logo'
+                                      onClick={this.handleRedirectToHome}
+                                >
                                     <img src={logo} alt=""/>
-                                </a>
+                                </Link>
                             </div>
 
                             <div className="flex header-navigation">

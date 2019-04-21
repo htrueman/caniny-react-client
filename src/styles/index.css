@@ -58,11 +58,26 @@ h6, .h6 {
 }
 
 .welcome-title {
-    font-size: 2vw;
-    letter-spacing: 10px;
+    margin: 0 auto;
+}
+
+.welcome-title h2 {
     font-family: Helvetica, sans-serif;
     font-weight: 700;
     margin: 0 auto;
+
+    color: #fff;
+    font-size: 2vw;
+    letter-spacing: 10px;
+}
+
+.welcome-title h1 {
+    font-family: Helvetica, sans-serif;
+
+    color: #fff;
+    font-size: 5vw;
+    font-weight: bold;
+    letter-spacing: 15px;
 }
 
 .size-container {
@@ -89,9 +104,15 @@ a[role=button] {
     background-size: cover;
 }
 
+.login-page .login-form-side {
+    height: 100%;
+    padding: 0 40px;
+    justify-content: center;
+}
+
 /*registration*/
 .registration-page .background {
-    background: url("../img/registrationBag.jpg")  no-repeat -5vw 10px fixed;
+    background: url("../img/registrationBag.jpg") no-repeat -5vw 10px fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -129,6 +150,7 @@ a[role=button] {
 .icon-block:hover .hover {
     display: block;
 }
+
 .icon-block:hover .default {
     display: none;
 }
@@ -137,7 +159,6 @@ a[role=button] {
     width: 50px;
     cursor: pointer;
 }
-
 
 
 /* Medium Devices, Desktops Only */
