@@ -5,7 +5,9 @@ import {FuseSearch, FuseShortcuts} from '@fuse';
 import connect from 'react-redux/es/connect/connect';
 import {withRouter} from 'react-router-dom';
 import UserMenu from 'app/fuse-layouts/shared-components/UserMenu';
+import CompanyMenu from 'app/fuse-layouts/shared-components/CompanyMenu';
 import logo from '../../../../img/Caniny_Logo.png';
+import Icon from '@material-ui/core/Icon';
 
 import * as Scroll from 'react-scroll';
 import {Link, DirectLink, Element, Events, animateScroll as scroll, scrollSpy, scroller} from 'react-scroll'
@@ -74,18 +76,24 @@ class ToolbarLayout2 extends Component {
         const {classes, settings, toolbarTheme, login} = this.props;
         const layoutConfig = settings.layout.config;
 
+        const logging = () => {
+            const token = localStorage.getItem('token');
+
+            if (token || login) return true;
+        };
+
         return (
             <MuiThemeProvider theme={toolbarTheme}>
                 <AppBar id="fuse-toolbar" className="flex relative z-10" color="default">
-                    {login ?
+                    {logging() ?
                         <Toolbar className="container p-0 lg:px-24">
-                            <div className="flex flex-1">
-                                <NavLink to='/' className='header-logo'>
-                                    <img src={logo} alt=""/>
-                                </NavLink>
+                            <div className="flex flex-1 ">
+                                <CompanyMenu />
 
-                                <NavLink to='/users'>Users</NavLink>
-                                <NavLink to='/animals'>Animals</NavLink>
+                                <div className="left-navigation">
+                                    <NavLink to='/users'><Icon>account_box</Icon></NavLink>
+                                    <NavLink to='/animals'><Icon>pets</Icon></NavLink>
+                                </div>
                                 {/*<Hidden mdDown>*/}
                                 {/*<FuseShortcuts/>*/}
                                 {/*</Hidden>*/}

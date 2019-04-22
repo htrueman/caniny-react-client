@@ -32,8 +32,38 @@ header {
 }
 
 .header-logo {
+    height: 64px;
     width: 8vw;
     display: flex;
     flex-direction: column;
     cursor: pointer;
+}
+
+.header-logo img {
+    margin: auto;
+}
+
+.left-navigation {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    margin: 0 0 0 10%;
+}
+
+.left-navigation span {
+    color: #fff;
+    font-size: 30px;
+    margin: 0 20px 0 0;
+}
+
+.left-navigation span:hover {
+    color: #33ADFF;
+    margin: 0 20px 0 0;
+}
+
+.display-user-name {
+    color: #fff;
+}
+.display-role {
+    color: #aaaaaa;
 }

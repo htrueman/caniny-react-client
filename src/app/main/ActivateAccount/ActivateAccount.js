@@ -44,7 +44,7 @@ class ActivateAccount extends Component {
     componentDidMount() {
         const url_string = window.location.href;
         const token = new URL(url_string).searchParams.get("token");
-        const id = new URL(url_string).searchParams.get("token");
+        const id = new URL(url_string).searchParams.get("id");
 
         jwtService.activate(id, token);
     }
@@ -55,12 +55,12 @@ class ActivateAccount extends Component {
         const {canSubmit, newPass} = this.state;
 
         return (
-            <div className={classNames(classes.root, "flex flex-col flex-1 flex-no-shrink p-24 md:flex-row md:p-0")}>
+            <div className={classNames(classes.root, "flex flex-col flex-1 flex-no-shrink p-24 md:flex-row md:p-0 full-height")}>
                 <div
                     className="flex flex-col flex-no-grow items-center text-white p-16 text-center md:p-128 md:items-center md:flex-no-shrink md:flex-1 md:text-center">
 
-                    <Typography variant="h3" color="inherit" className="font-light">
-                        Welcome to the Caniny!
+                    <Typography variant="h3" color="inherit" className="font-light mb-24">
+                        Welcome to Caniny!
                     </Typography>
 
                     <Link to='/login'>Login </Link>

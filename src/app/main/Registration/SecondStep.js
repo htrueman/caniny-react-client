@@ -121,7 +121,7 @@ class Register extends Component {
                             variant: 'success'
                         });
                         setTimeout(() => {
-                            // this.props.history.push('/')
+                            this.props.history.push('/')
                         }, 1000)
                     } else {
                         for (let key in res.payload.data) {
@@ -147,7 +147,7 @@ class Register extends Component {
                             variant: 'success'
                         })
                         setTimeout(() => {
-                            // this.props.history.push('/')
+                            this.props.history.push('/')
                         }, 1000)
                     } else {
                         for (let key in res.payload.data) {

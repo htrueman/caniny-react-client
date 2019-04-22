@@ -81,7 +81,10 @@ class LP extends Component {
     };
 
     componentDidMount() {
-        document.querySelector('.login-link').classList.add("active");
+        let link = document.querySelector('.login-link');
+        if (link) {
+            document.querySelector('.login-link').classList.add("active");
+        }
 
         // interval = setInterval(() => {
         //     this.refs.player.load();

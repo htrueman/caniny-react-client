@@ -5,7 +5,7 @@ import * as authActions from 'app/auth/store/actions';
 import {bindActionCreators} from 'redux';
 import {Link} from 'react-router-dom';
 
-class UserMenu extends Component {
+class CompanyMenu extends Component {
 
     state = {
         userMenu: null
@@ -42,11 +42,7 @@ class UserMenu extends Component {
                         <Typography component="span" className="normal-case font-600 flex display-user-name">
                             {user.data.displayName}
                         </Typography>
-                        <Typography className="text-11 capitalize display-role" color="textSecondary">
-                            {user.role}
-                        </Typography>
                     </div>
-
                     <Icon className="text-16 ml-12 hidden sm:flex" variant="action" style={{color: '#fff'}}>keyboard_arrow_down</Icon>
                 </Button>
 
@@ -71,20 +67,20 @@ class UserMenu extends Component {
                             <ListItemIcon>
                                 <Icon>account_circle</Icon>
                             </ListItemIcon>
-                            <ListItemText className="pl-0" primary="My Profile"/>
+                            <ListItemText className="pl-0" primary="Organization Profile"/>
                         </MenuItem>
 
-                        <MenuItem
-                            onClick={() => {
-                                logout();
-                                this.userMenuClose();
-                            }}
-                        >
-                            <ListItemIcon>
-                                <Icon>exit_to_app</Icon>
-                            </ListItemIcon>
-                            <ListItemText className="pl-0" primary="Logout"/>
-                        </MenuItem>
+                        {/*<MenuItem*/}
+                            {/*onClick={() => {*/}
+                                {/*logout();*/}
+                                {/*this.userMenuClose();*/}
+                            {/*}}*/}
+                        {/*>*/}
+                            {/*<ListItemIcon>*/}
+                                {/*<Icon>exit_to_app</Icon>*/}
+                            {/*</ListItemIcon>*/}
+                            {/*<ListItemText className="pl-0" primary="Logout"/>*/}
+                        {/*</MenuItem>*/}
                     </React.Fragment>
                 </Popover>
             </React.Fragment>
@@ -104,4 +100,4 @@ function mapStateToProps({auth}) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(CompanyMenu);

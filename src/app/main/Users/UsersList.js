@@ -16,6 +16,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
+import PlusIcon from '@material-ui/icons/PersonAdd';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 
@@ -142,7 +143,7 @@ const toolbarStyles = theme => ({
 });
 
 let EnhancedTableToolbar = props => {
-    const { numSelected, classes } = props;
+    const { numSelected, classes, open } = props;
 
     return (
         <Toolbar
@@ -170,7 +171,12 @@ let EnhancedTableToolbar = props => {
                         </IconButton>
                     </Tooltip>
                 ) : (
-                   ''
+                    <Tooltip title="Add user">
+                        <IconButton aria-label="Add user" onClick={open}>
+                            <PlusIcon />
+                        </IconButton>
+                    </Tooltip>
+
                 )}
             </div>
         </Toolbar>
@@ -180,6 +186,7 @@ let EnhancedTableToolbar = props => {
 EnhancedTableToolbar.propTypes = {
     classes: PropTypes.object.isRequired,
     numSelected: PropTypes.number.isRequired,
+    onAddUser: PropTypes.object,
 };
 
 EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
@@ -272,13 +279,15 @@ class EnhancedTable extends React.Component {
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     render() {
-        const { classes } = this.props;
+        const { classes, onAddUser } = this.props;
         const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
         return (
             <Paper className={classes.root}>
-                <EnhancedTableToolbar numSelected={selected.length} />
+                <EnhancedTableToolbar numSelected={selected.length} open={onAddUser}/>
+
+
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table} aria-labelledby="tableTitle">
                         <EnhancedTableHead
@@ -326,6 +335,7 @@ class EnhancedTable extends React.Component {
                         </TableBody>
                     </Table>
                 </div>
+
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
