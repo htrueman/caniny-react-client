@@ -61,6 +61,10 @@ header {
     margin: 0 20px 0 0;
 }
 
+.left-navigation a.active span {
+    color: #33ADFF;
+}
+
 .display-user-name {
     color: #fff;
 }
