@@ -10,7 +10,14 @@ import {ActivateAccountConfig} from 'app/main/ActivateAccount/ActivateAccountCon
 import {UsersConfig} from 'app/main/Users/UsersConfig';
 import {AnimalsConfig} from 'app/main/Animals/AnimalsConfig';
 
-const routeConfigs = [
+
+const logging = () => {
+    const token = localStorage.getItem('token');
+
+    if (token) return true;
+};
+
+const routeConfigs =  [
     ExampleConfig,
     LoginConfig,
     RegistrationConfig,
@@ -21,13 +28,14 @@ const routeConfigs = [
     AnimalsConfig
 ];
 
- const routes = [
+
+const routes = [
     ...FuseUtils.generateRoutesFromConfigs(routeConfigs),
     {
-        path     : '/',
-        exact    : true,
+        path: '/',
+        exact: true,
         component: () => <Redirect to="/"/>
     }
 ];
 
- export default routes;
+export default routes;

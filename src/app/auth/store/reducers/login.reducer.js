@@ -1,4 +1,5 @@
 import * as Actions from '../actions';
+import {USER_LOGGED_OUT} from "../actions";
 
 const initialState = {
     success: false,
@@ -19,6 +20,13 @@ const login = function (state = initialState, action) {
             };
         }
         case Actions.LOGIN_ERROR:
+        {
+            return {
+                success: false,
+                error  : action.payload
+            };
+        }
+        case Actions.USER_LOGGED_OUT:
         {
             return {
                 success: false,
