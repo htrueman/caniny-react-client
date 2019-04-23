@@ -40,8 +40,28 @@
     width: 100%;
     margin: 50px 0 0 0;
 
-    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
-    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
-
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
 }
+
+.user-actions span:first-child {
+    margin: 0 20px 0 -20px;
+}
+
+.user-actions span:first-child:hover {
+    color: #33ADFF;
+    cursor: pointer;
+}
+
+.user-actions span:last-child:hover {
+    color: #b61423;
+    cursor: pointer;
+}
+
+/*dialog window*/
+
+.new-user-window form > div {
+    margin: 0 0 20px 0;
+}
+

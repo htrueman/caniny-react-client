@@ -11,6 +11,8 @@ import {Auth} from './auth';
 import store from './store';
 import AppContext from './AppContext';
 import routes from './fuse-configs/routesConfig';
+import 'react-notifications/lib/notifications.css';
+import {NotificationContainer} from 'react-notifications';
 
 const jss = create({
     ...jssPreset(),
@@ -27,6 +29,8 @@ const App = () => {
                 routes
             }}
         >
+            <NotificationContainer/>
+
             <JssProvider jss={jss} generateClassName={generateClassName}>
                 <Provider store={store}>
                     <Auth>

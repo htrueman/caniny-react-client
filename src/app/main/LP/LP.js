@@ -272,7 +272,7 @@ class LP extends Component {
                                     <h2 className="text-uppercase">WELCOME TO</h2>
                                     <h1 className="text-uppercase">Caniny</h1>
                                     <p className="text-white sub-head">
-                                        We seek to enhance the animal’s lives by <br/>
+                                      We are seeking to enhance the animal's lives by <br/>
                                         organizing and managing their information
                                     </p>
 

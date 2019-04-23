@@ -5,13 +5,8 @@ import Icon from '@material-ui/core/Icon';
 import UsersList from './UsersList';
 import jwtService from 'app/services/jwtService';
 
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import UserWindow from './UserWindow';
+
 
 const styles = theme => ({
     layoutRoot: {}
@@ -19,7 +14,10 @@ const styles = theme => ({
 
 class Users extends Component {
     state = {
+        users: [],
+        selectedUser: {},
         open: false,
+        search: ''
     };
 
     handleClickOpen = () => {
@@ -28,18 +26,60 @@ class Users extends Component {
 
     handleClose = () => {
         this.setState({open: false});
+        this.getUsers();
     };
 
-    getUsers = async () => {
-        const res = await jwtService.getUsers();
-    }
+    getUsers = async (search) => {
+        let params = search ? `?search=${search}`:'';
+
+        const res = await jwtService.getUsers(params);
+        this.setState({
+            users: res.results
+        })
+    };
+
+    handleEditUser = user => {
+        console.log(user);
+
+        this.setState({
+            selectedUser: user,
+            open: true,
+        })
+    };
+
+    handleSearch = ({target: {value}}) => {
+
+        this.setState({
+            search: value
+        });
+
+        this.getUsers(value);
+
+        // let prevValue = value;
+    };
+
+    handleRemoveUser = async (id) => {
+        await jwtService.removeUser(id);
+        this.getUsers();
+    };
 
     componentDidMount() {
         this.getUsers();
-    }
+    };
 
     render() {
-        const {classes} = this.props;
+        const {
+                open,
+                users,
+                selectedUser,
+                search
+            } = this.state,
+
+            {
+                classes,
+            } = this.props;
+
+
         return (
             <Fragment>
                 <FusePageSimple
@@ -52,75 +92,38 @@ class Users extends Component {
 
                             <div className='search-block'>
                                 <Icon>search</Icon>
-                                <input type="text" placeholder='Search for anything'/>
+                                <input
+                                    type="text"
+                                    placeholder='Search for anything'
+                                    value={search}
+                                    onChange={this.handleSearch}
+                                />
                             </div>
                         </div>
                     }
                     contentToolbar={
                         <div className="toolbar-users-page">
-                            <h4>Filters</h4>
+
                         </div>
                     }
                     content={
                         <div className="p-24">
                             <UsersList
                                 onAddUser={this.handleClickOpen}
+                                data={users}
+                                onEdit={this.handleEditUser}
+                                onRemove={this.handleRemoveUser}
                             />
                         </div>
                     }
                 />
 
-                <Dialog
-                    open={this.state.open}
+                <UserWindow
+                    open={open}
                     onClose={this.handleClose}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="form-dialog-title">New user</DialogTitle>
-                    <DialogContent>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="name"
-                            label="First Name"
-                            type="text"
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="name"
-                            label="Last Name"
-                            type="text"
-                            fullWidth
-                        />
+                    user={selectedUser}
+                />
 
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="name"
-                            label="Email Address"
-                            type="email"
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="name"
-                            label="Phone"
-                            type="email"
-                            fullWidth
-                        />
-                    </DialogContent>
-
-                    <DialogActions>
-                        <Button onClick={this.handleClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button onClick={this.handleClose} color="primary">
-                            Save
-                        </Button>
-                    </DialogActions>
-                </Dialog>
             </Fragment>
 
         )

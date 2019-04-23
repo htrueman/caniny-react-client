@@ -198,32 +198,30 @@ class Login extends Component {
                                 </div>
 
 
-                                <TextFieldFormsy
-                                    className="mb-16"
-                                    type="text"
-                                    name="organization"
-                                    label="Organization"
-                                    validations={{
-                                        minLength: 4
-                                    }}
-                                    validationErrors={{
-                                        minLength: 'Min character length is 4'
-                                    }}
-                                    InputProps={{
-                                        endAdornment: <InputAdornment position="end"><Icon className="text-20"
-                                                                                           color="action">account_balance</Icon></InputAdornment>
-                                    }}
-                                    variant="outlined"
-                                />
+                                {/*<TextFieldFormsy*/}
+                                    {/*className="mb-16"*/}
+                                    {/*type="text"*/}
+                                    {/*name="organization"*/}
+                                    {/*label="Organization"*/}
+                                    {/*validations={{*/}
+                                        {/*minLength: 4*/}
+                                    {/*}}*/}
+                                    {/*validationErrors={{*/}
+                                        {/*minLength: 'Min character length is 4'*/}
+                                    {/*}}*/}
+                                    {/*InputProps={{*/}
+                                        {/*endAdornment: <InputAdornment position="end"><Icon className="text-20"*/}
+                                                                                           {/*color="action">account_balance</Icon></InputAdornment>*/}
+                                    {/*}}*/}
+                                    {/*variant="outlined"*/}
+                                {/*/>*/}
 
                                 <TextFieldFormsy
                                     className="mb-16"
                                     type="text"
                                     name="email"
                                     label="Email"
-                                    validations={{
-                                        minLength: 4
-                                    }}
+                                    validations="isEmail"
                                     validationErrors={{
                                         minLength: 'Min character length is 4'
                                     }}

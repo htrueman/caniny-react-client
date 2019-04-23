@@ -1,6 +1,9 @@
+import React from 'react';
+
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import FuseUtils from '@fuse/FuseUtils';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 const baseUrl = 'http://165.22.152.38:8000/api/v1/';
 
@@ -16,6 +19,14 @@ class jwtService extends FuseUtils.EventEmitter {
         this.setInterceptors();
         this.handleAuthentication();
     }
+
+    handleError = ({response}) => {
+        if (typeof response.data === 'object') {
+            for (let key in response.data) {
+                NotificationManager.error(response.data[key][0], 'Error');
+            }
+        }
+    };
 
 
     setInterceptors = () => {
@@ -177,18 +188,63 @@ class jwtService extends FuseUtils.EventEmitter {
 
 //    USERS
 
-    getUsers = () => {
+    getUsers = (search) => {
         return new Promise((resolve, reject) => {
-            axios.get(`${baseUrl}users/`)
+            console.log(search);
+
+            axios.get(`${baseUrl}users/${search}`)
                 .then(response => {
-                    if (response.data.user) {
-                        resolve(response.data.user);
+                    if (response.data) {
+                        resolve(response.data);
                     } else {
                         reject(response.data);
                     }
                 });
         });
-    }
+    };
+
+    createNewUser = (user) => {
+        return new Promise((resolve, reject) => {
+            axios.post(`${baseUrl}users/`, user)
+                .then(response => {
+                    if (response.data) {
+                        resolve(response.data);
+                    }
+                })
+                .catch(error => {
+                    this.handleError(error);
+                    reject(error.response.data);
+                });
+        });
+    };
+
+    updateUser = (user, id) => {
+        return new Promise((resolve, reject) => {
+            axios.patch(`${baseUrl}users/${id}/`, user)
+                .then(response => {
+                    if (response.data) {
+                        resolve(response.data);
+                    }
+                })
+                .catch(error => {
+                    this.handleError(error);
+                    reject(error.response.data);
+                });
+        });
+    };
+
+    removeUser = (id) => {
+        return new Promise((resolve, reject) => {
+            axios.delete(`${baseUrl}users/${id}/`)
+                .then(response => {
+                    resolve(response.data);
+                })
+                .catch(error => {
+                    this.handleError(error);
+                    reject(error.response.data);
+                });
+        });
+    };
 }
 
 const instance = new jwtService();

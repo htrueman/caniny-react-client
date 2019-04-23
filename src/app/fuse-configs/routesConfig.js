@@ -8,6 +8,7 @@ import {RegistrationConfig} from 'app/main/Registration/RegistrationConfig';
 import {ResetPasswordConfig} from 'app/main/ResetPassword/ResetPasswordConfig';
 import {ActivateAccountConfig} from 'app/main/ActivateAccount/ActivateAccountConfig';
 import {UsersConfig} from 'app/main/Users/UsersConfig';
+import {AnimalsConfig} from 'app/main/Animals/AnimalsConfig';
 
 const routeConfigs = [
     ExampleConfig,
@@ -17,6 +18,7 @@ const routeConfigs = [
     ResetPasswordConfig,
     ActivateAccountConfig,
     UsersConfig,
+    AnimalsConfig
 ];
 
  const routes = [
