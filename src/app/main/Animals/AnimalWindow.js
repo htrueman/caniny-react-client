@@ -10,7 +10,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {withStyles} from "@material-ui/core/styles/index";
-import {FormControlLabel, Checkbox} from '@material-ui/core';
 
 import jwtService from 'app/services/jwtService';
 
@@ -19,19 +18,17 @@ const styles = theme => ({
 });
 
 
-class UserWindow extends Component {
+class AnimalWindow extends Component {
     state = {
         firstName: '',
         lastName: '',
         email: '',
         phoneNumber: '',
         userType: '',
-        description: '',
-        isActive: true
     };
 
     handleSaveUser = async () => {
-        const {firstName, lastName, email, phoneNumber, userType, isActiveOn} = this.state;
+        const {firstName, lastName, email, phoneNumber, userType} = this.state;
 
         if (this.state.id) {
             await jwtService.updateUser({
@@ -39,8 +36,7 @@ class UserWindow extends Component {
                 lastName,
                 email,
                 phoneNumber,
-                userType,
-                is_active: isActiveOn
+                userType
             }, this.state.id);
         } else {
             await jwtService.createNewUser(this.state);
@@ -57,11 +53,11 @@ class UserWindow extends Component {
         this.props.onClose();
     };
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.user.id) {
-            this.setState({...nextProps.user})
-        }
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     if (nextProps.user.id) {
+    //         this.setState({...nextProps.user})
+    //     }
+    // }
 
 
     handleChangeInput = name => event => {
@@ -76,8 +72,6 @@ class UserWindow extends Component {
                 email,
                 phoneNumber,
                 userType,
-                description,
-                isActive
             } = this.state,
 
             {
@@ -93,74 +87,82 @@ class UserWindow extends Component {
                 aria-labelledby="form-dialog-title"
                 className="new-user-window"
             >
-                <DialogTitle id="form-dialog-title">New user</DialogTitle>
+                <DialogTitle id="form-dialog-title">New animal</DialogTitle>
                 <DialogContent>
                     <form className={classes.root} autoComplete="off">
                         <TextField
                             id="firstName"
-                            label="First Name"
+                            label="Name"
                             type="text"
-                            value={firstName}
-                            onChange={this.handleChangeInput('firstName')}
+                            // value={firstName}
+                            // onChange={this.handleChangeInput('firstName')}
                             fullWidth
                         />
                         <TextField
                             id="lastName"
-                            label="Last Name"
+                            label="Species"
                             type="text"
-                            value={lastName}
-                            onChange={this.handleChangeInput('lastName')}
+                            // value={lastName}
+                            // onChange={this.handleChangeInput('lastName')}
                             fullWidth
                         />
 
                         <TextField
                             id="email"
-                            label="Email Address"
-                            type="email"
-                            value={email}
-                            onChange={this.handleChangeInput('email')}
+                            label="Breed"
+                            type="text"
+                            // value={email}
+                            // onChange={this.handleChangeInput('email')}
                             fullWidth
                         />
                         <TextField
                             id="phone"
-                            label="Phone"
-                            type="email"
-                            value={phoneNumber}
-                            onChange={this.handleChangeInput('phoneNumber')}
+                            label="Age"
+                            type="text"
+                            // value={phoneNumber}
+                            // onChange={this.handleChangeInput('phoneNumber')}
                             fullWidth
                         />
-
-                        <FormControl className={classes.formControl} fullWidth>
-                            <InputLabel htmlFor="age-simple">Group</InputLabel>
-                            <Select
-                                value={userType}
-                                onChange={this.handleChangeInput('userType')}
-                                fullWidth
-                            >
-                                <MenuItem value='admin'>Admin</MenuItem>
-                                <MenuItem value='helper'>Helper</MenuItem>
-                            </Select>
-                        </FormControl>
-
-                        {!isActive && this.state.id ?
-                            <FormControl>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            name="remember"
-                                            onChange={() => this.setState({isActiveOn: true})}/>
-                                    }
-                                    label="Activate this user"
-                                />
-                            </FormControl> : ''
-                        }
-
-
-                        {description ? <FormControl className={classes.formControl} fullWidth>
-                                <span htmlFor="age-simple" style={{color: 'rgba(0, 0, 0, 0.54)'}}>Description</span>
-                                {description}
-                            </FormControl>
-                            : ''}
+                        <TextField
+                            id="phone"
+                            label="Size"
+                            type="text"
+                            // value={phoneNumber}
+                            // onChange={this.handleChangeInput('phoneNumber')}
+                            fullWidth
+                        />
+                        <TextField
+                            id="phone"
+                            label="Social"
+                            type="text"
+                            // value={phoneNumber}
+                            // onChange={this.handleChangeInput('phoneNumber')}
+                            fullWidth
+                        />
+                        <TextField
+                            id="phone"
+                            label="Accommodation"
+                            type="text"
+                            // value={phoneNumber}
+                            // onChange={this.handleChangeInput('phoneNumber')}
+                            fullWidth
+                        />
+                        <TextField
+                            id="phone"
+                            label="Tag"
+                            type="text"
+                            // value={phoneNumber}
+                            // onChange={this.handleChangeInput('phoneNumber')}
+                            fullWidth
+                        />
+                        <TextField
+                            id="phone"
+                            label="Microchip"
+                            type="text"
+                            // value={phoneNumber}
+                            // onChange={this.handleChangeInput('phoneNumber')}
+                            fullWidth
+                        />
                     </form>
                 </DialogContent>
 
@@ -179,4 +181,4 @@ class UserWindow extends Component {
 }
 
 
-export default withStyles(styles, {withTheme: true})(UserWindow);
+export default withStyles(styles, {withTheme: true})(AnimalWindow);

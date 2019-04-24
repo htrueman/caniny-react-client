@@ -157,7 +157,7 @@ class Register extends Component {
             axios.get('http://165.22.152.38:8000/api/v1/organizations/');
 
         this.setState({
-            organizations: res.data.results
+            organizations: res.data
         })
 
         if (this.props.match.params.organization) {

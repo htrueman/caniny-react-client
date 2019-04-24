@@ -145,7 +145,7 @@ class Register extends Component {
                         this.props.showMessage({
                             message: 'Email sent. Check your inbox.',
                             variant: 'success'
-                        })
+                        });
                         setTimeout(() => {
                             this.props.history.push('/')
                         }, 1000)

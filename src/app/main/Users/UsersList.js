@@ -22,11 +22,11 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import {lighten} from '@material-ui/core/styles/colorManipulator';
 
 let counter = 0;
-
-function createData(firstName, lastName, email, phoneNumber, userType) {
-    counter += 1;
-    return {id: counter, firstName, lastName, email, phoneNumber, userType};
-}
+//
+// function createData(firstName, lastName, email, phoneNumber, userType) {
+//     counter += 1;
+//     return {id: counter, firstName, lastName, email, phoneNumber, userType};
+// }
 
 function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -214,7 +214,7 @@ class EnhancedTable extends React.Component {
         selected: [],
         data: this.props.data,
         page: 0,
-        rowsPerPage: 5,
+        rowsPerPage: 10,
     };
 
     handleRequestSort = (event, property) => {
@@ -259,6 +259,8 @@ class EnhancedTable extends React.Component {
 
     handleChangePage = (event, page) => {
         this.setState({page});
+
+        this.props.onChangePagination(event, page)
     };
 
     handleChangeRowsPerPage = event => {
@@ -271,6 +273,13 @@ class EnhancedTable extends React.Component {
         const {classes, onAddUser, onEdit, onRemove} = this.props;
         const {data, order, orderBy, selected, rowsPerPage, page} = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+
+        const types = {
+            helper:'Helper',
+            admin : 'Admin',
+            super_admin : 'Super admin',
+            django_admin : 'Django admin'
+        }
         return (
             <Paper className={classes.root}>
                 <EnhancedTableToolbar numSelected={selected.length} open={onAddUser}/>
@@ -299,12 +308,9 @@ class EnhancedTable extends React.Component {
                                             tabIndex={-1}
                                             key={n.id}
                                             selected={isSelected}
+                                            style={{background: !n.isActive ? '#ffbebe' : ''}}
                                         >
                                             <TableCell padding="checkbox">
-                                                {/*<Checkbox*/}
-                                                {/*checked={isSelected}*/}
-                                                {/*onClick={event => this.handleClick(event, n.id)}*/}
-                                                {/*/>*/}
                                             </TableCell>
 
                                             <TableCell component="th" scope="row" padding="none">
@@ -324,7 +330,7 @@ class EnhancedTable extends React.Component {
                                             </TableCell>
 
                                             <TableCell align="right">
-                                                {n.userType}
+                                                {types[n.userType]}
                                             </TableCell>
 
                                             <TableCell align="right">
@@ -346,11 +352,11 @@ class EnhancedTable extends React.Component {
                 </div>
 
                 <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPageOptions={[10]}
                     component="div"
-                    count={data.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
+                    count={this.props.count}
+                    rowsPerPage={true}
+                    page={this.props.page}
                     backIconButtonProps={{
                         'aria-label': 'Previous Page',
                     }}

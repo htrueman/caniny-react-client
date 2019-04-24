@@ -17,7 +17,10 @@ class Users extends Component {
         users: [],
         selectedUser: {},
         open: false,
-        search: ''
+        search: '',
+
+        count: 0,
+        page: 1
     };
 
     handleClickOpen = () => {
@@ -30,32 +33,35 @@ class Users extends Component {
     };
 
     getUsers = async (search) => {
-        let params = search ? `?search=${search}`:'';
+        const {page} = this.state;
+
+        let params = search ? `?page=${page}&search=${search}` : '';
 
         const res = await jwtService.getUsers(params);
         this.setState({
-            users: res.results
+            users: res.results,
+            count: res.count
         })
     };
 
     handleEditUser = user => {
-        console.log(user);
-
         this.setState({
             selectedUser: user,
             open: true,
         })
     };
 
-    handleSearch = ({target: {value}}) => {
+    handleChangePagination = (e, page) => {
+        this.setState({
+            page
+        }, () => this.getUsers())
+    };
 
+    handleSearch = ({target: {value}}) => {
         this.setState({
             search: value
         });
-
         this.getUsers(value);
-
-        // let prevValue = value;
     };
 
     handleRemoveUser = async (id) => {
@@ -64,6 +70,8 @@ class Users extends Component {
     };
 
     componentDidMount() {
+        const token = sessionStorage.getItem('token');
+        if (!token) this.props.history.push('/');
         this.getUsers();
     };
 
@@ -72,7 +80,9 @@ class Users extends Component {
                 open,
                 users,
                 selectedUser,
-                search
+                search,
+                count,
+                page
             } = this.state,
 
             {
@@ -113,6 +123,9 @@ class Users extends Component {
                                 data={users}
                                 onEdit={this.handleEditUser}
                                 onRemove={this.handleRemoveUser}
+                                onChangePagination={this.handleChangePagination}
+                                page={page}
+                                count={count}
                             />
                         </div>
                     }
@@ -123,7 +136,6 @@ class Users extends Component {
                     onClose={this.handleClose}
                     user={selectedUser}
                 />
-
             </Fragment>
 
         )

@@ -66,18 +66,8 @@ class LP extends Component {
         console.log(model);
         this.props.defaultLogin(model)
             .then(res => {
-                console.log(res);
-                if (res.type === "LOGIN_ERROR") {
-                    this.props.showMessage({
-                        message: res.payload.data.detail,
-                        variant: 'error'
-                    })
-                } else {
-                    this.props.history.push('/users')
-                }
-                console.log(res);
+                this.props.history.push('/users')
             })
-
     };
 
     componentDidMount() {
@@ -272,7 +262,7 @@ class LP extends Component {
                                     <h2 className="text-uppercase">WELCOME TO</h2>
                                     <h1 className="text-uppercase">Caniny</h1>
                                     <p className="text-white sub-head">
-                                      We are seeking to enhance the animal's lives by <br/>
+                                        We are seeking to enhance the animal's lives by <br/>
                                         organizing and managing their information
                                     </p>
 

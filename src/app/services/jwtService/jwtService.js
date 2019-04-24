@@ -8,7 +8,7 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 const baseUrl = 'http://165.22.152.38:8000/api/v1/';
 
 (function () {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (token) {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
     }
@@ -23,7 +23,11 @@ class jwtService extends FuseUtils.EventEmitter {
     handleError = ({response}) => {
         if (typeof response.data === 'object') {
             for (let key in response.data) {
-                NotificationManager.error(response.data[key][0], 'Error');
+                if (typeof response.data[key] === 'string') {
+                    NotificationManager.error(response.data[key], 'Error');
+                } else {
+                    NotificationManager.error(response.data[key][0], 'Error');
+                }
             }
         }
     };
@@ -128,8 +132,9 @@ class jwtService extends FuseUtils.EventEmitter {
                     resolve(response);
                 })
                 .catch(error => {
-                    reject(error.response);
-                })
+                    this.handleError(error);
+                    // reject(error.response.data);
+                });
         });
     };
 
@@ -154,12 +159,11 @@ class jwtService extends FuseUtils.EventEmitter {
     };
 
     setSession = access_token => {
-        console.log(access_token);
         if (access_token) {
-            localStorage.setItem('token', access_token);
+            sessionStorage.setItem('token', access_token);
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
         } else {
-            localStorage.removeItem('token');
+            sessionStorage.removeItem('token');
             delete axios.defaults.headers.common['Authorization'];
         }
     };
@@ -183,7 +187,7 @@ class jwtService extends FuseUtils.EventEmitter {
     };
 
     getAccessToken = () => {
-        return window.localStorage.getItem('jwt_access_token');
+        return window.sessionStorage.getItem('jwt_access_token');
     };
 
 //    USERS

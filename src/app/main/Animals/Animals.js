@@ -3,14 +3,9 @@ import {withStyles} from '@material-ui/core/styles';
 import {FusePageSimple} from '@fuse';
 import Icon from '@material-ui/core/Icon';
 import AnimalsList from './AnimalsList';
-import jwtService from 'app/services/jwtService';
+import animalsService from 'app/services/animalsService';
+import AnimalWindow from './AnimalWindow';
 
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 
 const styles = theme => ({
     layoutRoot: {}
@@ -18,7 +13,13 @@ const styles = theme => ({
 
 class Animals extends Component {
     state = {
+        animals: [],
+        selectedAnimal: {},
         open: false,
+        search: '',
+
+        count: 0,
+        page: 1
     };
 
     handleClickOpen = () => {
@@ -29,16 +30,36 @@ class Animals extends Component {
         this.setState({open: false});
     };
 
-    getUsers = async () => {
-        const res = await jwtService.getUsers();
-    }
+    handleSearch = ({target: {value}}) => {
+        this.setState({
+            search: value
+        });
+        this.getUsers(value);
+    };
+
+
+    getAnimals = async (search) => {
+        const {page} = this.state;
+
+        let params = search ? `?page=${page}&search=${search}` : '';
+
+        const res = await animalsService.getAnimals(params);
+        this.setState({
+            animals: res.results,
+            count: res.count
+        })
+    };
 
     componentDidMount() {
-        this.getUsers();
+        const token = sessionStorage.getItem('token');
+        if (!token) this.props.history.push('/');
+        this.getAnimals();
     }
 
     render() {
-        const {classes} = this.props;
+        const {animals, selectedAnimal, open, page, count, search} = this.state,
+            {classes} = this.props;
+
         return (
             <Fragment>
                 <FusePageSimple
@@ -51,7 +72,13 @@ class Animals extends Component {
 
                             <div className='search-block'>
                                 <Icon>search</Icon>
-                                <input type="text" placeholder='Search for anything'/>
+                                <input
+                                    type="text"
+                                    placeholder='Search for anything'
+                                    value={search}
+                                    onChange={this.handleSearch}
+                                />
+
                             </div>
                         </div>
                     }
@@ -64,62 +91,19 @@ class Animals extends Component {
                         <div className="p-24">
                             <AnimalsList
                                 onAddUser={this.handleClickOpen}
+                                data={animals}
+                                page={page}
+                                count={count}
                             />
                         </div>
                     }
                 />
 
-                <Dialog
-                    open={this.state.open}
+                <AnimalWindow
+                    open={open}
                     onClose={this.handleClose}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="form-dialog-title">New user</DialogTitle>
-                    <DialogContent>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="name"
-                            label="First Name"
-                            type="text"
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="name"
-                            label="Last Name"
-                            type="text"
-                            fullWidth
-                        />
-
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="name"
-                            label="Email Address"
-                            type="email"
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="name"
-                            label="Phone"
-                            type="email"
-                            fullWidth
-                        />
-                    </DialogContent>
-
-                    <DialogActions>
-                        <Button onClick={this.handleClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button onClick={this.handleClose} color="primary">
-                            Save
-                        </Button>
-                    </DialogActions>
-                </Dialog>
+                    animal={selectedAnimal}
+                />
             </Fragment>
 
         )

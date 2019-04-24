@@ -77,9 +77,9 @@ class ToolbarLayout2 extends Component {
         const layoutConfig = settings.layout.config;
 
         const logging = () => {
-            const token = localStorage.getItem('token');
+            const token = sessionStorage.getItem('token');
 
-            if (token || login) return true;
+            if (token) return true;
         };
 
         return (

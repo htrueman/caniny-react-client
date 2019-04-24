@@ -26,17 +26,17 @@ class UserMenu extends Component {
         return (
             <React.Fragment>
                 <Button className="h-64" onClick={this.userMenuClick}>
-                    {user.data.photoURL ?
-                        (
-                            <Avatar className="" alt="user photo" src={user.data.photoURL}/>
-                        )
-                        :
-                        (
-                            <Avatar className="">
-                                {user.data.displayName[0]}
-                            </Avatar>
-                        )
-                    }
+                    {/*{user.data.photoURL ?*/}
+                        {/*(*/}
+                            <Avatar className="" alt="user photo" />
+                        {/*)*/}
+                        {/*:*/}
+                        {/*(*/}
+                            {/*<Avatar className="">*/}
+                                {/*{user.data.displayName[0]}*/}
+                            {/*</Avatar>*/}
+                        {/*)*/}
+                    {/*}*/}
 
                     <div className="hidden md:flex flex-col ml-12 items-start">
                         <Typography component="span" className="normal-case font-600 flex display-user-name">

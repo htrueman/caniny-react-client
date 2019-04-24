@@ -9,7 +9,7 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 
 export function defaultLogin(user) {
     return (dispatch) =>
-        jwtService.signInWithEmailAndPassword(user)
+        user ? jwtService.signInWithEmailAndPassword(user) : ''
             .then((user) => {
                     // dispatch(setUserData(user));
 
