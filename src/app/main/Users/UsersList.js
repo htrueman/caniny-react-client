@@ -252,7 +252,9 @@ class EnhancedTableHead extends React.Component {
                                                 }}
                                                 title={
                                                     <React.Fragment>
-                                                        <Typography color="inherit">Admin && Assistance</Typography>
+                                                        <Typography color="inherit"><u>Super Admin</u> - Manage users and animals</Typography>
+                                                        <Typography color="inherit"><u>Admin</u> - Manage animals</Typography>
+                                                        <Typography color="inherit"><u>Assistant</u> - Has read only access to animals and users pages</Typography>
                                                         {/*<em>{"And here's"}</em> <b>{'some'}</b>*/}
                                                         {/*<u>{'amazing content'}</u>.{' '}*/}
                                                         {/*{"It's very engaging. Right?"}*/}
@@ -459,7 +461,7 @@ class EnhancedTable extends React.Component {
                                             <TableCell component="th" scope="row" padding="none">
                                                 <div className='img-block-in-table'>
                                                     <div className="img">
-                                                        <img src='assets/images/avatars/Abbott.jpg' alt=""/>
+                                                        <img src={n.avatar ? n.avatar : 'assets/images/avatars/avatar.svg'} alt=""/>
                                                     </div>
                                                     <span>
                                                     {n.firstName}

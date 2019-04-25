@@ -14,7 +14,7 @@ import {FormControlLabel, Checkbox} from '@material-ui/core';
 
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
-import { formatPhoneNumber, formatPhoneNumberIntl } from 'react-phone-number-input'
+import {formatPhoneNumber, formatPhoneNumberIntl} from 'react-phone-number-input'
 
 import jwtService from 'app/services/jwtService';
 
@@ -145,19 +145,21 @@ class UserWindow extends Component {
                         <PhoneInput
                             placeholder=""
                             value={phoneNumber}
-                            onChange={phoneNumber => this.setState({phoneNumber})}/>
+                            onChange={(phoneNumber, e) => {
+                                this.setState({phoneNumber: formatPhoneNumberIntl(phoneNumber)})
+                            }}/>
 
 
                         {/*<FormControl className={classes.formControl} fullWidth>*/}
-                            <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}}>Group</InputLabel>
-                            <Select
-                                value={userType}
-                                onChange={this.handleChangeInput('userType')}
-                                fullWidth
-                            >
-                                <MenuItem value='admin'>Admin</MenuItem>
-                                <MenuItem value='helper'>Assistant</MenuItem>
-                            </Select>
+                        <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}}>Group</InputLabel>
+                        <Select
+                            value={userType}
+                            onChange={this.handleChangeInput('userType')}
+                            fullWidth
+                        >
+                            <MenuItem value='admin'>Admin</MenuItem>
+                            <MenuItem value='helper'>Assistant</MenuItem>
+                        </Select>
                         {/*</FormControl>*/}
 
                         {!isActive && this.state.id ?
