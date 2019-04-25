@@ -20,6 +20,7 @@ import PlusIcon from '@material-ui/icons/PersonAdd';
 import PlusOne from '@material-ui/icons/ExposurePlus1';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import {lighten} from '@material-ui/core/styles/colorManipulator';
+import Fab from '@material-ui/core/Fab';
 
 let counter = 0;
 //
@@ -178,9 +179,9 @@ let EnhancedTableToolbar = props => {
                     </Tooltip>
                 ) : (
                     <Tooltip title="Add animal">
-                        <IconButton aria-label="Add animal" onClick={open}>
+                        <Fab color="secondary" aria-label="Edit" className={classes.fab} onClick={open}>
                             <PlusOne/>
-                        </IconButton>
+                        </Fab>
                     </Tooltip>
 
                 )}

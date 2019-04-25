@@ -96,6 +96,11 @@ a[role=button] {
     text-decoration: none;
 }
 
+/*.blue-icon {*/
+    /*background: #32ADFF;*/
+    /*color: #fff;*/
+/*}*/
+
 /*login*/
 .login-page .background {
     background: url("../img/registrationBag.jpg") no-repeat -5vw 10px fixed;

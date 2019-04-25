@@ -28,7 +28,10 @@ class Users extends Component {
     };
 
     handleClose = () => {
-        this.setState({open: false});
+        this.setState({
+            open: false,
+            selectedUser: {}
+        });
         this.getUsers();
     };
 

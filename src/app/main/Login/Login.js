@@ -1,5 +1,16 @@
 import React, {Component, Fragment} from 'react'
-import {withStyles, Card, CardContent,FormControl, FormControlLabel, Checkbox, Typography, Button, InputAdornment, Icon} from '@material-ui/core';
+import {
+    withStyles,
+    Card,
+    CardContent,
+    FormControl,
+    FormControlLabel,
+    Checkbox,
+    Typography,
+    Button,
+    InputAdornment,
+    Icon
+} from '@material-ui/core';
 
 import {darken} from '@material-ui/core/styles/colorManipulator';
 import {FuseAnimate, TextFieldFormsy} from '@fuse';
@@ -19,6 +30,7 @@ import instagramIcon from '../../../img/instagram.svg';
 import googleIcon2 from "../../../img/search2.svg";
 import facebookIcon2 from "../../../img/facebook2.svg";
 import instagramIcon2 from "../../../img/instagram2.svg";
+import jwtService from 'app/services/jwtService';
 
 const styles = theme => ({
     root: {
@@ -98,9 +110,19 @@ class Login extends Component {
         this.props.instagramLogin({
             token: res
         })
-            // .then(() => {
-            //     this.props.history.push('/users')
-            // })
+        // .then(() => {
+        //     this.props.history.push('/users')
+        // })
+    };
+
+    componentDidMount() {
+        const url_string = window.location.href;
+        const token = new URL(url_string).searchParams.get("token");
+        const id = new URL(url_string).searchParams.get("id");
+
+        if (token && id) {
+            jwtService.activate(id, token);
+        }
     };
 
 
@@ -139,7 +161,8 @@ class Login extends Component {
 
                     <Card className="w-full max-w-400 mx-auto m-16 md:m-0" square>
 
-                        <CardContent className="flex flex-col items-center justify-center p-32 md:p-48 md:pt-128 login-form-side">
+                        <CardContent
+                            className="flex flex-col items-center justify-center p-32 md:p-48 md:pt-128 login-form-side">
 
                             <Typography variant="h6" className="text-center md:w-full">LOGIN TO YOUR
                                 ACCOUNT</Typography>
@@ -199,21 +222,21 @@ class Login extends Component {
 
 
                                 {/*<TextFieldFormsy*/}
-                                    {/*className="mb-16"*/}
-                                    {/*type="text"*/}
-                                    {/*name="organization"*/}
-                                    {/*label="Organization"*/}
-                                    {/*validations={{*/}
-                                        {/*minLength: 4*/}
-                                    {/*}}*/}
-                                    {/*validationErrors={{*/}
-                                        {/*minLength: 'Min character length is 4'*/}
-                                    {/*}}*/}
-                                    {/*InputProps={{*/}
-                                        {/*endAdornment: <InputAdornment position="end"><Icon className="text-20"*/}
-                                                                                           {/*color="action">account_balance</Icon></InputAdornment>*/}
-                                    {/*}}*/}
-                                    {/*variant="outlined"*/}
+                                {/*className="mb-16"*/}
+                                {/*type="text"*/}
+                                {/*name="organization"*/}
+                                {/*label="Organization"*/}
+                                {/*validations={{*/}
+                                {/*minLength: 4*/}
+                                {/*}}*/}
+                                {/*validationErrors={{*/}
+                                {/*minLength: 'Min character length is 4'*/}
+                                {/*}}*/}
+                                {/*InputProps={{*/}
+                                {/*endAdornment: <InputAdornment position="end"><Icon className="text-20"*/}
+                                {/*color="action">account_balance</Icon></InputAdornment>*/}
+                                {/*}}*/}
+                                {/*variant="outlined"*/}
                                 {/*/>*/}
 
                                 <TextFieldFormsy
@@ -223,7 +246,7 @@ class Login extends Component {
                                     label="Email"
                                     validations="isEmail"
                                     validationErrors={{
-                                        minLength: 'Min character length is 4'
+                                        isEmail: 'Please enter a valid email'
                                     }}
                                     InputProps={{
                                         endAdornment: <InputAdornment position="end"><Icon className="text-20"

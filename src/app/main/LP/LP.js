@@ -173,11 +173,9 @@ class LP extends Component {
                                 type="text"
                                 name="email"
                                 label="Email"
-                                validations={{
-                                    minLength: 4
-                                }}
+                                validations="isEmail"
                                 validationErrors={{
-                                    minLength: 'Min character length is 4'
+                                    isEmail: 'Please enter a valid email'
                                 }}
                                 InputProps={{
                                     endAdornment: <InputAdornment position="end"><Icon className="text-20"

@@ -12,6 +12,10 @@ import Select from '@material-ui/core/Select';
 import {withStyles} from "@material-ui/core/styles/index";
 import {FormControlLabel, Checkbox} from '@material-ui/core';
 
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
+import { formatPhoneNumber, formatPhoneNumberIntl } from 'react-phone-number-input'
+
 import jwtService from 'app/services/jwtService';
 
 const styles = theme => ({
@@ -27,11 +31,12 @@ class UserWindow extends Component {
         phoneNumber: '',
         userType: '',
         description: '',
-        isActive: true
+        isActive: true,
+        isActiveOn: false
     };
 
     handleSaveUser = async () => {
-        const {firstName, lastName, email, phoneNumber, userType, isActiveOn} = this.state;
+        const {firstName, lastName, email, phoneNumber, userType, isActiveOn, isActive} = this.state;
 
         if (this.state.id) {
             await jwtService.updateUser({
@@ -40,21 +45,13 @@ class UserWindow extends Component {
                 email,
                 phoneNumber,
                 userType,
-                is_active: isActiveOn
-            }, this.state.id);
+                isActive: isActiveOn ? isActiveOn : isActive
+            }, this.state.id)
         } else {
             await jwtService.createNewUser(this.state);
         }
 
-        this.setState({
-            firstName: '',
-            lastName: '',
-            email: '',
-            phoneNumber: '',
-            userType: '',
-        });
-
-        this.props.onClose();
+        this.handleCloseWindow();
     };
 
     componentWillReceiveProps(nextProps) {
@@ -66,6 +63,20 @@ class UserWindow extends Component {
 
     handleChangeInput = name => event => {
         this.setState({[name]: event.target.value});
+    };
+
+    handleCloseWindow = () => {
+        this.setState({
+            firstName: '',
+            lastName: '',
+            email: '',
+            phoneNumber: '',
+            userType: '',
+            description: '',
+            isActive: true
+        });
+
+        this.props.onClose();
     };
 
 
@@ -82,14 +93,13 @@ class UserWindow extends Component {
 
             {
                 classes,
-                onClose,
                 open
             } = this.props;
 
         return (
             <Dialog
                 open={open}
-                onClose={onClose}
+                onClose={this.handleCloseWindow}
                 aria-labelledby="form-dialog-title"
                 className="new-user-window"
             >
@@ -103,6 +113,9 @@ class UserWindow extends Component {
                             value={firstName}
                             onChange={this.handleChangeInput('firstName')}
                             fullWidth
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
                         />
                         <TextField
                             id="lastName"
@@ -111,6 +124,9 @@ class UserWindow extends Component {
                             value={lastName}
                             onChange={this.handleChangeInput('lastName')}
                             fullWidth
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
                         />
 
                         <TextField
@@ -120,27 +136,29 @@ class UserWindow extends Component {
                             value={email}
                             onChange={this.handleChangeInput('email')}
                             fullWidth
-                        />
-                        <TextField
-                            id="phone"
-                            label="Phone"
-                            type="email"
-                            value={phoneNumber}
-                            onChange={this.handleChangeInput('phoneNumber')}
-                            fullWidth
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
                         />
 
-                        <FormControl className={classes.formControl} fullWidth>
-                            <InputLabel htmlFor="age-simple">Group</InputLabel>
+                        <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}}>Phone</InputLabel>
+                        <PhoneInput
+                            placeholder=""
+                            value={phoneNumber}
+                            onChange={phoneNumber => this.setState({phoneNumber})}/>
+
+
+                        {/*<FormControl className={classes.formControl} fullWidth>*/}
+                            <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}}>Group</InputLabel>
                             <Select
                                 value={userType}
                                 onChange={this.handleChangeInput('userType')}
                                 fullWidth
                             >
                                 <MenuItem value='admin'>Admin</MenuItem>
-                                <MenuItem value='helper'>Helper</MenuItem>
+                                <MenuItem value='helper'>Assistant</MenuItem>
                             </Select>
-                        </FormControl>
+                        {/*</FormControl>*/}
 
                         {!isActive && this.state.id ?
                             <FormControl>
@@ -165,7 +183,7 @@ class UserWindow extends Component {
                 </DialogContent>
 
                 <DialogActions>
-                    <Button onClick={onClose} color="primary">
+                    <Button onClick={this.handleCloseWindow} color="primary">
                         Cancel
                     </Button>
                     <Button onClick={this.handleSaveUser} color="primary">

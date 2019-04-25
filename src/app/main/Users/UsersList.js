@@ -20,6 +20,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import PlusIcon from '@material-ui/icons/PersonAdd';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import {lighten} from '@material-ui/core/styles/colorManipulator';
+import Fab from '@material-ui/core/Fab';
 
 let counter = 0;
 //
@@ -52,73 +53,53 @@ function getSorting(order, orderBy) {
     return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
 
-const rows = [
-    {id: 'firstName', numeric: false, disablePadding: true, label: 'First Name'},
-    {id: 'lastName', numeric: true, disablePadding: false, label: 'Last Name'},
-    {id: 'email', numeric: true, disablePadding: false, label: 'Email'},
-    {id: 'phoneNumber', numeric: true, disablePadding: false, label: 'Phone'},
-    {id: 'userType', numeric: true, disablePadding: false, label: 'Group'},
-
-];
-
-class EnhancedTableHead extends React.Component {
-    createSortHandler = property => event => {
-        this.props.onRequestSort(event, property);
+function arrowGenerator(color) {
+    return {
+        '&[x-placement*="bottom"] $arrow': {
+            top: 0,
+            left: 0,
+            marginTop: '-0.95em',
+            width: '3em',
+            height: '1em',
+            '&::before': {
+                borderWidth: '0 1em 1em 1em',
+                borderColor: `transparent transparent ${color} transparent`,
+            },
+        },
+        '&[x-placement*="top"] $arrow': {
+            bottom: 0,
+            left: 0,
+            marginBottom: '-0.95em',
+            width: '3em',
+            height: '1em',
+            '&::before': {
+                borderWidth: '1em 1em 0 1em',
+                borderColor: `${color} transparent transparent transparent`,
+            },
+        },
+        '&[x-placement*="right"] $arrow': {
+            left: 0,
+            marginLeft: '-0.95em',
+            height: '3em',
+            width: '1em',
+            '&::before': {
+                borderWidth: '1em 1em 1em 0',
+                borderColor: `transparent ${color} transparent transparent`,
+            },
+        },
+        '&[x-placement*="left"] $arrow': {
+            right: 0,
+            marginRight: '-0.95em',
+            height: '3em',
+            width: '1em',
+            '&::before': {
+                borderWidth: '1em 0 1em 1em',
+                borderColor: `transparent transparent transparent ${color}`,
+            },
+        },
     };
-
-    render() {
-        const {onSelectAllClick, order, orderBy, numSelected, rowCount} = this.props;
-
-        return (
-            <TableHead>
-                <TableRow>
-                    <TableCell padding="checkbox">
-                        {/*<Checkbox*/}
-                        {/*indeterminate={numSelected > 0 && numSelected < rowCount}*/}
-                        {/*checked={numSelected === rowCount}*/}
-                        {/*onChange={onSelectAllClick}*/}
-                        {/*/>*/}
-                    </TableCell>
-
-                    {rows.map(
-                        row => (
-                            <TableCell
-                                key={row.id}
-                                align={row.numeric ? 'right' : 'left'}
-                                padding={row.disablePadding ? 'none' : 'default'}
-                                sortDirection={orderBy === row.id ? order : false}
-                            >
-                                <Tooltip
-                                    title="Sort"
-                                    placement={row.numeric ? 'bottom-end' : 'bottom-start'}
-                                    enterDelay={300}
-                                >
-                                    <TableSortLabel
-                                        active={orderBy === row.id}
-                                        direction={order}
-                                        onClick={this.createSortHandler(row.id)}
-                                    >
-                                        {row.label}
-                                    </TableSortLabel>
-                                </Tooltip>
-                            </TableCell>
-                        ),
-                        this,
-                    )}
-                </TableRow>
-            </TableHead>
-        );
-    }
 }
 
-EnhancedTableHead.propTypes = {
-    numSelected: PropTypes.number.isRequired,
-    onRequestSort: PropTypes.func.isRequired,
-    onSelectAllClick: PropTypes.func.isRequired,
-    order: PropTypes.string.isRequired,
-    orderBy: PropTypes.string.isRequired,
-    rowCount: PropTypes.number.isRequired,
-};
 
 const toolbarStyles = theme => ({
     root: {
@@ -143,7 +124,168 @@ const toolbarStyles = theme => ({
     title: {
         flex: '0 0 auto',
     },
+    button: {
+        margin: theme.spacing.unit,
+    },
+    lightTooltip: {
+        backgroundColor: theme.palette.common.white,
+        color: 'rgba(0, 0, 0, 0.87)',
+        boxShadow: theme.shadows[1],
+        fontSize: 11,
+    },
+    arrowPopper: arrowGenerator(theme.palette.grey[700]),
+    arrow: {
+        position: 'absolute',
+        fontSize: 6,
+        width: '3em',
+        height: '3em',
+        '&::before': {
+            content: '""',
+            margin: 'auto',
+            display: 'block',
+            width: 0,
+            height: 0,
+            borderStyle: 'solid',
+        },
+    },
+    bootstrapPopper: arrowGenerator(theme.palette.common.black),
+    bootstrapTooltip: {
+        backgroundColor: theme.palette.common.black,
+    },
+    bootstrapPlacementLeft: {
+        margin: '0 8px',
+    },
+    bootstrapPlacementRight: {
+        margin: '0 8px',
+    },
+    bootstrapPlacementTop: {
+        margin: '8px 0',
+    },
+    bootstrapPlacementBottom: {
+        margin: '8px 0',
+    },
+    htmlPopper: arrowGenerator('#dadde9'),
+    htmlTooltip: {
+        backgroundColor: '#f5f5f9',
+        color: 'rgba(0, 0, 0, 0.87)',
+        maxWidth: 220,
+        fontSize: theme.typography.pxToRem(12),
+        border: '1px solid #dadde9',
+        '& b': {
+            fontWeight: theme.typography.fontWeightMedium,
+        },
+    },
 });
+
+
+const rows = [
+    {id: 'firstName', numeric: false, disablePadding: true, label: 'First Name'},
+    {id: 'lastName', numeric: true, disablePadding: false, label: 'Last Name'},
+    {id: 'email', numeric: true, disablePadding: false, label: 'Email'},
+    {id: 'phoneNumber', numeric: true, disablePadding: false, label: 'Phone'},
+    {id: 'userType', numeric: true, disablePadding: false, label: 'Group'},
+];
+
+class EnhancedTableHead extends React.Component {
+    state = {
+        arrowRef: null,
+    };
+    handleArrowRef = node => {
+        this.setState({
+            arrowRef: node,
+        });
+    };
+
+    createSortHandler = property => event => {
+        this.props.onRequestSort(event, property);
+    };
+
+    render() {
+        const {onSelectAllClick, order, orderBy, numSelected, rowCount, classes} = this.props;
+
+        return (
+            <TableHead>
+                <TableRow>
+                    <TableCell padding="checkbox">
+                        {/*<Checkbox*/}
+                        {/*indeterminate={numSelected > 0 && numSelected < rowCount}*/}
+                        {/*checked={numSelected === rowCount}*/}
+                        {/*onChange={onSelectAllClick}*/}
+                        {/*/>*/}
+                    </TableCell>
+
+                    {rows.map(
+                        row => (
+                            <TableCell
+                                key={row.id}
+                                align={row.numeric ? 'center' : 'left'}
+                                padding={row.disablePadding ? 'none' : 'default'}
+                                sortDirection={orderBy === row.id ? order : false}
+                            >
+                                <Tooltip
+                                    title={row.label === 'Group' ? '' : 'Sort'}
+                                    placement={row.numeric ? 'bottom-end' : 'bottom-start'}
+                                    enterDelay={300}
+                                >
+                                    <TableSortLabel
+                                        active={orderBy === row.id}
+                                        direction={order}
+                                        onClick={this.createSortHandler(row.id)}
+                                    >
+                                        {row.label}
+
+                                        {row.label === 'Group' ?
+                                            <Tooltip
+                                                classes={{
+                                                    popper: classes.htmlPopper,
+                                                    tooltip: classes.htmlTooltip,
+                                                }}
+                                                PopperProps={{
+                                                    popperOptions: {
+                                                        modifiers: {
+                                                            arrow: {
+                                                                enabled: Boolean(this.state.arrowRef),
+                                                                element: this.state.arrowRef,
+                                                            },
+                                                        },
+                                                    },
+                                                }}
+                                                title={
+                                                    <React.Fragment>
+                                                        <Typography color="inherit">Admin && Assistance</Typography>
+                                                        {/*<em>{"And here's"}</em> <b>{'some'}</b>*/}
+                                                        {/*<u>{'amazing content'}</u>.{' '}*/}
+                                                        {/*{"It's very engaging. Right?"}*/}
+                                                        <span className={classes.arrow} ref={this.handleArrowRef}/>
+                                                    </React.Fragment>
+                                                }
+                                            >
+                                                <Icon>priority_high</Icon>
+                                            </Tooltip>
+                                            : ''}
+                                    </TableSortLabel>
+                                </Tooltip>
+                            </TableCell>
+                        ),
+                        this,
+                    )}
+                </TableRow>
+            </TableHead>
+        );
+    }
+}
+
+EnhancedTableHead = withStyles(toolbarStyles)(EnhancedTableHead);
+
+
+EnhancedTableHead.propTypes = {
+    numSelected: PropTypes.number.isRequired,
+    onRequestSort: PropTypes.func.isRequired,
+    onSelectAllClick: PropTypes.func.isRequired,
+    order: PropTypes.string.isRequired,
+    orderBy: PropTypes.string.isRequired,
+    rowCount: PropTypes.number.isRequired,
+};
 
 let EnhancedTableToolbar = props => {
     const {numSelected, classes, open} = props;
@@ -170,14 +312,14 @@ let EnhancedTableToolbar = props => {
                 {numSelected > 0 ? (
                     <Tooltip title="Delete">
                         <IconButton aria-label="Delete">
-                            <DeleteIcon/>
+                            <DeleteIcon className='jss2113'/>
                         </IconButton>
                     </Tooltip>
                 ) : (
                     <Tooltip title="Add user">
-                        <IconButton aria-label="Add user" onClick={open}>
+                        <Fab color="secondary" aria-label="Edit" className={classes.fab} onClick={open}>
                             <PlusIcon/>
-                        </IconButton>
+                        </Fab>
                     </Tooltip>
 
                 )}
@@ -275,11 +417,12 @@ class EnhancedTable extends React.Component {
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
         const types = {
-            helper:'Helper',
-            admin : 'Admin',
-            super_admin : 'Super admin',
-            django_admin : 'Django admin'
-        }
+            helper: 'Assistant',
+            admin: 'Admin',
+            super_admin: 'Super admin',
+            django_admin: 'Django admin'
+        };
+
         return (
             <Paper className={classes.root}>
                 <EnhancedTableToolbar numSelected={selected.length} open={onAddUser}/>
@@ -314,22 +457,29 @@ class EnhancedTable extends React.Component {
                                             </TableCell>
 
                                             <TableCell component="th" scope="row" padding="none">
-                                                {n.firstName}
+                                                <div className='img-block-in-table'>
+                                                    <div className="img">
+                                                        <img src='assets/images/avatars/Abbott.jpg' alt=""/>
+                                                    </div>
+                                                    <span>
+                                                    {n.firstName}
+                                                    </span>
+                                                </div>
                                             </TableCell>
 
-                                            <TableCell align="right">
+                                            <TableCell align="center">
                                                 {n.lastName}
                                             </TableCell>
 
-                                            <TableCell align="right">
+                                            <TableCell align="center">
                                                 {n.email}
                                             </TableCell>
 
-                                            <TableCell align="right">
+                                            <TableCell align="center">
                                                 {n.phoneNumber}
                                             </TableCell>
 
-                                            <TableCell align="right">
+                                            <TableCell align="center">
                                                 {types[n.userType]}
                                             </TableCell>
 
@@ -354,7 +504,7 @@ class EnhancedTable extends React.Component {
                 <TablePagination
                     rowsPerPageOptions={[10]}
                     component="div"
-                    count={this.props.count}
+                    count={Math.ceil(this.props.count / 10)}
                     rowsPerPage={true}
                     page={this.props.page}
                     backIconButtonProps={{
