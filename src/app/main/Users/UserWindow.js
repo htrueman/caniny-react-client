@@ -27,6 +27,7 @@ class UserWindow extends Component {
     state = {
         firstName: '',
         lastName: '',
+        avatar: '',
         email: '',
         phoneNumber: '',
         userType: '',
@@ -48,7 +49,14 @@ class UserWindow extends Component {
                 isActive: isActiveOn ? isActiveOn : isActive
             }, this.state.id)
         } else {
-            await jwtService.createNewUser(this.state);
+            await jwtService.createNewUser({
+                firstName,
+                lastName,
+                email,
+                phoneNumber,
+                userType,
+                isActive
+            })
         }
 
         this.handleCloseWindow();
@@ -67,6 +75,8 @@ class UserWindow extends Component {
 
     handleCloseWindow = () => {
         this.setState({
+            id: null,
+            avatar: null,
             firstName: '',
             lastName: '',
             email: '',
