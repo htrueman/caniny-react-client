@@ -4,23 +4,49 @@ import {FusePageSimple} from '@fuse';
 import Icon from '@material-ui/core/Icon';
 import UsersList from './UsersList';
 import jwtService from 'app/services/jwtService';
-
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import UserWindow from './UserWindow';
+import Typography from '@material-ui/core/Typography';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Paper from '@material-ui/core/Paper';
 
+
+import SwipeableViews from 'react-swipeable-views';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 const styles = theme => ({
-    layoutRoot: {}
+    layoutRoot: {},
+    root: {
+        width: '100%',
+        maxWidth: 360,
+        backgroundColor: theme.palette.background.paper,
+    },
 });
+
+function ListItemLink(props) {
+    return <ListItem button component="button" {...props} />;
+}
 
 class Users extends Component {
     state = {
         users: [],
         selectedUser: {},
         open: false,
+        openRemove: false,
+        removeUserId: '',
         search: '',
 
         count: 0,
-        page: 1
+        page: 0,
+        tab: 0
     };
 
     handleClickOpen = () => {
@@ -38,7 +64,8 @@ class Users extends Component {
     getUsers = async (search) => {
         const {page} = this.state;
 
-        let params = search ? `?page=${page}&search=${search}` : '';
+
+        let params = search ? `?page=${1 + page}&search=${search}` : '';
 
         const res = await jwtService.getUsers(params);
         this.setState({
@@ -55,6 +82,8 @@ class Users extends Component {
     };
 
     handleChangePagination = (e, page) => {
+        console.log(e);
+        console.log(page);
         this.setState({
             page
         }, () => this.getUsers())
@@ -67,8 +96,26 @@ class Users extends Component {
         this.getUsers(value);
     };
 
-    handleRemoveUser = async (id) => {
-        await jwtService.removeUser(id);
+    handleOpenRemoveWindow = id => {
+        this.setState({
+            openRemove: true,
+            removeUserId: id
+        })
+    };
+
+    handleChangeTab = (event, value) => {
+        console.log(value);
+        this.setState({
+            tab: value
+        })
+    }
+
+    handleRemoveUser = async () => {
+        await jwtService.removeUser(this.state.removeUserId);
+        this.setState({
+            openRemove: false,
+            removeUserId: '',
+        });
         this.getUsers();
     };
 
@@ -85,7 +132,8 @@ class Users extends Component {
                 selectedUser,
                 search,
                 count,
-                page
+                page,
+                openRemove
             } = this.state,
 
             {
@@ -116,7 +164,29 @@ class Users extends Component {
                     }
                     contentToolbar={
                         <div className="toolbar-users-page">
+                            <div className='filters-block'>
+                                <Typography variant="h6" id="tableTitle">
+                                    Filters
+                                </Typography>
 
+                                <div className={classes.root}>
+                                    <Paper square>
+                                    <Tabs
+                                        value={this.state.tab}
+                                        onChange={this.handleChangeTab}
+                                        indicatorColor="primary"
+                                        className='filters-tab'
+                                        textColor="primary"
+                                        variant="fullWidth"
+                                    >
+                                        <Tab key='all' label="All"/>
+                                        <Tab label="Super admin"/>
+                                        <Tab label="Admin"/>
+                                        <Tab label="Assistance"/>
+                                    </Tabs>
+                                    </Paper>
+                                </div>
+                            </div>
                         </div>
                     }
                     content={
@@ -125,7 +195,7 @@ class Users extends Component {
                                 onAddUser={this.handleClickOpen}
                                 data={users}
                                 onEdit={this.handleEditUser}
-                                onRemove={this.handleRemoveUser}
+                                onRemove={this.handleOpenRemoveWindow}
                                 onChangePagination={this.handleChangePagination}
                                 page={page}
                                 count={count}
@@ -139,6 +209,25 @@ class Users extends Component {
                     onClose={this.handleClose}
                     user={selectedUser}
                 />
+
+                <Dialog
+                    open={openRemove}
+                    onClose={() => this.setState({openRemove: false, removeUserId: ''})}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Are you sure you want to delete the user?"}</DialogTitle>
+
+                    <DialogActions>
+                        <Button onClick={() => this.setState({openRemove: false, removeUserId: ''})} color="primary">
+                            Disagree
+                        </Button>
+
+                        <Button onClick={this.handleRemoveUser} color="primary" autoFocus>
+                            Agree
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </Fragment>
 
         )

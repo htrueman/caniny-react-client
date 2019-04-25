@@ -96,9 +96,13 @@ a[role=button] {
     text-decoration: none;
 }
 
+.project-page {
+    display: flex;
+}
+
 /*.blue-icon {*/
-    /*background: #32ADFF;*/
-    /*color: #fff;*/
+/*background: #32ADFF;*/
+/*color: #fff;*/
 /*}*/
 
 /*login*/
@@ -166,7 +170,6 @@ a[role=button] {
     cursor: pointer;
 }
 
-
 /* Medium Devices, Desktops Only */
 @media only screen and (min-width: 992px) {
     ::-webkit-scrollbar {
@@ -225,7 +228,6 @@ body {
     font-family: Muli, Roboto, "Helvetica", Arial, sans-serif;
     line-height: 1;
 }
-
 
 form button {
     background-color: #32ADFF !important;

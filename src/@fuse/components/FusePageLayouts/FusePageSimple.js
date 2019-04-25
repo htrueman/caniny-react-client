@@ -92,11 +92,10 @@ const styles = theme => ({
         zIndex: 9999
     },
     toolbar: {
-        height: toolbarHeight,
+        height: 'max-content',
         minHeight: toolbarHeight,
         display: 'flex',
-        alignItems: 'center',
-        width: '20%'
+        width: '30%'
     },
     content: {
         flex: '1 0 auto'
@@ -291,7 +290,7 @@ class FusePageSimple extends React.Component {
 
                                 {header && !sidebarInner && headerContent}
 
-                                <div className='flex size-container'>
+                                <div className='flex size-container project-page'>
                                     {contentToolbar && (
                                         <div className={classes.toolbar}>
                                             {contentToolbar}

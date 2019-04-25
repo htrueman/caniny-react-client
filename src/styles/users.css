@@ -57,13 +57,44 @@
     border-bottom: 2px solid #2D323E !important;
 }
 
+.exclamation-icon {
+    color: #33ADFF;
+    font-size: 20px;
+}
+
 .img-block-in-table .img {
     /*position: absolute;*/
     width: 40px;
     height: 40px;
     border-radius: 50%;
     overflow: hidden;
-    margin: 0 10px 0 -10px;
+    margin: 0 10px 0 0;
+}
+
+.filters-block header {
+    position: relative !important;
+}
+
+.filters-tab div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.filters-tab button  {
+    background: #fff;
+}
+.filters-tab button[aria-selecte=true],
+.filters-tab button[aria-selected=true] > span > span {
+    background: #500074 !important;
+    color: #fff !important;
+}
+.filters-tab button > span  {
+    padding: 0;
+}
+.filters-tab button > span > span {
+   background: #fff !important;
+    text-align: left;
+    color: #000 !important;
 }
 
 .img-block-in-table .img img {
@@ -73,11 +104,16 @@
 /*----------------------------------------*/
 .toolbar-users-page {
     width: 100%;
-    margin: 50px 0 0 0;
+    margin: 48px 0 0 0;
+    background: #fff;
 
-    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
-    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12);
+    -moz-box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12);
+    box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12);
+}
+
+.toolbar-users-page h6 {
+   margin: 10px 100px 0 20px;
 }
 
 .user-actions span:first-child {

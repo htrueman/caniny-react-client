@@ -167,8 +167,9 @@ class UserWindow extends Component {
                             onChange={this.handleChangeInput('userType')}
                             fullWidth
                         >
-                            <MenuItem value='admin'>Admin</MenuItem>
                             <MenuItem value='helper'>Assistant</MenuItem>
+                            <MenuItem value='admin'>Admin</MenuItem>
+                            <MenuItem value='super_admin'>Super Admin:</MenuItem>
                         </Select>
                         {/*</FormControl>*/}
 

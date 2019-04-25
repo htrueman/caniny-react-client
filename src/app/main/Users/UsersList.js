@@ -179,6 +179,7 @@ const toolbarStyles = theme => ({
 
 
 const rows = [
+    {id: 'avatar', numeric: false, disablePadding: true, label: 'Photo'},
     {id: 'firstName', numeric: false, disablePadding: true, label: 'First Name'},
     {id: 'lastName', numeric: true, disablePadding: false, label: 'Last Name'},
     {id: 'email', numeric: true, disablePadding: false, label: 'Email'},
@@ -197,7 +198,7 @@ class EnhancedTableHead extends React.Component {
     };
 
     createSortHandler = property => event => {
-        this.props.onRequestSort(event, property);
+        if(property !== 'avatar') this.props.onRequestSort(event, property);
     };
 
     render() {
@@ -220,10 +221,10 @@ class EnhancedTableHead extends React.Component {
                                 key={row.id}
                                 align={row.numeric ? 'center' : 'left'}
                                 padding={row.disablePadding ? 'none' : 'default'}
-                                sortDirection={orderBy === row.id ? order : false}
+                                sortDirection={row.id ===  'avatar' ? order : false}
                             >
                                 <Tooltip
-                                    title={row.label === 'Group' ? '' : 'Sort'}
+                                    title={row.label === 'Group' || row.label === 'Photo' ? '' : 'Sort'}
                                     placement={row.numeric ? 'bottom-end' : 'bottom-start'}
                                     enterDelay={300}
                                 >
@@ -252,9 +253,9 @@ class EnhancedTableHead extends React.Component {
                                                 }}
                                                 title={
                                                     <React.Fragment>
-                                                        <Typography color="inherit"><u>Super Admin</u> - Manage users and animals</Typography>
-                                                        <Typography color="inherit"><u>Admin</u> - Manage animals</Typography>
-                                                        <Typography color="inherit"><u>Assistant</u> - Has read only access to animals and users pages</Typography>
+                                                        <Typography color="inherit"><u>Super Admin</u>: Full permissions</Typography>
+                                                        <Typography color="inherit"><u>Admin</u>: Edit permissions</Typography>
+                                                        <Typography color="inherit"><u>Assistant</u>: View permissions</Typography>
                                                         {/*<em>{"And here's"}</em> <b>{'some'}</b>*/}
                                                         {/*<u>{'amazing content'}</u>.{' '}*/}
                                                         {/*{"It's very engaging. Right?"}*/}
@@ -262,7 +263,7 @@ class EnhancedTableHead extends React.Component {
                                                     </React.Fragment>
                                                 }
                                             >
-                                                <Icon>priority_high</Icon>
+                                                <Icon className='exclamation-icon'>priority_high</Icon>
                                             </Tooltip>
                                             : ''}
                                     </TableSortLabel>
@@ -402,6 +403,7 @@ class EnhancedTable extends React.Component {
     };
 
     handleChangePage = (event, page) => {
+        console.log(page);
         this.setState({page});
 
         this.props.onChangePagination(event, page)
@@ -463,10 +465,11 @@ class EnhancedTable extends React.Component {
                                                     <div className="img">
                                                         <img src={n.avatar ? n.avatar : 'assets/images/avatars/avatar.svg'} alt=""/>
                                                     </div>
-                                                    <span>
-                                                    {n.firstName}
-                                                    </span>
                                                 </div>
+                                            </TableCell>
+
+                                            <TableCell component="th" scope="row" padding="none">
+                                                    {n.firstName}
                                             </TableCell>
 
                                             <TableCell align="center">
@@ -494,20 +497,15 @@ class EnhancedTable extends React.Component {
                                         </TableRow>
                                     );
                                 })}
-                            {emptyRows > 0 && (
-                                <TableRow style={{height: 49 * emptyRows}}>
-                                    <TableCell colSpan={6}/>
-                                </TableRow>
-                            )}
                         </TableBody>
                     </Table>
                 </div>
 
                 <TablePagination
-                    rowsPerPageOptions={[10]}
+                    rowsPerPageOptions={[5, 10, 25]}
                     component="div"
-                    count={Math.ceil(this.props.count / 10)}
-                    rowsPerPage={true}
+                    count={this.props.count}
+                    rowsPerPage={rowsPerPage}
                     page={this.props.page}
                     backIconButtonProps={{
                         'aria-label': 'Previous Page',
