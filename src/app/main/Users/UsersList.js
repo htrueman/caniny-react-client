@@ -359,7 +359,7 @@ class EnhancedTable extends React.Component {
         selected: [],
         data: this.props.data,
         page: 0,
-        rowsPerPage: 10,
+        rowsPerPage: this.props.pageSize,
     };
 
     handleRequestSort = (event, property) => {
@@ -421,9 +421,9 @@ class EnhancedTable extends React.Component {
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
         const types = {
-            helper: 'Assistant',
-            admin: 'Admin',
-            super_admin: 'Super admin',
+            helper: 'Assistance',
+            admin: 'Staff',
+            super_admin: 'Admin',
             django_admin: 'Django admin'
         };
 
@@ -514,7 +514,7 @@ class EnhancedTable extends React.Component {
                         'aria-label': 'Next Page',
                     }}
                     onChangePage={this.handleChangePage}
-                    onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                    onChangeRowsPerPage={this.props.onChangePageSize}
                 />
             </Paper>
         );

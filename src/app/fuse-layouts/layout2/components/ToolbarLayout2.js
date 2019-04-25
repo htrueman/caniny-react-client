@@ -88,27 +88,17 @@ class ToolbarLayout2 extends Component {
                     {logging() ?
                         <Toolbar className="container p-0 lg:px-24">
                             <div className="flex flex-1 ">
-                                <CompanyMenu />
+                                <CompanyMenu/>
 
                                 <div className="left-navigation">
-                                    <NavLink to='/users'><Icon>account_box</Icon></NavLink>
-                                    <NavLink to='/animals'><Icon>pets</Icon></NavLink>
+                                    <NavLink to='/users'><Icon>person</Icon></NavLink>
+                                    <NavLink to='/animals'><Icon
+                                        style={{fontSize: '25px', marginTop: '1px'}}>pets</Icon></NavLink>
                                 </div>
-                                {/*<Hidden mdDown>*/}
-                                {/*<FuseShortcuts/>*/}
-                                {/*</Hidden>*/}
                             </div>
 
                             <div className="flex">
-
                                 <UserMenu/>
-
-
-                                {/*<FuseSearch/>*/}
-
-                                {/*<div className={classes.separator}/>*/}
-
-                                {/*<QuickPanelToggleButton/>*/}
                             </div>
 
                         </Toolbar>

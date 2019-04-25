@@ -80,24 +80,56 @@
     display: flex;
     flex-direction: column;
 }
-.filters-tab button  {
+
+.filters-tab button {
     background: #fff;
 }
+
 .filters-tab button[aria-selecte=true],
 .filters-tab button[aria-selected=true] > span > span {
-    background: #500074 !important;
+    background: #609 !important;
     color: #fff !important;
 }
-.filters-tab button > span  {
+
+.filters-tab button > span {
     padding: 0;
 }
+
 .filters-tab button > span > span {
-   background: #fff !important;
+    background: #fff !important;
     text-align: left;
     color: #000 !important;
 }
 
 .img-block-in-table .img img {
+    width: 100%;
+}
+
+.drop-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 20px 0 0;
+}
+
+.drop-block .fileContainer {
+    box-shadow: none;
+    padding: 0;
+}
+
+.drop-block .fileContainer img,
+.drop-block .fileContainer p {
+    display: none;
+}
+
+.drop-block .img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.drop-block .img img {
     width: 100%;
 }
 
@@ -107,13 +139,13 @@
     margin: 48px 0 0 0;
     background: #fff;
 
-    -webkit-box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12);
-    -moz-box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12);
-    box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12);
+    -webkit-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
 }
 
 .toolbar-users-page h6 {
-   margin: 10px 100px 0 20px;
+    margin: 10px 100px 0 20px;
 }
 
 .user-actions span:first-child {

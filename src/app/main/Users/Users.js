@@ -46,6 +46,7 @@ class Users extends Component {
 
         count: 0,
         page: 0,
+        pageSize: 10,
         tab: 0
     };
 
@@ -62,12 +63,18 @@ class Users extends Component {
     };
 
     getUsers = async (search) => {
-        const {page} = this.state;
+        const {page, tab, pageSize} = this.state;
 
 
-        let params = search ? `?page=${1 + page}&search=${search}` : '';
+        const urlParams = [
+            search ? `&search=${search}` : '',
+            tab !== 0 ? `&user_type=${tab === 1 ? 'super_admin' : (tab === 2 ? 'admin' : 'helper')}` : '',
+        ];
 
-        const res = await jwtService.getUsers(params);
+        const url = `?page_size=${pageSize}&page=${(page +1) + urlParams.join('')}`;
+
+
+        const res = await jwtService.getUsers(url);
         this.setState({
             users: res.results,
             count: res.count
@@ -82,10 +89,15 @@ class Users extends Component {
     };
 
     handleChangePagination = (e, page) => {
-        console.log(e);
-        console.log(page);
         this.setState({
             page
+        }, () => this.getUsers())
+    };
+
+    handleChangePageSize = ({target: {value}}) => {
+        console.log(value);
+        this.setState({
+            pageSize: value
         }, () => this.getUsers())
     };
 
@@ -107,8 +119,8 @@ class Users extends Component {
         console.log(value);
         this.setState({
             tab: value
-        })
-    }
+        }, () => this.getUsers())
+    };
 
     handleRemoveUser = async () => {
         await jwtService.removeUser(this.state.removeUserId);
@@ -133,6 +145,7 @@ class Users extends Component {
                 search,
                 count,
                 page,
+                pageSize,
                 openRemove
             } = this.state,
 
@@ -171,19 +184,19 @@ class Users extends Component {
 
                                 <div className={classes.root}>
                                     <Paper square>
-                                    <Tabs
-                                        value={this.state.tab}
-                                        onChange={this.handleChangeTab}
-                                        indicatorColor="primary"
-                                        className='filters-tab'
-                                        textColor="primary"
-                                        variant="fullWidth"
-                                    >
-                                        <Tab key='all' label="All"/>
-                                        <Tab label="Super admin"/>
-                                        <Tab label="Admin"/>
-                                        <Tab label="Assistance"/>
-                                    </Tabs>
+                                        <Tabs
+                                            value={this.state.tab}
+                                            onChange={this.handleChangeTab}
+                                            indicatorColor="primary"
+                                            className='filters-tab'
+                                            textColor="primary"
+                                            variant="fullWidth"
+                                        >
+                                            <Tab key='all' label="All"/>
+                                            <Tab label="Admin"/>
+                                            <Tab label="Staff"/>
+                                            <Tab label="Assistance"/>
+                                        </Tabs>
                                     </Paper>
                                 </div>
                             </div>
@@ -192,13 +205,16 @@ class Users extends Component {
                     content={
                         <div className="p-24">
                             <UsersList
-                                onAddUser={this.handleClickOpen}
                                 data={users}
+                                page={page}
+                                pageSize={pageSize}
+                                count={count}
+
+                                onAddUser={this.handleClickOpen}
                                 onEdit={this.handleEditUser}
                                 onRemove={this.handleOpenRemoveWindow}
                                 onChangePagination={this.handleChangePagination}
-                                page={page}
-                                count={count}
+                                onChangePageSize={this.handleChangePageSize}
                             />
                         </div>
                     }

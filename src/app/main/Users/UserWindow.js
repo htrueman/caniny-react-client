@@ -11,11 +11,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {withStyles} from "@material-ui/core/styles/index";
 import {FormControlLabel, Checkbox} from '@material-ui/core';
-
+import ImageUploader from 'react-images-upload';
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
 import {formatPhoneNumber, formatPhoneNumberIntl} from 'react-phone-number-input'
-
 import jwtService from 'app/services/jwtService';
 
 const styles = theme => ({
@@ -30,33 +29,57 @@ class UserWindow extends Component {
         avatar: '',
         email: '',
         phoneNumber: '',
-        userType: '',
+        userType: 'helper',
         description: '',
         isActive: true,
         isActiveOn: false
     };
 
     handleSaveUser = async () => {
-        const {firstName, lastName, email, phoneNumber, userType, isActiveOn, isActive} = this.state;
+        const {firstName, lastName, email, avatar, phoneNumber, userType, isActiveOn, isActive} = this.state;
 
         if (this.state.id) {
-            await jwtService.updateUser({
-                firstName,
-                lastName,
-                email,
-                phoneNumber,
-                userType,
-                isActive: isActiveOn ? isActiveOn : isActive
-            }, this.state.id)
+            if (avatar) {
+                await jwtService.updateUser({
+                    firstName,
+                    lastName,
+                    email,
+                    phoneNumber,
+                    userType,
+                    avatar,
+                    isActive: isActiveOn ? isActiveOn : isActive,
+                }, this.state.id)
+            } else {
+                await jwtService.updateUser({
+                    firstName,
+                    lastName,
+                    email,
+                    phoneNumber,
+                    userType,
+                    isActive: isActiveOn ? isActiveOn : isActive,
+                }, this.state.id)
+            }
         } else {
-            await jwtService.createNewUser({
-                firstName,
-                lastName,
-                email,
-                phoneNumber,
-                userType,
-                isActive
-            })
+            if (avatar) {
+                await jwtService.createNewUser({
+                    firstName,
+                    lastName,
+                    email,
+                    phoneNumber,
+                    userType,
+                    isActive,
+                    avatar
+                })
+            } else {
+                await jwtService.createNewUser({
+                    firstName,
+                    lastName,
+                    email,
+                    phoneNumber,
+                    userType,
+                    isActive,
+                })
+            }
         }
 
         this.handleCloseWindow();
@@ -66,6 +89,25 @@ class UserWindow extends Component {
         if (nextProps.user.id) {
             this.setState({...nextProps.user})
         }
+    }
+
+    onDrop = (file) => {
+        this.getBase64(file[0], (result) => {
+            this.setState({
+                avatar: result,
+            })
+        });
+    };
+
+    getBase64(file, cb) {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            cb(reader.result)
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
     }
 
 
@@ -81,7 +123,7 @@ class UserWindow extends Component {
             lastName: '',
             email: '',
             phoneNumber: '',
-            userType: '',
+            userType: 'helper',
             description: '',
             isActive: true
         });
@@ -98,7 +140,8 @@ class UserWindow extends Component {
                 phoneNumber,
                 userType,
                 description,
-                isActive
+                isActive,
+                avatar
             } = this.state,
 
             {
@@ -116,28 +159,46 @@ class UserWindow extends Component {
                 <DialogTitle id="form-dialog-title">New user</DialogTitle>
                 <DialogContent>
                     <form className={classes.root} autoComplete="off">
-                        <TextField
-                            id="firstName"
-                            label="First Name"
-                            type="text"
-                            value={firstName}
-                            onChange={this.handleChangeInput('firstName')}
-                            fullWidth
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                        <TextField
-                            id="lastName"
-                            label="Last Name"
-                            type="text"
-                            value={lastName}
-                            onChange={this.handleChangeInput('lastName')}
-                            fullWidth
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
+                        <div className='flex'>
+                            <div className='drop-block'>
+                                <div className='img'>
+                                    <img src={avatar ? avatar : 'assets/images/avatars/avatar.svg'} alt=""/>
+                                </div>
+                                <ImageUploader
+                                    withIcon={true}
+                                    buttonText='Choose images'
+                                    onChange={this.onDrop}
+                                    imgExtension={['.jpg', '.gif', '.png']}
+                                    maxFileSize={5242880}
+                                    singleImage={true}
+                                />
+                            </div>
+
+                            <div className='flex flex-col justify-around'>
+                                <TextField
+                                    id="firstName"
+                                    label="First Name"
+                                    type="text"
+                                    value={firstName}
+                                    onChange={this.handleChangeInput('firstName')}
+                                    fullWidth
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                                <TextField
+                                    id="lastName"
+                                    label="Last Name"
+                                    type="text"
+                                    value={lastName}
+                                    onChange={this.handleChangeInput('lastName')}
+                                    fullWidth
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                            </div>
+                        </div>
 
                         <TextField
                             id="email"
@@ -167,9 +228,9 @@ class UserWindow extends Component {
                             onChange={this.handleChangeInput('userType')}
                             fullWidth
                         >
-                            <MenuItem value='helper'>Assistant</MenuItem>
-                            <MenuItem value='admin'>Admin</MenuItem>
-                            <MenuItem value='super_admin'>Super Admin:</MenuItem>
+                            <MenuItem value='helper'>Assistance</MenuItem>
+                            <MenuItem value='admin'>Staff</MenuItem>
+                            <MenuItem value='super_admin'>Admin</MenuItem>
                         </Select>
                         {/*</FormControl>*/}
 
