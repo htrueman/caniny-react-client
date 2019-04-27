@@ -200,6 +200,19 @@ class jwtService extends FuseUtils.EventEmitter {
 
 //    USERS
 
+    getUserProfile = () => {
+        return new Promise((resolve, reject) => {
+            axios.get(`${baseUrl}profile/`)
+                .then(response => {
+                    if (response.data) {
+                        resolve(response.data);
+                    } else {
+                        reject(response.data);
+                    }
+                });
+        });
+    };
+
     getUsers = (search) => {
         return new Promise((resolve, reject) => {
             console.log(search);
@@ -248,6 +261,18 @@ class jwtService extends FuseUtils.EventEmitter {
     removeUser = (id) => {
         return new Promise((resolve, reject) => {
             axios.delete(`${baseUrl}users/${id}/`)
+                .then(response => {
+                    resolve(response.data);
+                })
+                .catch(error => {
+                    this.handleError(error);
+                    reject(error.response.data);
+                });
+        });
+    };
+    removeUsers = (id) => {
+        return new Promise((resolve, reject) => {
+            axios.post(`${baseUrl}users/bulk_delete/`, id)
                 .then(response => {
                     resolve(response.data);
                 })

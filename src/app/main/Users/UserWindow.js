@@ -16,6 +16,7 @@ import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
 import {formatPhoneNumber, formatPhoneNumberIntl} from 'react-phone-number-input'
 import jwtService from 'app/services/jwtService';
+import moment from 'moment';
 
 const styles = theme => ({
     layoutRoot: {}
@@ -31,15 +32,17 @@ class UserWindow extends Component {
         phoneNumber: '',
         userType: 'helper',
         description: '',
+        joinDate: moment(new Date()).format('DD-MM-YYYY'),
         isActive: true,
-        isActiveOn: false
+        isActiveOn: false,
+        uploadImg: false
     };
 
     handleSaveUser = async () => {
-        const {firstName, lastName, email, avatar, phoneNumber, userType, isActiveOn, isActive} = this.state;
+        const {firstName, lastName, email, avatar, phoneNumber, userType, isActiveOn, isActive, joinDate, uploadImg} = this.state;
 
         if (this.state.id) {
-            if (avatar) {
+            if (uploadImg) {
                 await jwtService.updateUser({
                     firstName,
                     lastName,
@@ -68,7 +71,8 @@ class UserWindow extends Component {
                     phoneNumber,
                     userType,
                     isActive,
-                    avatar
+                    avatar,
+                    joinDate: moment(joinDate, 'DD-MM-YYYY').format('YYYY-MM-DD')
                 })
             } else {
                 await jwtService.createNewUser({
@@ -78,6 +82,7 @@ class UserWindow extends Component {
                     phoneNumber,
                     userType,
                     isActive,
+                    joinDate: moment(joinDate, 'DD-MM-YYYY').format('YYYY-MM-DD')
                 })
             }
         }
@@ -95,6 +100,7 @@ class UserWindow extends Component {
         this.getBase64(file[0], (result) => {
             this.setState({
                 avatar: result,
+                uploadImg: true
             })
         });
     };
@@ -125,7 +131,9 @@ class UserWindow extends Component {
             phoneNumber: '',
             userType: 'helper',
             description: '',
-            isActive: true
+            joinDate: moment(new Date()).format('DD-MM-YYYY'),
+            isActive: true,
+            uploadImg: false
         });
 
         this.props.onClose();
@@ -141,7 +149,9 @@ class UserWindow extends Component {
                 userType,
                 description,
                 isActive,
-                avatar
+                avatar,
+                joinDate,
+
             } = this.state,
 
             {
@@ -157,6 +167,7 @@ class UserWindow extends Component {
                 className="new-user-window"
             >
                 <DialogTitle id="form-dialog-title">{this.state.id ? 'Edit' : 'New user'}</DialogTitle>
+
                 <DialogContent>
                     <form className={classes.root} autoComplete="off">
                         <div className='flex'>
@@ -175,34 +186,42 @@ class UserWindow extends Component {
                             </div>
 
                             <div className='flex flex-col justify-around'>
-                                <TextField
-                                    id="firstName"
-                                    label="First Name"
-                                    type="text"
-                                    value={firstName}
-                                    onChange={this.handleChangeInput('firstName')}
-                                    fullWidth
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                                <TextField
-                                    id="lastName"
-                                    label="Last Name"
-                                    type="text"
-                                    value={lastName}
-                                    onChange={this.handleChangeInput('lastName')}
-                                    fullWidth
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
+                                <div>
+                                    <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}}
+                                                className="custom-label">First Name</InputLabel>
+                                    <TextField
+                                        id="firstName"
+                                        type="text"
+                                        value={firstName}
+                                        onChange={this.handleChangeInput('firstName')}
+                                        fullWidth
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                </div>
+
+                                <div>
+                                    <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}}
+                                                className="custom-label">Last Name</InputLabel>
+                                    <TextField
+                                        id="lastName"
+                                        type="text"
+                                        value={lastName}
+                                        onChange={this.handleChangeInput('lastName')}
+                                        fullWidth
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                </div>
                             </div>
                         </div>
 
+                        <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}} className="custom-label">Email
+                            Address</InputLabel>
                         <TextField
                             id="email"
-                            label="Email Address"
                             type="email"
                             value={email}
                             onChange={this.handleChangeInput('email')}
@@ -212,7 +231,8 @@ class UserWindow extends Component {
                             }}
                         />
 
-                        <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}}>Phone</InputLabel>
+                        <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}}
+                                    className="custom-label">Phone</InputLabel>
                         <PhoneInput
                             placeholder=""
                             value={phoneNumber}
@@ -220,14 +240,13 @@ class UserWindow extends Component {
                                 this.setState({phoneNumber: formatPhoneNumberIntl(phoneNumber)})
                             }}/>
 
-
+                        <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}} className="custom-label">Join
+                            Date</InputLabel>
                         <TextField
                             id="date"
-                            label="Join Date"
-                            type="date"
-                            value={new Date()}
+                            type="text"
+                            value={joinDate}
                             disabled
-                            onChange={this.handleChangeInput('lastName')}
                             fullWidth
                             InputLabelProps={{
                                 shrink: true,

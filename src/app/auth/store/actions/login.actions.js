@@ -10,12 +10,10 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export function defaultLogin(user) {
     return (dispatch) =>
         user ? jwtService.signInWithEmailAndPassword(user) : ''
-            .then((user) => {
-                    // dispatch(setUserData(user));
-
+            .then(() => {
                     return dispatch({
                         type: 'LOGIN_SUCCESS'
-                    });
+                    }, setUserData());
                 }
             )
             .catch(error => {

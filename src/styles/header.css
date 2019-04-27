@@ -52,7 +52,7 @@ header {
 
 .left-navigation a {
     color: #fff !important;
-    font-size: 30px;
+    font-size: 25px;
     margin: 0 20px 0 0;
 }
 
@@ -68,6 +68,16 @@ header {
 .display-user-name {
     color: #fff;
 }
+
 .display-role {
     color: #aaaaaa;
+}
+
+.custom-label {
+    color: rgba(0, 0, 0, 0.54) !important;
+    padding: 0;
+    font-size: 14px !important;
+    font-family: Muli, Roboto, "Helvetica", Arial, sans-serif !important;
+    line-height: 1;
+    transform-origin: top left;
 }

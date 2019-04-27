@@ -82,22 +82,16 @@ export function createUserSettingsFirebase(authUser) {
 /**
  * Set User Data
  */
-export function setUserData(user) {
-    return (dispatch) => {
-
-        /*
-        Set User Settings
-         */
-        // dispatch(setDefaultSettings(user.data.settings));
-
-        /*
-        Set User Data
-         */
-        dispatch({
-            type: SET_USER_DATA,
-            payload: user
+export function setUserData() {
+    jwtService.getUserProfile()
+        .then(res => {
+            return (dispatch) => {
+                dispatch({
+                    type: SET_USER_DATA,
+                    payload: res
+                })
+            }
         })
-    }
 }
 
 /**
@@ -151,29 +145,13 @@ export function logoutUser() {
     return (dispatch, getState) => {
 
         const user = getState().auth.user;
-        //
-        // if (user.role === 'guest') {
-        //     return null;
-        // }
 
         history.push({
             pathname: '/'
         });
 
-        // switch (user.from) {
-        //     case 'firebase': {
-        //         firebaseService.signOut();
-        //         break;
-        //     }
-        //     case 'auth0': {
-        //         auth0Service.logout();
-        //         break;
-        //     }
-        //     default: {
-                jwtService.logout();
-            // }
-        // }
 
+        jwtService.logout();
         dispatch(setInitialSettings());
 
         dispatch({

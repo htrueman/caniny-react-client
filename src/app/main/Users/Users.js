@@ -57,6 +57,15 @@ function ListItemLink(props) {
     return <ListItem button component="button" {...props} />;
 }
 
+const userParams = {
+    firstName: 'first_name',
+    lastName: 'last_name',
+    phoneNumber: 'phone_number',
+    email: 'email',
+    userType: 'user_type',
+    joinDate: 'join_date'
+}
+
 class Users extends Component {
     state = {
         users: [],
@@ -85,12 +94,13 @@ class Users extends Component {
     };
 
     getUsers = async (search) => {
-        const {page, tab, pageSize} = this.state;
+        const {page, tab, pageSize, sorted} = this.state;
 
 
         const urlParams = [
             search ? `&search=${search}` : '',
             tab !== 0 ? `&user_type__iexact=${tab === 'all' ? '' : tab}` : '',
+            sorted ? `&ordering=${sorted.desc ? userParams[sorted.id] : `-${userParams[sorted.id]}`}` : '',
         ];
 
         const url = `?page_size=${pageSize}&page=${(page + 1) + urlParams.join('')}`;
@@ -111,6 +121,9 @@ class Users extends Component {
     };
 
     handleChangeSort = (newSorted) => {
+        this.setState({
+            sorted: newSorted[0]
+        }, () => this.getUsers());
         console.log(newSorted)
     };
 
@@ -156,7 +169,12 @@ class Users extends Component {
     };
 
     handleRemoveUser = async () => {
-        await jwtService.removeUser(this.state.removeUserId);
+        if (typeof this.state.removeUserId === 'string') {
+            await jwtService.removeUser(this.state.removeUserId);
+        } else {
+            await jwtService.removeUsers({ids: this.state.removeUserId});
+        }
+
         this.setState({
             openRemove: false,
             removeUserId: '',
@@ -164,10 +182,15 @@ class Users extends Component {
         this.getUsers();
     };
 
-    componentDidMount() {
+    async componentDidMount() {
         const token = sessionStorage.getItem('token');
         if (!token) this.props.history.push('/');
         this.getUsers();
+
+        const res = await jwtService.getUserProfile();
+        this.setState({
+            userProfile: res
+        })
     };
 
     render() {
@@ -180,7 +203,8 @@ class Users extends Component {
                 page,
                 pageSize,
                 openRemove,
-                tab
+                tab,
+                userProfile
             } = this.state,
 
             {
@@ -214,8 +238,8 @@ class Users extends Component {
                             <FuseAnimate animation="transition.slideLeftIn" delay={200}>
                                 <Paper elevation={1} className="rounded-8">
                                     <div className="p-24 flex items-center">
-                                        <Avatar className="mr-12" src='assets/images/avatars/avatar.svg'/>
-                                        <Typography>User</Typography>
+                                        <Avatar className="mr-12" src='assets/images/avatars/profile.jpg'/>
+                                        <Typography>John Doe</Typography>
                                     </div>
                                     <Divider/>
                                     <List>
@@ -268,6 +292,8 @@ class Users extends Component {
                                 page={page}
                                 pageSize={pageSize}
                                 count={count}
+
+                                userProfile={userProfile}
 
                                 onAddUser={this.handleClickOpen}
                                 onEdit={this.handleEditUser}
