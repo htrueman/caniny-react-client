@@ -21,17 +21,19 @@ class jwtService extends FuseUtils.EventEmitter {
     }
 
     handleError = ({response}) => {
-        if (typeof response.data === 'object') {
-            for (let key in response.data) {
-                if (typeof response.data[key] === 'string') {
-                    NotificationManager.error(response.data[key], 'Error');
-                } else {
-                    if (typeof response.data[key][0] === 'object') {
-                        for (let key2 in response.data[key][0]) {
-                            NotificationManager.error(response.data[key][0][key2], 'Error');
-                        }
+        if(response) {
+            if (typeof response.data === 'object') {
+                for (let key in response.data) {
+                    if (typeof response.data[key] === 'string') {
+                        NotificationManager.error(response.data[key], 'Error');
                     } else {
-                        NotificationManager.error(response.data[key][0], 'Error');
+                        if (typeof response.data[key][0] === 'object') {
+                            for (let key2 in response.data[key][0]) {
+                                NotificationManager.error(response.data[key][0][key2], 'Error');
+                            }
+                        } else {
+                            NotificationManager.error(response.data[key][0], 'Error');
+                        }
                     }
                 }
             }

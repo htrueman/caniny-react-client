@@ -310,3 +310,7 @@ form button[disabled] {
 .container {
     display: flex;
 }
+
+.ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover {
+    background: rgba(84, 176, 255, 0.74) !important;
+}

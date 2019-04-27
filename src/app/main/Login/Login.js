@@ -31,6 +31,7 @@ import googleIcon2 from "../../../img/search2.svg";
 import facebookIcon2 from "../../../img/facebook2.svg";
 import instagramIcon2 from "../../../img/instagram2.svg";
 import jwtService from 'app/services/jwtService';
+import TextField from "../Users/UserWindow";
 
 const styles = theme => ({
     root: {
@@ -254,6 +255,9 @@ class Login extends Component {
                                     }}
                                     variant="outlined"
                                     required
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
                                 />
 
                                 <TextFieldFormsy
@@ -273,6 +277,9 @@ class Login extends Component {
                                     }}
                                     variant="outlined"
                                     required
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
                                 />
 
                                 <FormControl>

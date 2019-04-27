@@ -8,6 +8,8 @@ import UserMenu from 'app/fuse-layouts/shared-components/UserMenu';
 import CompanyMenu from 'app/fuse-layouts/shared-components/CompanyMenu';
 import logo from '../../../../img/Caniny_Logo.png';
 import Icon from '@material-ui/core/Icon';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faPaw } from '@fortawesome/free-solid-svg-icons'
 
 import * as Scroll from 'react-scroll';
 import {Link, DirectLink, Element, Events, animateScroll as scroll, scrollSpy, scroller} from 'react-scroll'
@@ -91,9 +93,8 @@ class ToolbarLayout2 extends Component {
                                 <CompanyMenu/>
 
                                 <div className="left-navigation">
-                                    <NavLink to='/users'><Icon>person</Icon></NavLink>
-                                    <NavLink to='/animals'><Icon
-                                        style={{fontSize: '25px', marginTop: '1px'}}>pets</Icon></NavLink>
+                                    <NavLink to='/users'><FontAwesomeIcon icon={faUser} /></NavLink>
+                                    <NavLink to='/animals'><FontAwesomeIcon icon={faPaw} /></NavLink>
                                 </div>
                             </div>
 

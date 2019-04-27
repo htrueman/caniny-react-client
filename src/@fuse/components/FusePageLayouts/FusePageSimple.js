@@ -95,7 +95,7 @@ const styles = theme => ({
         height: 'max-content',
         minHeight: toolbarHeight,
         display: 'flex',
-        width: '30%'
+        width: '20%'
     },
     content: {
         flex: '1 0 auto'

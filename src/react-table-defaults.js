@@ -53,7 +53,7 @@ class FilterComponent extends Component {
         // Update local state
         this.setState(newState);
         // Fire the callback to alert React-Table of the new filter
-        this.props.onChange(newState);
+        // this.props.onChange(newState);
     };
 
     handleFilterMenuClick = event => {

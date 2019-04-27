@@ -221,6 +221,20 @@ class UserWindow extends Component {
                             }}/>
 
 
+                        <TextField
+                            id="date"
+                            label="Join Date"
+                            type="date"
+                            value={new Date()}
+                            disabled
+                            onChange={this.handleChangeInput('lastName')}
+                            fullWidth
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+
+
                         {/*<FormControl className={classes.formControl} fullWidth>*/}
                         <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}}>Group</InputLabel>
                         <Select

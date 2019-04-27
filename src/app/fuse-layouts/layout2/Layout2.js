@@ -76,7 +76,7 @@ const Layout2 = ({classes, settings, children}) => {
                         <LeftSideLayout2/>
                     )}
 
-                    <div className="flex flex-1 flex-col relative" style={{height: 'max-content', padding: '64px 0 0 0'}}>
+                    <div className="flex flex-1 flex-col relative full-height" style={{height: 'max-content', padding: '64px 0 0 0'}}>
 
                         {layoutConfig.toolbar.display && layoutConfig.toolbar.position === 'above' && (
                             <ToolbarLayout2/>

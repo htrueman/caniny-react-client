@@ -11,8 +11,8 @@
     align-items: center;
 }
 
-.header-users-page h4 span {
-    font-size: 35px;
+.header-users-page h4 svg {
+    font-size: 30px;
     margin: 0 10px 0 0;
 }
 

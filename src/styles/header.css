@@ -50,19 +50,19 @@ header {
     margin: 0 0 0 10%;
 }
 
-.left-navigation span {
-    color: #fff;
+.left-navigation a {
+    color: #fff !important;
     font-size: 30px;
     margin: 0 20px 0 0;
 }
 
-.left-navigation span:hover {
-    color: #33ADFF;
+.left-navigation a:hover {
+    color: #33ADFF !important;
     margin: 0 20px 0 0;
 }
 
-.left-navigation a.active span {
-    color: #33ADFF;
+.left-navigation a.active {
+    color: #33ADFF !important;
 }
 
 .display-user-name {

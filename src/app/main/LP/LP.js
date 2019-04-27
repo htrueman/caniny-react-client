@@ -38,6 +38,7 @@ import imgAbout from '../../../img/home-about.jpg';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {darken} from "@material-ui/core/styles/colorManipulator";
+import TextField from "../Users/UserWindow";
 
 
 const styles = theme => ({
@@ -183,6 +184,9 @@ class LP extends Component {
                                 }}
                                 variant="outlined"
                                 required
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                             />
 
                             <TextFieldFormsy
@@ -202,6 +206,9 @@ class LP extends Component {
                                 }}
                                 variant="outlined"
                                 required
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                             />
 
                             <FormControl>

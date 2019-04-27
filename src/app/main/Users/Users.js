@@ -15,12 +15,15 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons'
 
+import {Avatar, Divider} from '@material-ui/core';
+import {FuseAnimate} from '@fuse';
 
-import SwipeableViews from 'react-swipeable-views';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import {NavLink, withRouter} from 'react-router-dom';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 
 const styles = theme => ({
     layoutRoot: {},
@@ -29,6 +32,25 @@ const styles = theme => ({
         maxWidth: 360,
         backgroundColor: theme.palette.background.paper,
     },
+    listItem: {
+        color: 'inherit!important',
+        textDecoration: 'none!important',
+        height: 40,
+        width: 'calc(100% - 16px)',
+        borderRadius: '0 20px 20px 0',
+        paddingLeft: 24,
+        paddingRight: 12,
+    },
+    activeListItem: {
+        color: '#fff',
+        backgroundColor: 'rgb(236, 12, 142) !important',
+        textDecoration: 'none!important',
+        height: 40,
+        width: 'calc(100% - 16px)',
+        borderRadius: '0 20px 20px 0',
+        paddingLeft: 24,
+        paddingRight: 12,
+    }
 });
 
 function ListItemLink(props) {
@@ -47,7 +69,7 @@ class Users extends Component {
         count: 0,
         page: 0,
         pageSize: 10,
-        tab: 0
+        tab: 'all'
     };
 
     handleClickOpen = () => {
@@ -68,10 +90,10 @@ class Users extends Component {
 
         const urlParams = [
             search ? `&search=${search}` : '',
-            tab !== 0 ? `&user_type=${tab === 1 ? 'super_admin' : (tab === 2 ? 'admin' : 'helper')}` : '',
+            tab !== 0 ? `&user_type=${tab === 'all' ? '' : tab}` : '',
         ];
 
-        const url = `?page_size=${pageSize}&page=${(page +1) + urlParams.join('')}`;
+        const url = `?page_size=${pageSize}&page=${(page + 1) + urlParams.join('')}`;
 
 
         const res = await jwtService.getUsers(url);
@@ -115,7 +137,7 @@ class Users extends Component {
         })
     };
 
-    handleChangeTab = (event, value) => {
+    handleChangeTab = (value) => {
         console.log(value);
         this.setState({
             tab: value
@@ -146,7 +168,8 @@ class Users extends Component {
                 count,
                 page,
                 pageSize,
-                openRemove
+                openRemove,
+                tab
             } = this.state,
 
             {
@@ -162,7 +185,7 @@ class Users extends Component {
                     }}
                     header={
                         <div className="p-24 size-container header-users-page">
-                            <h4><Icon>account_box</Icon>Users </h4>
+                            <h4><FontAwesomeIcon icon={faUser} />Users </h4>
 
                             <div className='search-block'>
                                 <Icon>search</Icon>
@@ -176,36 +199,61 @@ class Users extends Component {
                         </div>
                     }
                     contentToolbar={
-                        <div className="toolbar-users-page">
-                            <div className='filters-block'>
-                                <Typography variant="h6" id="tableTitle">
-                                    Filters
-                                </Typography>
-
-                                <div className={classes.root}>
-                                    <Paper square>
-                                        <Tabs
-                                            value={this.state.tab}
-                                            onChange={this.handleChangeTab}
-                                            indicatorColor="primary"
-                                            className='filters-tab'
-                                            textColor="primary"
-                                            variant="fullWidth"
+                        <div className="p-24" style={{width: '100%'}}>
+                            <FuseAnimate animation="transition.slideLeftIn" delay={200}>
+                                <Paper elevation={1} className="rounded-8">
+                                    <div className="p-24 flex items-center">
+                                        <Avatar className="mr-12" src='assets/images/avatars/avatar.svg'/>
+                                        <Typography>User</Typography>
+                                    </div>
+                                    <Divider/>
+                                    <List>
+                                        <ListItem
+                                            button
+                                            activeClassName="active"
+                                            className={tab === 'all' ? classes.activeListItem : classes.listItem}
+                                            onClick={() => this.handleChangeTab('all')}
                                         >
-                                            <Tab key='all' label="All"/>
-                                            <Tab label="Admin"/>
-                                            <Tab label="Staff"/>
-                                            <Tab label="Assistance"/>
-                                        </Tabs>
-                                    </Paper>
-                                </div>
-                            </div>
+                                            <ListItemText className="truncate pr-0" primary="All"
+                                                          disableTypography={true}/>
+                                        </ListItem>
+                                        <ListItem
+                                            button
+                                            activeClassName="active"
+                                            className={tab === 'super_admin' ? classes.activeListItem : classes.listItem}
+                                            onClick={() => this.handleChangeTab('super_admin')}
+                                        >
+                                            <ListItemText className="truncate pr-0" primary="Admin"
+                                                          disableTypography={true}/>
+                                        </ListItem>
+                                        <ListItem
+                                            button
+                                            activeClassName="active"
+                                            className={tab === 'admin' ? classes.activeListItem : classes.listItem}
+                                            onClick={() => this.handleChangeTab('admin')}
+                                        >
+                                            <ListItemText className="truncate pr-0" primary="Staff"
+                                                          disableTypography={true}/>
+                                        </ListItem>
+                                        <ListItem
+                                            button
+                                            activeClassName="active"
+                                            className={tab === 'helper' ? classes.activeListItem : classes.listItem}
+                                            onClick={() => this.handleChangeTab('helper')}
+
+                                        >
+                                            <ListItemText className="truncate pr-0" primary="Assistance"
+                                                          disableTypography={true}/>
+                                        </ListItem>
+                                    </List>
+                                </Paper>
+                            </FuseAnimate>
                         </div>
                     }
                     content={
                         <div className="p-24">
                             <UsersList
-                                data={users}
+                                contacts={users}
                                 page={page}
                                 pageSize={pageSize}
                                 count={count}
@@ -235,13 +283,15 @@ class Users extends Component {
                     <DialogTitle id="alert-dialog-title">{"Are you sure you want to delete the user?"}</DialogTitle>
 
                     <DialogActions>
-                        <Button onClick={() => this.setState({openRemove: false, removeUserId: ''})} color="primary">
-                            Disagree
+                        <Button onClick={this.handleRemoveUser} style={{color: '#33ADFF'}} autoFocus>
+                            Yes
                         </Button>
 
-                        <Button onClick={this.handleRemoveUser} color="primary" autoFocus>
-                            Agree
+                        <Button style={{color: '#b61423'}}
+                                onClick={() => this.setState({openRemove: false, removeUserId: ''})} color="primary">
+                            No
                         </Button>
+
                     </DialogActions>
                 </Dialog>
             </Fragment>
