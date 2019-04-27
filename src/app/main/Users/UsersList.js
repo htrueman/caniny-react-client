@@ -9,18 +9,16 @@ import {
     Menu,
     MenuItem,
     MenuList,
-    Typography
+    Typography,
+    Select, Popover
 } from '@material-ui/core';
 import PlusIcon from '@material-ui/icons/PersonAdd';
 import Fab from '@material-ui/core/Fab';
 import {FuseUtils, FuseAnimate} from '@fuse';
-import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
-import {bindActionCreators} from 'redux';
 import ReactTable from "react-table";
-import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
-import { withStyles } from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles';
+import {Link} from "react-router-dom";
 
 function arrowGenerator(color) {
     return {
@@ -73,6 +71,10 @@ const styles = theme => ({
     button: {
         margin: theme.spacing.unit,
     },
+    groupBlock: {
+        display: 'flex',
+        alignItems: 'center'
+    },
     lightTooltip: {
         backgroundColor: theme.palette.common.white,
         color: 'rgba(0, 0, 0, 0.87)',
@@ -93,6 +95,9 @@ const styles = theme => ({
             height: 0,
             borderStyle: 'solid',
         },
+    },
+    fab: {
+        boxShadow: 'none',
     },
     bootstrapPopper: arrowGenerator(theme.palette.common.black),
     bootstrapTooltip: {
@@ -126,7 +131,8 @@ const styles = theme => ({
 class ContactsList extends Component {
 
     state = {
-        selectedContactsMenu: null
+        selectedContactsMenu: null,
+        selectedUsersIds: []
     };
 
     getFilteredArray = (entities, searchText) => {
@@ -145,20 +151,79 @@ class ContactsList extends Component {
         this.setState({selectedContactsMenu: null});
     };
 
-    render() {
-        const {contacts, onAddUser, classes, user, searchText = '', selectedContactIds = [], selectAllContacts, deSelectAllContacts, toggleInSelectedContacts, openEditContactDialog, removeContacts, removeContact, toggleStarredContact, setContactsUnstarred, setContactsStarred} = this.props;
-        const data = this.getFilteredArray(contacts, searchText);
-        const {selectedContactsMenu} = this.state;
 
-        if (!data && data.length === 0) {
-            return (
-                <div className="flex items-center justify-center h-full">
-                    <Typography color="textSecondary" variant="h5">
-                        There are no contacts!
-                    </Typography>
-                </div>
-            );
-        }
+    selectAllContacts = async () => {
+        let arr = [];
+        await this.props.users.forEach(item => {
+            arr.push(item.id)
+        });
+
+        this.setState({
+            selectedUsersIds: arr
+        })
+    };
+
+    selectUser = id => {
+        this.setState({
+            selectedUsersIds: [
+                ...this.state.selectedUsersIds,
+                id
+            ]
+        })
+    };
+
+    selectUser = id => {
+        let arr = this.state.selectedUsersIds.filter(item => item !== id);
+
+        this.setState({
+            selectedUsersIds: arr
+        })
+    };
+
+    deSelectAllContacts = () => {
+        this.setState({
+            selectedUsersIds: [],
+            userMenu: null
+        })
+    };
+
+    userMenuClick = event => {
+        this.setState({userMenu: event.currentTarget});
+    };
+
+    userMenuClose = () => {
+        this.setState({userMenu: null});
+    };
+
+    render() {
+        const {
+            users,
+            onAddUser,
+            classes,
+            page,
+            pageSize,
+            count,
+            searchText = '',
+            onChangePagination,
+            removeContacts,
+            onRemove,
+            onSortUsers,
+            setContactsUnstarred,
+            setContactsStarred,
+            onChangePageSize,
+            onFilterUser,
+            onEdit
+        } = this.props;
+
+        const data = this.getFilteredArray(users, searchText);
+        const {
+            selectedContactsMenu,
+            selectedUsersIds,
+            userMenu
+        } = this.state;
+
+        console.log(selectedUsersIds);
+
 
         const types = {
             helper: 'Assistance',
@@ -175,13 +240,30 @@ class ContactsList extends Component {
                         return {
                             className: "cursor-pointer",
                             onClick: (e, handleOriginal) => {
-                                if (rowInfo) {
-                                    openEditContactDialog(rowInfo.original);
-                                }
+                                onEdit(rowInfo.original);
                             }
                         }
                     }}
+                    manual
                     data={data}
+                    page={page}
+                    pages={Math.ceil(count / pageSize)}
+                    onPageChange={(pageIndex) => {
+                        onChangePagination(pageIndex);
+                    }}
+
+                    onSortedChange={(newSorted) => {
+                        onSortUsers(newSorted)
+                    }}
+                    onFilteredChange={(e, t, k) => {
+                        onFilterUser(e, t, k)
+                    }}
+
+                    defaultPageSize={10}
+                    pageSize={pageSize}
+                    pageSizeOptions={[5, 10, 15, 20]}
+                    onPageSizeChange={onChangePageSize}
+                    noDataText="No users found"
                     columns={[
                         {
                             Header: () => (
@@ -189,11 +271,11 @@ class ContactsList extends Component {
                                     onClick={(event) => {
                                         event.stopPropagation();
                                     }}
-                                    // onChange={(event) => {
-                                    //     event.target.checked ? selectAllContacts() : deSelectAllContacts();
-                                    // }}
-                                    checked={selectedContactIds.length === Object.keys(contacts).length && selectedContactIds.length > 0}
-                                    indeterminate={selectedContactIds.length !== Object.keys(contacts).length && selectedContactIds.length > 0}
+                                    onChange={(event) => {
+                                        event.target.checked ? this.selectAllContacts() : this.deSelectAllContacts();
+                                    }}
+                                    checked={selectedUsersIds.length === Object.keys(users).length && selectedUsersIds.length > 0}
+                                    indeterminate={selectedUsersIds.length !== Object.keys(users).length && selectedUsersIds.length > 0}
                                 />
                             ),
                             accessor: "",
@@ -202,7 +284,10 @@ class ContactsList extends Component {
                                         onClick={(event) => {
                                             event.stopPropagation();
                                         }}
-                                        checked={selectedContactIds.includes(row.value.id)}
+                                        onChange={(event) => {
+                                            event.target.checked ? this.selectUser(row.value.id) : this.deSelectUser(row.value.id);
+                                        }}
+                                        checked={selectedUsersIds.includes(row.value.id)}
                                         // onChange={() => toggleInSelectedContacts(row.value.id)}
                                     />
                                 )
@@ -213,58 +298,46 @@ class ContactsList extends Component {
                         },
                         {
                             Header: () => (
-                                selectedContactIds.length > 0 && (
-                                    <React.Fragment>
+                                selectedUsersIds.length > 0 && (
+                                    <div>
                                         <IconButton
                                             aria-owns={selectedContactsMenu ? 'selectedContactsMenu' : null}
                                             aria-haspopup="true"
-                                            onClick={this.openSelectedContactMenu}
+                                            onClick={this.userMenuClick}
                                         >
                                             <Icon>more_horiz</Icon>
                                         </IconButton>
-                                        <Menu
-                                            id="selectedContactsMenu"
-                                            anchorEl={selectedContactsMenu}
-                                            open={Boolean(selectedContactsMenu)}
-                                            onClose={this.closeSelectedContactsMenu}
+
+                                        <Popover
+                                            open={Boolean(userMenu)}
+                                            anchorEl={userMenu}
+                                            onClose={this.userMenuClose}
+                                            anchorOrigin={{
+                                                vertical: 'bottom',
+                                                horizontal: 'center'
+                                            }}
+                                            transformOrigin={{
+                                                vertical: 'top',
+                                                horizontal: 'center'
+                                            }}
+                                            classes={{
+                                                paper: "py-8"
+                                            }}
                                         >
-                                            <MenuList>
-                                                <MenuItem
-                                                    onClick={() => {
-                                                        removeContacts(selectedContactIds);
-                                                        this.closeSelectedContactsMenu();
-                                                    }}
-                                                >
-                                                    <ListItemIcon>
-                                                        <Icon>delete</Icon>
-                                                    </ListItemIcon>
-                                                    <ListItemText inset primary="Remove"/>
-                                                </MenuItem>
-                                                <MenuItem
-                                                    onClick={() => {
-                                                        setContactsStarred(selectedContactIds);
-                                                        this.closeSelectedContactsMenu();
-                                                    }}
-                                                >
-                                                    <ListItemIcon>
-                                                        <Icon>star</Icon>
-                                                    </ListItemIcon>
-                                                    <ListItemText inset primary="Starred"/>
-                                                </MenuItem>
-                                                <MenuItem
-                                                    onClick={() => {
-                                                        setContactsUnstarred(selectedContactIds);
-                                                        this.closeSelectedContactsMenu();
-                                                    }}
-                                                >
-                                                    <ListItemIcon>
-                                                        <Icon>star_border</Icon>
-                                                    </ListItemIcon>
-                                                    <ListItemText inset primary="Unstarred"/>
-                                                </MenuItem>
-                                            </MenuList>
-                                        </Menu>
-                                    </React.Fragment>
+
+                                            <MenuItem
+                                                onClick={() => {
+                                                    removeContacts(selectedUsersIds);
+                                                    this.closeSelectedContactsMenu();
+                                                }}
+                                            >
+                                                <ListItemIcon>
+                                                    <Icon>delete</Icon>
+                                                </ListItemIcon>
+                                                <ListItemText inset primary="Remove"/>
+                                            </MenuItem>
+                                        </Popover>
+                                    </div>
                                 )
                             ),
                             accessor: "avatar",
@@ -280,7 +353,7 @@ class ContactsList extends Component {
                             Header: "First Name",
                             accessor: "firstName",
                             filterable: true,
-                            className: "font-bold"
+                            className: "font-bold",
                         },
                         {
                             Header: "Last Name",
@@ -300,7 +373,7 @@ class ContactsList extends Component {
                         },
                         {
                             Header: () => (
-                                <div>
+                                <div className={classes.groupBlock}>
                                     Group
                                     <Tooltip
                                         classes={{
@@ -342,7 +415,7 @@ class ContactsList extends Component {
                                 </div>
                             ),
                             accessor: "userType",
-                            filterable: true,
+                            filterable: false,
                             Cell: row => (
                                 <span>
                                     {types[row.value]}
@@ -351,8 +424,9 @@ class ContactsList extends Component {
                         },
                         {
                             Header: () => (
-                                <Tooltip title="Add user">
-                                    <Fab color="secondary" aria-label="Edit" className={classes.fab} onClick={onAddUser}>
+                                <Tooltip title="Add user" className={classes.toolTip}>
+                                    <Fab color="secondary" aria-label="Edit" className={classes.fab}
+                                         onClick={onAddUser}>
                                         <PlusIcon/>
                                     </Fab>
                                 </Tooltip>
@@ -365,7 +439,7 @@ class ContactsList extends Component {
                                     <IconButton
                                         onClick={(ev) => {
                                             ev.stopPropagation();
-                                            toggleStarredContact(row.original.id)
+                                            onEdit(row.original)
                                         }}
                                     >
                                         <Icon>edit</Icon>
@@ -374,7 +448,7 @@ class ContactsList extends Component {
                                     <IconButton
                                         onClick={(ev) => {
                                             ev.stopPropagation();
-                                            removeContact(row.original.id);
+                                            onRemove(row.original.id);
                                         }}
                                     >
                                         <Icon>delete</Icon>
@@ -383,8 +457,6 @@ class ContactsList extends Component {
                             )
                         }
                     ]}
-                    defaultPageSize={10}
-                    noDataText="No contacts found"
                 />
             </FuseAnimate>
         );

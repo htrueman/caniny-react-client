@@ -15,8 +15,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faUser} from '@fortawesome/free-solid-svg-icons'
 
 import {Avatar, Divider} from '@material-ui/core';
 import {FuseAnimate} from '@fuse';
@@ -90,7 +90,7 @@ class Users extends Component {
 
         const urlParams = [
             search ? `&search=${search}` : '',
-            tab !== 0 ? `&user_type=${tab === 'all' ? '' : tab}` : '',
+            tab !== 0 ? `&user_type__iexact=${tab === 'all' ? '' : tab}` : '',
         ];
 
         const url = `?page_size=${pageSize}&page=${(page + 1) + urlParams.join('')}`;
@@ -110,16 +110,21 @@ class Users extends Component {
         })
     };
 
-    handleChangePagination = (e, page) => {
+    handleChangeSort = (newSorted) => {
+        console.log(newSorted)
+    };
+
+    handleChangePagination = (page) => {
+        console.log(page);
         this.setState({
-            page
+            page: page
         }, () => this.getUsers())
     };
 
-    handleChangePageSize = ({target: {value}}) => {
-        console.log(value);
+    handleChangePageSize = (pageSize) => {
         this.setState({
-            pageSize: value
+            pageSize: pageSize,
+            page: 0
         }, () => this.getUsers())
     };
 
@@ -138,10 +143,16 @@ class Users extends Component {
     };
 
     handleChangeTab = (value) => {
-        console.log(value);
         this.setState({
-            tab: value
+            tab: value,
+            page: 0
         }, () => this.getUsers())
+    };
+
+    handleFilterUser = (e, t, k) => {
+        console.log(e);
+        console.log(t);
+        console.log(k);
     };
 
     handleRemoveUser = async () => {
@@ -185,7 +196,7 @@ class Users extends Component {
                     }}
                     header={
                         <div className="p-24 size-container header-users-page">
-                            <h4><FontAwesomeIcon icon={faUser} />Users </h4>
+                            <h4><FontAwesomeIcon icon={faUser}/>Users </h4>
 
                             <div className='search-block'>
                                 <Icon>search</Icon>
@@ -253,7 +264,7 @@ class Users extends Component {
                     content={
                         <div className="p-24">
                             <UsersList
-                                contacts={users}
+                                users={users}
                                 page={page}
                                 pageSize={pageSize}
                                 count={count}
@@ -263,6 +274,8 @@ class Users extends Component {
                                 onRemove={this.handleOpenRemoveWindow}
                                 onChangePagination={this.handleChangePagination}
                                 onChangePageSize={this.handleChangePageSize}
+                                onSortUsers={this.handleChangeSort}
+                                onFilterUser={this.handleFilterUser}
                             />
                         </div>
                     }

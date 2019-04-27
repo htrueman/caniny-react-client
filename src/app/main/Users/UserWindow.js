@@ -10,7 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {withStyles} from "@material-ui/core/styles/index";
-import {FormControlLabel, Checkbox} from '@material-ui/core';
+import {FormControlLabel, Checkbox, Avatar} from '@material-ui/core';
 import ImageUploader from 'react-images-upload';
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
@@ -156,14 +156,14 @@ class UserWindow extends Component {
                 aria-labelledby="form-dialog-title"
                 className="new-user-window"
             >
-                <DialogTitle id="form-dialog-title">New user</DialogTitle>
+                <DialogTitle id="form-dialog-title">{this.state.id ? 'Edit' : 'New user'}</DialogTitle>
                 <DialogContent>
                     <form className={classes.root} autoComplete="off">
                         <div className='flex'>
                             <div className='drop-block'>
-                                <div className='img'>
-                                    <img src={avatar ? avatar : 'assets/images/avatars/avatar.svg'} alt=""/>
-                                </div>
+                                <Avatar className="w-96 h-96" alt="contact avatar"
+                                        src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+
                                 <ImageUploader
                                     withIcon={true}
                                     buttonText='Choose images'
@@ -234,8 +234,6 @@ class UserWindow extends Component {
                             }}
                         />
 
-
-                        {/*<FormControl className={classes.formControl} fullWidth>*/}
                         <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}}>Group</InputLabel>
                         <Select
                             value={userType}
@@ -246,7 +244,6 @@ class UserWindow extends Component {
                             <MenuItem value='admin'>Staff</MenuItem>
                             <MenuItem value='super_admin'>Admin</MenuItem>
                         </Select>
-                        {/*</FormControl>*/}
 
                         {!isActive && this.state.id ?
                             <FormControl>

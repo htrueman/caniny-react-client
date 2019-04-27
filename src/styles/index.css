@@ -314,3 +314,13 @@ form button[disabled] {
 .ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover {
     background: rgba(84, 176, 255, 0.74) !important;
 }
+
+.rt-th .filter input {
+    border: 0 !important;
+    background: none !important;
+}
+
+#filter-menu ul li:nth-child(5),
+#filter-menu ul li:nth-child(6) {
+    display: none;
+}
