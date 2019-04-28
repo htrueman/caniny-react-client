@@ -2,28 +2,24 @@ import React, {Component, Fragment} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import {FusePageSimple} from '@fuse';
 import Icon from '@material-ui/core/Icon';
-import UsersList from './UsersList';
 import jwtService from 'app/services/jwtService';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import UserWindow from './UserWindow';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faUser} from '@fortawesome/free-solid-svg-icons'
-
 import {Avatar, Divider} from '@material-ui/core';
 import {FuseAnimate} from '@fuse';
 
-import {NavLink, withRouter} from 'react-router-dom';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import UserWindow from './UserWindow';
+import UsersList from './UsersList';
+
 
 const styles = theme => ({
     layoutRoot: {},
@@ -53,10 +49,6 @@ const styles = theme => ({
     }
 });
 
-function ListItemLink(props) {
-    return <ListItem button component="button" {...props} />;
-}
-
 const userParams = {
     firstName: 'first_name',
     lastName: 'last_name',
@@ -64,7 +56,15 @@ const userParams = {
     email: 'email',
     userType: 'user_type',
     joinDate: 'join_date'
-}
+};
+
+const filterParams = {
+    contains: 'Contains',
+    startswith: 'Starts with',
+    endswith: 'Ends with',
+    exact: 'Matches'
+};
+
 
 class Users extends Component {
     state = {
@@ -74,6 +74,7 @@ class Users extends Component {
         openRemove: false,
         removeUserId: '',
         search: '',
+        filters: [],
 
         count: 0,
         page: 0,
@@ -94,14 +95,18 @@ class Users extends Component {
     };
 
     getUsers = async (search) => {
-        const {page, tab, pageSize, sorted} = this.state;
+        const {page, tab, pageSize, sorted, filters} = this.state;
 
 
-        const urlParams = [
+        let urlParams = [
             search ? `&search=${search}` : '',
             tab !== 0 ? `&user_type__iexact=${tab === 'all' ? '' : tab}` : '',
             sorted ? `&ordering=${sorted.desc ? userParams[sorted.id] : `-${userParams[sorted.id]}`}` : '',
         ];
+
+        await filters.forEach(filter => {
+            urlParams.push(`&${userParams[filter.column]}__i${filter.filterType}=${filter.filterValue}`)
+        });
 
         const url = `?page_size=${pageSize}&page=${(page + 1) + urlParams.join('')}`;
 
@@ -112,6 +117,19 @@ class Users extends Component {
             count: res.count
         })
     };
+
+    handleFilterUser = (filter) => {
+        const filtersArr = filter.map(item => ({
+            column: item.id,
+            filterType: item.value.filterType,
+            filterValue: item.value.filterValue
+        }));
+
+        this.setState({
+            filters: filtersArr
+        }, () => this.getUsers());
+    };
+
 
     handleEditUser = user => {
         this.setState({
@@ -160,12 +178,6 @@ class Users extends Component {
             tab: value,
             page: 0
         }, () => this.getUsers())
-    };
-
-    handleFilterUser = (e, t, k) => {
-        console.log(e);
-        console.log(t);
-        console.log(k);
     };
 
     handleRemoveUser = async () => {
