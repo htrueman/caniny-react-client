@@ -39,9 +39,9 @@ class animalsService extends FuseUtils.EventEmitter {
         });
     };
 
-    createNewUser = (user) => {
+    createNewAnimal = (animal) => {
         return new Promise((resolve, reject) => {
-            axios.post(`${baseUrl}users/`, user)
+            axios.post(`${baseUrl}animals/`, animal)
                 .then(response => {
                     if (response.data) {
                         resolve(response.data);
@@ -54,9 +54,9 @@ class animalsService extends FuseUtils.EventEmitter {
         });
     };
 
-    updateUser = (user, id) => {
+    updateAnimal = (animal, id) => {
         return new Promise((resolve, reject) => {
-            axios.patch(`${baseUrl}users/${id}/`, user)
+            axios.patch(`${baseUrl}animals/${id}/`, animal)
                 .then(response => {
                     if (response.data) {
                         resolve(response.data);
@@ -71,7 +71,7 @@ class animalsService extends FuseUtils.EventEmitter {
 
     removeUser = (id) => {
         return new Promise((resolve, reject) => {
-            axios.delete(`${baseUrl}users/${id}/`)
+            axios.delete(`${baseUrl}animals/${id}/`)
                 .then(response => {
                     resolve(response.data);
                 })

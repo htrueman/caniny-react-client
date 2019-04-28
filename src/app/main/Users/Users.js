@@ -331,7 +331,7 @@ class Users extends Component {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
-                    <DialogTitle id="alert-dialog-title">{"Are you sure you want to delete the user?"}</DialogTitle>
+                    <DialogTitle id="alert-dialog-title">{"Do you want to continue the deletion?"}</DialogTitle>
 
                     <DialogActions>
                         <Button onClick={this.handleRemoveUser} style={{color: '#33ADFF'}} autoFocus>

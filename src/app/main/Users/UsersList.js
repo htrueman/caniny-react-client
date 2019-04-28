@@ -224,6 +224,7 @@ class ContactsList extends PureComponent {
                 <div className='filter-input' key='1'>
                     <TextField
                         onChange={changeFilterValue}
+                        placeholder="Filter"
                         style={{
                             width: '100%',
                             height: '40px',
@@ -273,6 +274,7 @@ class ContactsList extends PureComponent {
                         onChange={changeFilterValue}
                         name='value1'
                         key='value1'
+                        placeholder="Filter"
                         style={{
                             width: '100%',
                             height: '40px',
@@ -320,6 +322,7 @@ class ContactsList extends PureComponent {
                 <div className='filter-input'>
                     <TextField
                         onChange={changeFilterValue}
+                        placeholder="Filter"
                         style={{
                             width: '100%',
                             height: '40px',
@@ -367,6 +370,7 @@ class ContactsList extends PureComponent {
                 <div className='filter-input'>
                     <TextField
                         onChange={changeFilterValue}
+                        placeholder="Filter"
                         style={{
                             width: '100%',
                             height: '40px',
@@ -414,6 +418,7 @@ class ContactsList extends PureComponent {
                 <div className='filter-input'>
                     <TextField
                         onChange={changeFilterValue}
+                        placeholder="Filter"
                         style={{
                             width: '100%',
                             height: '40px',
@@ -435,12 +440,6 @@ class ContactsList extends PureComponent {
             </div>
         )
     };
-
-
-    componentDidMount() {
-        console.log('ewf')
-    }
-
 
     render() {
         const {

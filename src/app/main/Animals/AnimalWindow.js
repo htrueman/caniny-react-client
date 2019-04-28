@@ -11,7 +11,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {withStyles} from "@material-ui/core/styles/index";
 
-import jwtService from 'app/services/jwtService';
+import animalsService from 'app/services/animalsService';
 
 const styles = theme => ({
     layoutRoot: {}
@@ -27,11 +27,11 @@ class AnimalWindow extends Component {
         userType: '',
     };
 
-    handleSaveUser = async () => {
+    handleSaveAnimal = async () => {
         const {firstName, lastName, email, phoneNumber, userType} = this.state;
 
         if (this.state.id) {
-            await jwtService.updateUser({
+            await animalsService.updateAnimal({
                 firstName,
                 lastName,
                 email,
@@ -39,7 +39,7 @@ class AnimalWindow extends Component {
                 userType
             }, this.state.id);
         } else {
-            await jwtService.createNewUser(this.state);
+            await animalsService.createNewAnimal(this.state);
         }
 
         this.setState({

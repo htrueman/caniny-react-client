@@ -7,13 +7,10 @@ import {withRouter} from 'react-router-dom';
 import UserMenu from 'app/fuse-layouts/shared-components/UserMenu';
 import CompanyMenu from 'app/fuse-layouts/shared-components/CompanyMenu';
 import logo from '../../../../img/Caniny_Logo.png';
-import Icon from '@material-ui/core/Icon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faPaw } from '@fortawesome/free-solid-svg-icons'
-import {setUserData} from '../../../auth/store/actions/user.actions';
 
-import * as Scroll from 'react-scroll';
-import {Link, DirectLink, Element, Events, animateScroll as scroll, scrollSpy, scroller} from 'react-scroll'
+import {Link, DirectLink, Events, scrollSpy, scroller} from 'react-scroll'
 
 
 const styles = theme => ({

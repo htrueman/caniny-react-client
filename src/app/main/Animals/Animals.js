@@ -5,7 +5,16 @@ import Icon from '@material-ui/core/Icon';
 import AnimalsList from './AnimalsList';
 import animalsService from 'app/services/animalsService';
 import AnimalWindow from './AnimalWindow';
-
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faPaw} from "@fortawesome/free-solid-svg-icons";
+import Paper from '@material-ui/core/Paper';
+import {Avatar, Divider} from "@material-ui/core";
+import Typography from '@material-ui/core/Typography';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import {faUser} from '@fortawesome/free-solid-svg-icons'
+import {FuseAnimate} from '@fuse';
 
 const styles = theme => ({
     layoutRoot: {}
@@ -19,7 +28,8 @@ class Animals extends Component {
         search: '',
 
         count: 0,
-        page: 1
+        page: 0,
+        tab: 'all'
     };
 
     handleClickOpen = () => {
@@ -57,7 +67,15 @@ class Animals extends Component {
     }
 
     render() {
-        const {animals, selectedAnimal, open, page, count, search} = this.state,
+        const {
+                animals,
+                selectedAnimal,
+                open,
+                page,
+                count,
+                search,
+                tab
+            } = this.state,
             {classes} = this.props;
 
         return (
@@ -68,7 +86,7 @@ class Animals extends Component {
                     }}
                     header={
                         <div className="p-24 size-container header-users-page">
-                            <h4><Icon>pets</Icon>Animals </h4>
+                            <h4><FontAwesomeIcon icon={faPaw}/>Animals </h4>
 
                             <div className='search-block'>
                                 <Icon>search</Icon>
@@ -83,8 +101,55 @@ class Animals extends Component {
                         </div>
                     }
                     contentToolbar={
-                        <div className="toolbar-users-page">
-                            {/*<h4>Filters</h4>*/}
+                        <div className="p-24" style={{width: '100%'}}>
+                            <FuseAnimate animation="transition.slideLeftIn" delay={200}>
+                                <Paper elevation={1} className="rounded-8">
+                                    <div className="p-24 flex items-center">
+                                        <Avatar className="mr-12" src='assets/images/avatars/profile.jpg'/>
+                                        <Typography>John Doe</Typography>
+                                    </div>
+                                    <Divider/>
+                                    <List>
+                                        <ListItem
+                                            button
+                                            activeClassName="active"
+                                            className={tab === 'all' ? classes.activeListItem : classes.listItem}
+                                            // onClick={() => this.handleChangeTab('all')}
+                                        >
+                                            <ListItemText className="truncate pr-0" primary="All"
+                                                          disableTypography={true}/>
+                                        </ListItem>
+                                        {/*<ListItem*/}
+                                            {/*button*/}
+                                            {/*activeClassName="active"*/}
+                                            {/*className={tab === 'super_admin' ? classes.activeListItem : classes.listItem}*/}
+                                            {/*onClick={() => this.handleChangeTab('super_admin')}*/}
+                                        {/*>*/}
+                                            {/*<ListItemText className="truncate pr-0" primary="Admin"*/}
+                                                          {/*disableTypography={true}/>*/}
+                                        {/*</ListItem>*/}
+                                        {/*<ListItem*/}
+                                            {/*button*/}
+                                            {/*activeClassName="active"*/}
+                                            {/*className={tab === 'admin' ? classes.activeListItem : classes.listItem}*/}
+                                            {/*onClick={() => this.handleChangeTab('admin')}*/}
+                                        {/*>*/}
+                                            {/*<ListItemText className="truncate pr-0" primary="Staff"*/}
+                                                          {/*disableTypography={true}/>*/}
+                                        {/*</ListItem>*/}
+                                        {/*<ListItem*/}
+                                            {/*button*/}
+                                            {/*activeClassName="active"*/}
+                                            {/*className={tab === 'helper' ? classes.activeListItem : classes.listItem}*/}
+                                            {/*onClick={() => this.handleChangeTab('helper')}*/}
+
+                                        {/*>*/}
+                                            {/*<ListItemText className="truncate pr-0" primary="Assistance"*/}
+                                                          {/*disableTypography={true}/>*/}
+                                        {/*</ListItem>*/}
+                                    </List>
+                                </Paper>
+                            </FuseAnimate>
                         </div>
                     }
                     content={
