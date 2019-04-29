@@ -98,7 +98,8 @@ const styles = theme => ({
         width: '20%'
     },
     content: {
-        flex: '1 0 auto'
+        flex: '1 0 auto',
+        width: '100%'
     },
     sidebarWrapper: {
         overflow: 'hidden',

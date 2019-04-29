@@ -17,14 +17,23 @@ const styles = theme => ({
     layoutRoot: {}
 });
 
+const animalFields = {
+    id: '',
+    name: '',
+    species: '',
+    breed: '',
+    dateOfBirth: '',
+    age: '',
+    size: '',
+    social: '',
+    accommodation: '',
+    tag: '',
+    microchip: '',
+}
 
 class AnimalWindow extends Component {
     state = {
-        firstName: '',
-        lastName: '',
-        email: '',
-        phoneNumber: '',
-        userType: '',
+        ...animalFields
     };
 
     handleSaveAnimal = async () => {
@@ -43,11 +52,7 @@ class AnimalWindow extends Component {
         }
 
         this.setState({
-            firstName: '',
-            lastName: '',
-            email: '',
-            phoneNumber: '',
-            userType: '',
+            ...animalFields
         });
 
         this.props.onClose();
@@ -67,11 +72,16 @@ class AnimalWindow extends Component {
 
     render() {
         const {
-                firstName,
-                lastName,
-                email,
-                phoneNumber,
-                userType,
+                name,
+                species,
+                breed,
+                dateOfBirth,
+                age,
+                size,
+                social,
+                accommodation,
+                tag,
+                microchip,
             } = this.state,
 
             {
@@ -88,14 +98,15 @@ class AnimalWindow extends Component {
                 className="new-user-window"
             >
                 <DialogTitle id="form-dialog-title">New animal</DialogTitle>
+
                 <DialogContent>
                     <form className={classes.root} autoComplete="off">
                         <TextField
                             id="firstName"
                             label="Name"
                             type="text"
-                            // value={firstName}
-                            // onChange={this.handleChangeInput('firstName')}
+                            value={name}
+                            onChange={this.handleChangeInput('name')}
                             fullWidth
                         />
                         <TextField
@@ -170,7 +181,7 @@ class AnimalWindow extends Component {
                     <Button onClick={onClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={this.handleSaveUser} color="primary">
+                    <Button onClick={this.handleSaveAnimal} color="primary">
                         Save
                     </Button>
                 </DialogActions>
