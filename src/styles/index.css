@@ -323,6 +323,9 @@ form button[disabled] {
 .filter-block {
     display: flex;
 }
+.filter-block p{
+    display: none;
+}
 
 .filter-block .filter-input {
     display: flex;

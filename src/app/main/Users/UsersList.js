@@ -17,6 +17,9 @@ import ReactTable from "react-table";
 import Tooltip from '@material-ui/core/Tooltip';
 import {withStyles} from '@material-ui/core/styles';
 import moment from 'moment';
+import Grid from '@material-ui/core/Grid';
+import DateFnsUtils from '@date-io/date-fns';
+import {MuiPickersUtilsProvider, DatePicker} from 'material-ui-pickers';
 
 function arrowGenerator(color) {
     return {
@@ -94,6 +97,11 @@ const styles = theme => ({
             borderStyle: 'solid',
         },
     },
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        width: 200,
+    },
     fab: {
         boxShadow: 'none',
     },
@@ -130,7 +138,9 @@ const filterParams = {
     contains: 'Contains',
     startswith: 'Starts with',
     endswith: 'Ends with',
-    exact: 'Matches'
+    exact: 'Matches',
+    gte: 'Greater',
+    lte: 'Less',
 };
 
 class ContactsList extends PureComponent {
@@ -147,8 +157,8 @@ class ContactsList extends PureComponent {
         filterValue3: '',
         filterType4: 'contains',
         filterValue4: '',
-        filterType5: 'contains',
-        filterValue5: '',
+        filterType5: '',
+        filterValue5: new Date(),
 
         focus: ''
     };
@@ -399,41 +409,45 @@ class ContactsList extends PureComponent {
                 filterType5: value,
             }, () => {
                 onChangeFilter({
-                    filterValue: filterValue5,
+                    filterValue: moment(value).format('YYYY-MM-DD'),
                     filterType: value
                 });
             });
         };
-        const changeFilterValue = ({target: {value}}) => {
+        const changeFilterValue = (value) => {
+            console.log(value);
             this.setState({
                 filterValue5: value,
                 focus: 'filterValue5'
             }, () => onChangeFilter({
-                filterValue: value,
+                type: 'date',
+                filterValue: moment(value).format('YYYY-MM-DD'),
                 filterType: filterType5
             }));
         };
         return (
             <div className="filter-block">
                 <div className='filter-input'>
-                    <TextField
-                        onChange={changeFilterValue}
-                        placeholder="Filter"
-                        style={{
-                            width: '100%',
-                            height: '40px',
-                            float: 'left',
-                            fontSize: '12px'
-                        }}
-                        value={filterValue5}
-                        autoFocus={focus === 'filterValue5'}
-                    />
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <DatePicker
+                            style={{
+                                width: '100%',
+                                height: '40px',
+                                float: 'left',
+                                fontSize: '12px'
+                            }}
+                            value={filterValue5}
+                            cancelLabel=''
+                            placeholder='Filter'
+                            onChange={changeFilterValue}
+                        />
+                    </MuiPickersUtilsProvider>
 
-                    {filterParams[filterType5]}
+                    {filterParams[filterType5] || 'Matches'}
                 </div>
 
 
-                <RenderMenu
+                <RenderPhoneMenu
                     changeFilterType={changeFilterType}
                 />
 
@@ -738,10 +752,77 @@ class RenderMenu extends Component {
                     anchorOrigin={{vertical: "bottom", horizontal: "center"}}
                     transformOrigin={{vertical: "top", horizontal: "center"}}
                 >
-                    <MenuItem onClick={() => {this.handleClose(); this.props.changeFilterType('contains')}}>Contains</MenuItem>
-                    <MenuItem onClick={() => {this.handleClose(); this.props.changeFilterType('startswith')}}>Starts with</MenuItem>
-                    <MenuItem onClick={() => {this.handleClose(); this.props.changeFilterType('endswith')}}>Ends with</MenuItem>
-                    <MenuItem onClick={() => {this.handleClose(); this.props.changeFilterType('exact')}}>Matches</MenuItem>
+                    <MenuItem onClick={() => {
+                        this.handleClose();
+                        this.props.changeFilterType('contains')
+                    }}>Contains</MenuItem>
+                    <MenuItem onClick={() => {
+                        this.handleClose();
+                        this.props.changeFilterType('startswith')
+                    }}>Starts with</MenuItem>
+                    <MenuItem onClick={() => {
+                        this.handleClose();
+                        this.props.changeFilterType('endswith')
+                    }}>Ends with</MenuItem>
+                    <MenuItem onClick={() => {
+                        this.handleClose();
+                        this.props.changeFilterType('exact')
+                    }}>Matches</MenuItem>
+                </Menu>
+            </Fragment>
+        )
+
+    }
+}
+
+class RenderPhoneMenu extends Component {
+    state = {anchorEl: null};
+
+
+    handleClick = event => {
+        console.log(event);
+        this.setState({anchorEl: event.currentTarget});
+    };
+
+    handleClose = () => {
+        this.setState({anchorEl: null});
+    };
+
+    render() {
+        const {anchorEl} = this.state;
+        return (
+            <Fragment>
+                <button
+                    aria-owns={'simple-menu'}
+                    aria-haspopup="true"
+                    className="filter-button"
+                    onClick={this.handleClick}
+                >
+                    <Icon>filter_list</Icon>
+                </button>
+
+                <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={this.handleClose}
+
+                    getContentAnchorEl={null}
+                    anchorOrigin={{vertical: "bottom", horizontal: "center"}}
+                    transformOrigin={{vertical: "top", horizontal: "center"}}
+                >
+                    <MenuItem onClick={() => {
+                        this.handleClose();
+                        this.props.changeFilterType('')
+                    }}>Matches</MenuItem>
+                    <MenuItem onClick={() => {
+                        this.handleClose();
+                        this.props.changeFilterType('gte')
+                    }}>Greater</MenuItem>
+                    <MenuItem onClick={() => {
+                        this.handleClose();
+                        this.props.changeFilterType('lte')
+                    }}>Less</MenuItem>
                 </Menu>
             </Fragment>
         )

@@ -105,11 +105,20 @@ class Users extends Component {
         ];
 
         await filters.forEach(filter => {
-            urlParams.push(`&${userParams[filter.column]}__i${filter.filterType}=${filter.filterValue}`)
+            console.log(filter.type)
+            if (filter.type === 'date') {
+                console.log(filter.filterType);
+                if (filter.filterType) {
+                    urlParams.push(`&${userParams[filter.column]}__${filter.filterType}=${filter.filterValue}`)
+                } else {
+                    urlParams.push(`&${userParams[filter.column]}=${filter.filterValue}`)
+                }
+            } else {
+                urlParams.push(`&${userParams[filter.column]}__i${filter.filterType}=${filter.filterValue}`)
+            }
         });
 
         const url = `?page_size=${pageSize}&page=${(page + 1) + urlParams.join('')}`;
-
 
         const res = await jwtService.getUsers(url);
         this.setState({
@@ -119,11 +128,26 @@ class Users extends Component {
     };
 
     handleFilterUser = (filter) => {
-        const filtersArr = filter.map(item => ({
-            column: item.id,
-            filterType: item.value.filterType,
-            filterValue: item.value.filterValue
-        }));
+        const filtersArr = filter.map(item => {
+
+            console.log(item.value.filterValue)
+            if (item.value.type === 'date') {
+                return {
+                    type: item.value.type,
+                    column: item.id,
+                    filterType: item.value.filterType,
+                    filterValue: item.value.filterValue
+                }
+            } else {
+                return {
+                    type: item.value.type,
+                    column: item.id,
+                    filterType: item.value.filterType,
+                    filterValue: window.btoa(item.value.filterValue)
+                }
+            }
+
+        });
 
         this.setState({
             filters: filtersArr
