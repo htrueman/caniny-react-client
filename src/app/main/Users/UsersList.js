@@ -17,10 +17,6 @@ import ReactTable from "react-table";
 import Tooltip from '@material-ui/core/Tooltip';
 import {withStyles} from '@material-ui/core/styles';
 import moment from 'moment';
-import Grid from '@material-ui/core/Grid';
-import DateFnsUtils from '@date-io/date-fns';
-// import {MuiPickersUtilsProvider, DatePicker} from 'material-ui-pickers';
-
 import DatePicker, {CalendarContainer} from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 

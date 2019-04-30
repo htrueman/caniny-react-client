@@ -17,7 +17,26 @@ import {faUser} from '@fortawesome/free-solid-svg-icons'
 import {FuseAnimate} from '@fuse';
 
 const styles = theme => ({
-    layoutRoot: {}
+    layoutRoot: {},
+    activeListItem: {
+        color: '#fff',
+        backgroundColor: 'rgb(236, 12, 142) !important',
+        textDecoration: 'none!important',
+        height: 40,
+        width: 'calc(100% - 16px)',
+        borderRadius: '0 20px 20px 0',
+        paddingLeft: 24,
+        paddingRight: 12,
+    },
+    listItem: {
+        color: 'inherit!important',
+        textDecoration: 'none!important',
+        height: 40,
+        width: 'calc(100% - 16px)',
+        borderRadius: '0 20px 20px 0',
+        paddingLeft: 24,
+        paddingRight: 12,
+    },
 });
 
 class Animals extends Component {
@@ -58,6 +77,13 @@ class Animals extends Component {
             animals: res.results,
             count: res.count
         })
+    };
+
+    handleChangeTab = (value) => {
+        this.setState({
+            tab: value,
+            page: 0
+        }, () => this.getAnimals())
     };
 
     componentDidMount() {
@@ -114,39 +140,39 @@ class Animals extends Component {
                                             button
                                             activeClassName="active"
                                             className={tab === 'all' ? classes.activeListItem : classes.listItem}
-                                            // onClick={() => this.handleChangeTab('all')}
+                                            onClick={() => this.handleChangeTab('all')}
                                         >
                                             <ListItemText className="truncate pr-0" primary="All"
                                                           disableTypography={true}/>
                                         </ListItem>
-                                        {/*<ListItem*/}
-                                            {/*button*/}
-                                            {/*activeClassName="active"*/}
-                                            {/*className={tab === 'super_admin' ? classes.activeListItem : classes.listItem}*/}
-                                            {/*onClick={() => this.handleChangeTab('super_admin')}*/}
-                                        {/*>*/}
-                                            {/*<ListItemText className="truncate pr-0" primary="Admin"*/}
-                                                          {/*disableTypography={true}/>*/}
-                                        {/*</ListItem>*/}
-                                        {/*<ListItem*/}
-                                            {/*button*/}
-                                            {/*activeClassName="active"*/}
-                                            {/*className={tab === 'admin' ? classes.activeListItem : classes.listItem}*/}
-                                            {/*onClick={() => this.handleChangeTab('admin')}*/}
-                                        {/*>*/}
-                                            {/*<ListItemText className="truncate pr-0" primary="Staff"*/}
-                                                          {/*disableTypography={true}/>*/}
-                                        {/*</ListItem>*/}
-                                        {/*<ListItem*/}
-                                            {/*button*/}
-                                            {/*activeClassName="active"*/}
-                                            {/*className={tab === 'helper' ? classes.activeListItem : classes.listItem}*/}
-                                            {/*onClick={() => this.handleChangeTab('helper')}*/}
+                                        <ListItem
+                                            button
+                                            activeClassName="active"
+                                            className={tab === 'dogs' ? classes.activeListItem : classes.listItem}
+                                            onClick={() => this.handleChangeTab('dogs')}
+                                        >
+                                            <ListItemText className="truncate pr-0" primary="Dogs"
+                                                          disableTypography={true}/>
+                                        </ListItem>
+                                        <ListItem
+                                            button
+                                            activeClassName="active"
+                                            className={tab === 'cats' ? classes.activeListItem : classes.listItem}
+                                            onClick={() => this.handleChangeTab('cats')}
+                                        >
+                                            <ListItemText className="truncate pr-0" primary="Cats"
+                                                          disableTypography={true}/>
+                                        </ListItem>
+                                        <ListItem
+                                            button
+                                            activeClassName="active"
+                                            className={tab === 'others' ? classes.activeListItem : classes.listItem}
+                                            onClick={() => this.handleChangeTab('others')}
 
-                                        {/*>*/}
-                                            {/*<ListItemText className="truncate pr-0" primary="Assistance"*/}
-                                                          {/*disableTypography={true}/>*/}
-                                        {/*</ListItem>*/}
+                                        >
+                                            <ListItemText className="truncate pr-0" primary="Others"
+                                                          disableTypography={true}/>
+                                        </ListItem>
                                     </List>
                                 </Paper>
                             </FuseAnimate>

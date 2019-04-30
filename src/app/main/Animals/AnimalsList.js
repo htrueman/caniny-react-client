@@ -551,6 +551,14 @@ class ContactsList extends PureComponent {
                     // ),
                 },
                 {
+                    Header: "Age",
+                    accessor: "age",
+                    filterable: true,
+                    // Filter: ({filter, onChange}) => (
+                    //     this.customFilter5(filter, onChange)
+                    // ),
+                },
+                {
                     Header: "Species",
                     accessor: "species",
                     filterable: true,
@@ -567,24 +575,32 @@ class ContactsList extends PureComponent {
                     // ),
                 },
                 {
-                    Header: "Age",
-                    accessor: "age",
+                    Header: () => (
+                       <span>
+                           Animals <br/> Friendly
+                       </span>
+                    ),
+                    accessor: "animals_friendly",
                     filterable: true,
                     // Filter: ({filter, onChange}) => (
-                    //     this.customFilter5(filter, onChange)
+                    //     this.customFilter4(filter, onChange)
                     // ),
                 },
                 {
-                    Header: "Size",
+                    Header: () => (
+                        <span>
+                           Kids <br/> Friendly
+                       </span>
+                    ),
+                    accessor: "kids_friendly",
+                    filterable: true,
+                    // Filter: ({filter, onChange}) => (
+                    //     this.customFilter4(filter, onChange)
+                    // ),
+                },
+                {
+                    Header: "Energy Level",
                     accessor: "size",
-                    filterable: true,
-                    // Filter: ({filter, onChange}) => (
-                    //     this.customFilter5(filter, onChange)
-                    // ),
-                },
-                {
-                    Header: "Social",
-                    accessor: "social",
                     filterable: true,
                     // Filter: ({filter, onChange}) => (
                     //     this.customFilter5(filter, onChange)
@@ -594,21 +610,14 @@ class ContactsList extends PureComponent {
                     Header: "Accommodation",
                     accessor: "accommodation",
                     filterable: true,
+                    width: 130
                     // Filter: ({filter, onChange}) => (
                     //     this.customFilter5(filter, onChange)
                     // ),
                 },
                 {
-                    Header: "Tag",
-                    accessor: "tag",
-                    filterable: true,
-                    // Filter: ({filter, onChange}) => (
-                    //     this.customFilter5(filter, onChange)
-                    // ),
-                },
-                {
-                    Header: "Microchip",
-                    accessor: "microchip",
+                    Header: "Entry Date",
+                    accessor: "date",
                     filterable: true,
                     // Filter: ({filter, onChange}) => (
                     //     this.customFilter5(filter, onChange)
@@ -676,7 +685,7 @@ class ContactsList extends PureComponent {
                     pageSize={pageSize}
                     pageSizeOptions={[5, 10, 15, 20]}
                     // onPageSizeChange={onChangePageSize}
-                    noDataText="No users found"
+                    noDataText="No animals found"
                     columns={columns}
                 />
             </FuseAnimate>

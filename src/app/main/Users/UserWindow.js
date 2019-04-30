@@ -256,12 +256,13 @@ class UserWindow extends Component {
                         <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}}>Group</InputLabel>
                         <Select
                             value={userType}
+                            native
                             onChange={this.handleChangeInput('userType')}
                             fullWidth
                         >
-                            <MenuItem value='helper'>Assistance</MenuItem>
-                            <MenuItem value='admin'>Staff</MenuItem>
-                            <MenuItem value='super_admin'>Admin</MenuItem>
+                            <option value='helper'>Assistance</option>
+                            <option value='admin'>Staff</option>
+                            <option value='super_admin'>Admin</option>
                         </Select>
 
                         {!isActive && this.state.id ?
