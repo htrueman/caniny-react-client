@@ -322,7 +322,7 @@ class Users extends Component {
                         </div>
                     }
                     content={
-                        <div className="p-24">
+                        <div className="p-24 users-list-table">
                             <UsersList
                                 users={users}
                                 page={page}

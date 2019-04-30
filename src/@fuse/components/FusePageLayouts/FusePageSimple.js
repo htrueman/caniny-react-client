@@ -95,11 +95,11 @@ const styles = theme => ({
         height: 'max-content',
         minHeight: toolbarHeight,
         display: 'flex',
-        width: '20%'
+        width: '15%'
     },
     content: {
         flex: '1 0 auto',
-        width: '100%'
+        width: '85%'
     },
     sidebarWrapper: {
         overflow: 'hidden',

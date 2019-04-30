@@ -162,6 +162,27 @@
     cursor: pointer;
 }
 
+.users-list-table .-filters .rt-th:nth-child(7) {
+    overflow: initial !important;
+}
+
+.date-filter {
+    width: 129px !important;
+    height: 29px;
+    padding: 5px 7px;
+    font-size: 16px !important;
+    border-radius: 3px;
+    font-weight: normal;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.42) !important;
+    margin: 1px 0 10px 0;
+}
+.date-filter:hover {
+    border-bottom: 2px solid rgba(0, 0, 0, 0.81) !important;
+}
+.date-filter:focus {
+    border-bottom: 2px solid #039be5 !important;
+}
+
 /*dialog window*/
 
 .new-user-window form > div {

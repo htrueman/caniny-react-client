@@ -83,7 +83,7 @@ h6, .h6 {
 
 .size-container {
     width: 100%;
-    max-width: 1200px;
+    max-width: 95vw;
     margin: 0 auto;
 }
 
@@ -335,8 +335,14 @@ form button[disabled] {
     color: rgba(0, 0, 0, 0.54);
 }
 .filter-block .filter-input input {
-    border: 0 !important;
+    border-top: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
     background: none !important;
+    border-radius: 0 !important;
+}
+.filter-block .filter-input input::placeholder {
+   color: rgba(110, 110, 110, 0.73) !important;
 }
 .filter-block .filter-button {
     height: max-content;

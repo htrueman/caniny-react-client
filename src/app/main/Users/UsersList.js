@@ -19,7 +19,10 @@ import {withStyles} from '@material-ui/core/styles';
 import moment from 'moment';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
-import {MuiPickersUtilsProvider, DatePicker} from 'material-ui-pickers';
+// import {MuiPickersUtilsProvider, DatePicker} from 'material-ui-pickers';
+
+import DatePicker, {CalendarContainer} from 'react-datepicker'
+import "react-datepicker/dist/react-datepicker.css";
 
 function arrowGenerator(color) {
     return {
@@ -158,7 +161,7 @@ class ContactsList extends PureComponent {
         filterType4: 'contains',
         filterValue4: '',
         filterType5: '',
-        filterValue5: new Date(),
+        filterValue5: '',
 
         focus: ''
     };
@@ -421,27 +424,21 @@ class ContactsList extends PureComponent {
                 focus: 'filterValue5'
             }, () => onChangeFilter({
                 type: 'date',
-                filterValue: moment(value).format('YYYY-MM-DD'),
+                filterValue: value ? moment(value).format('YYYY-MM-DD') : '',
                 filterType: filterType5
             }));
         };
+
         return (
             <div className="filter-block">
                 <div className='filter-input'>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <DatePicker
-                            style={{
-                                width: '100%',
-                                height: '40px',
-                                float: 'left',
-                                fontSize: '12px'
-                            }}
-                            value={filterValue5}
-                            cancelLabel=''
-                            placeholder='Filter'
-                            onChange={changeFilterValue}
-                        />
-                    </MuiPickersUtilsProvider>
+                    <DatePicker
+                        placeholderText="Filter"
+                        selected={filterValue5}
+                        onChange={changeFilterValue}
+                        className="date-filter"
+                        dateFormat="dd-MM-yyyy"
+                    />
 
                     {filterParams[filterType5] || 'Matches'}
                 </div>
