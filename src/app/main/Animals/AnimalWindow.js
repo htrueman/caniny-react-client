@@ -94,19 +94,18 @@ const animalFields = {
     accommodation: '',
     tag: '',
     microchip: '',
-}
+};
 
 class AnimalWindow extends Component {
     state = {
-        ...animalFields,
-
+        animal: {},
         value: 0,
     };
 
     handleSaveAnimal = async (e) => {
         e.preventDefault();
-        // const {firstName, lastName, email, phoneNumber, userType} = this.state;
-        //
+        const {firstName, lastName, email, phoneNumber, userType} = this.state;
+
         // if (this.state.id) {
         //     await animalsService.updateAnimal({
         //         firstName,
@@ -116,18 +115,19 @@ class AnimalWindow extends Component {
         //         userType
         //     }, this.state.id);
         // } else {
-        //     await animalsService.createNewAnimal(this.state);
+        await animalsService.createNewAnimal(this.state.animal);
         // }
-        //
-        // this.setState({
-        //     ...animalFields
-        // });
+
+        this.setState({
+            ...animalFields
+        });
 
         this.props.onClose();
     };
 
     handleChange = (event, value) => {
-        this.setState({value});
+        console.log(this.state);
+        this.setState({value}, () => console.log(this.state));
     };
 
     onDrop = (file) => {
@@ -158,20 +158,24 @@ class AnimalWindow extends Component {
 
 
     handleChangeInput = name => event => {
-        this.setState({[name]: event.target.value});
+        this.setState({
+            animal: {
+                ...this.state.animal,
+                [name]: event.target.value
+            }
+        });
     };
 
 
     render() {
         const {
-                value,
                 name,
                 species,
                 breed,
                 age,
                 accommodation,
-                birthday,
-                stage,
+                dateOfBirth,
+                LifeStages,
                 gender,
                 species_details,
                 origin_country,
@@ -236,7 +240,9 @@ class AnimalWindow extends Component {
                 date,
                 comments,
 
-            } = this.state,
+            } = this.state.animal,
+
+            {value} = this.state,
 
             {
                 classes,
@@ -322,8 +328,8 @@ class AnimalWindow extends Component {
                                     <InputLabel htmlFor="age-simple">Birthday</InputLabel>
                                     <TextField
                                         id="date"
-                                        onChange={this.handleChangeInput('birthday')}
-                                        value={birthday}
+                                        onChange={this.handleChangeInput('dateOfBirth')}
+                                        value={dateOfBirth}
                                         type="date"
                                     />
                                 </div>
@@ -342,9 +348,9 @@ class AnimalWindow extends Component {
                                 <div className={classes.formControl}>
                                     <InputLabel htmlFor="age-simple">Life Stage</InputLabel>
                                     <Select
-                                        value={stage}
+                                        value={LifeStages}
                                         native
-                                        onChange={this.handleChangeInput('stage')}
+                                        onChange={this.handleChangeInput('LifeStages')}
                                     >
                                         <option value=""/>
                                         <option value='baby'>Baby</option>
@@ -463,8 +469,8 @@ class AnimalWindow extends Component {
                                         <option value='lazy'>1: Lazy</option>
                                         <option value='chill'>2: Chill</option>
                                         <option value='active'>3: Active</option>
-                                        <option value='Energetic'>4: Energetic</option>
-                                        <option value='Hyper'>5: Hyper</option>
+                                        <option value='energetic'>4: Energetic</option>
+                                        <option value='hyper'>5: Hyper</option>
                                     </Select>
                                 </div>
                                 {/*</div>*/}
@@ -480,8 +486,8 @@ class AnimalWindow extends Component {
                                         <option value=""/>
                                         <option value='yes'>Yes</option>
                                         <option value='no'>No</option>
-                                        <option value='females'>Only females</option>
-                                        <option value='males'>Only males</option>
+                                        <option value='only_females'>Only females</option>
+                                        <option value='only_males'>Only males</option>
                                     </Select>
                                 </div>
 
@@ -495,8 +501,8 @@ class AnimalWindow extends Component {
                                         <option value=""/>
                                         <option value='yes'>Yes</option>
                                         <option value='no'>No</option>
-                                        <option value='females'>Only females</option>
-                                        <option value='males'>Only males</option>
+                                        <option value='only_females'>Only females</option>
+                                        <option value='only_males'>Only males</option>
                                     </Select>
                                 </div>
 
@@ -510,8 +516,8 @@ class AnimalWindow extends Component {
                                         <option value=""/>
                                         <option value='yes'>Yes</option>
                                         <option value='no'>No</option>
-                                        <option value='small'>Only Small Animals</option>
-                                        <option value='big'>Only Big Animals</option>
+                                        <option value='only_small_animals'>Only Small Animals</option>
+                                        <option value='only_big_animals'>Only Big Animals</option>
                                     </Select>
                                 </div>
 
@@ -525,8 +531,8 @@ class AnimalWindow extends Component {
                                         <option value=""/>
                                         <option value='yes'>Yes</option>
                                         <option value='no'>No</option>
-                                        <option value='females'>Only females</option>
-                                        <option value='males'>Only males</option>
+                                        <option value='only_females'>Only females</option>
+                                        <option value='only_males'>Only males</option>
                                     </Select>
                                 </div>
                                 {/*</div>*/}
@@ -542,11 +548,11 @@ class AnimalWindow extends Component {
                                         <option value=""/>
                                         <option value='yes'>Yes</option>
                                         <option value='no'>No</option>
-                                        <option value='females'>Only females</option>
-                                        <option value='males'>Only males</option>
-                                        <option value='young'>Only young kids</option>
-                                        <option value='old'>Only old kids</option>
-                                        <option value='all'>Both young & old</option>
+                                        <option value='only_females'>Only females</option>
+                                        <option value='only_males'>Only males</option>
+                                        <option value='only_young_kids'>Only young kids</option>
+                                        <option value='only_old_kids'>Only old kids</option>
+                                        <option value='both_young_and_old'>Both young & old</option>
                                     </Select>
                                 </div>
 
