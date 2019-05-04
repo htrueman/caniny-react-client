@@ -35,7 +35,8 @@ const styles = theme => ({
         marginTop: theme.spacing.unit * 2,
     },
     dialogContent: {
-        width: '40vw',
+        width: '960px',
+        overflow: 'auto'
     },
     root: {
         flexGrow: 1,
@@ -52,7 +53,6 @@ const styles = theme => ({
         textTransform: 'initial',
         minWidth: 72,
         fontWeight: theme.typography.fontWeightRegular,
-        marginRight: theme.spacing.unit * 4,
         fontFamily: [
             '-apple-system',
             'BlinkMacSystemFont',
@@ -284,7 +284,7 @@ class AnimalWindow extends Component {
                             <Tab
                                 disableRipple
                                 classes={{root: classes.tabRoot, selected: classes.tabSelected}}
-                                label="Health"
+                                label="Personality"
                             />
                             <Tab
                                 disableRipple
@@ -299,7 +299,27 @@ class AnimalWindow extends Component {
                             <Tab
                                 disableRipple
                                 classes={{root: classes.tabRoot, selected: classes.tabSelected}}
+                                label="Health"
+                            />
+                            <Tab
+                                disableRipple
+                                classes={{root: classes.tabRoot, selected: classes.tabSelected}}
+                                label="Care"
+                            />
+                            <Tab
+                                disableRipple
+                                classes={{root: classes.tabRoot, selected: classes.tabSelected}}
+                                label="Sheltering"
+                            />
+                            <Tab
+                                disableRipple
+                                classes={{root: classes.tabRoot, selected: classes.tabSelected}}
                                 label="Ownership"
+                            />
+                            <Tab
+                                disableRipple
+                                classes={{root: classes.tabRoot, selected: classes.tabSelected}}
+                                label="Dossier"
                             />
                         </Tabs>
                     </div>
