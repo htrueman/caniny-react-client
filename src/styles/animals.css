@@ -14,3 +14,24 @@
 .owner-photos .fileContainer button {
     margin: 0;
 }
+
+.animal-window .drop-block {
+    width: 20%;
+}
+
+.width-80 {
+    width: 80%;
+}
+
+.width-100 {
+    width: 100%;
+}
+
+.input-shadow-block {
+    width: 100%;
+    margin: 10px 0;
+
+    /*-webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);*/
+    /*-moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);*/
+    /*box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);*/
+}
