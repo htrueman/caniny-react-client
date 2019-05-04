@@ -138,7 +138,10 @@ class AnimalWindow extends Component {
     onDrop = (file) => {
         this.getBase64(file[0], (result) => {
             this.setState({
-                avatar: result,
+                animal: {
+                    ...this.state.animal,
+                    avatar: result,
+                },
                 uploadImg: true
             })
         });
@@ -182,6 +185,7 @@ class AnimalWindow extends Component {
                 join_date,
                 accommodation,
                 dateOfBirth,
+                temperament,
                 LifeStages,
                 gender,
                 species_details,
@@ -192,6 +196,7 @@ class AnimalWindow extends Component {
                 cats_friendly,
                 dogs_friendly,
                 animals_friendly,
+                coat_type,
                 human_friendly,
                 kids_friendly,
                 chip_id,
@@ -258,10 +263,10 @@ class AnimalWindow extends Component {
                 open
             } = this.props;
 
+
         return (
             <Dialog
                 open={open}
-                // maxWidth='md'
                 maxWidth={false}
                 onClose={onClose}
                 aria-labelledby="form-dialog-title"
@@ -420,12 +425,12 @@ class AnimalWindow extends Component {
                                         <InputLabel htmlFor="age-simple">Species*</InputLabel>
                                         <Select
                                             value={species}
-                                            required
+                                            required={true}
                                             native
                                             onChange={this.handleChangeInput('species')}
                                         >
-                                            <option value='dogs'>Dogs</option>
-                                            <option value='cats'>Cats</option>
+                                            <option value='dog'>Dogs</option>
+                                            <option value='cat'>Cats</option>
                                             <option value='other'>Other</option>
                                         </Select>
                                     </div>
@@ -438,8 +443,8 @@ class AnimalWindow extends Component {
                                             native
                                             onChange={this.handleChangeInput('breed')}
                                         >
-                                            <option value='dogs'>Dogs</option>
-                                            <option value='cats'>Cats</option>
+                                            <option value='dog'>Dogs</option>
+                                            <option value='cat'>Cats</option>
                                             <option value='other'>Other</option>
                                         </Select>
                                     </div>
@@ -462,7 +467,6 @@ class AnimalWindow extends Component {
                                         <InputLabel htmlFor="age-simple">Join Date</InputLabel>
                                         <TextField
                                             id="Age"
-                                            required
                                             type="number"
                                             value={join_date}
                                             onChange={this.handleChangeInput('join_date')}
@@ -478,37 +482,6 @@ class AnimalWindow extends Component {
                                             onChange={this.handleChangeInput('origin_country')}
                                         />
                                     </div>
-
-                                    {/*<div className={classes.formControl}>*/}
-                                    {/*<InputLabel htmlFor="age-simple">Pregnant</InputLabel>*/}
-                                    {/*<Select*/}
-                                    {/*value={pregnant}*/}
-                                    {/*native*/}
-                                    {/*onChange={this.handleChangeInput('pregnant')}*/}
-                                    {/*>*/}
-                                    {/*<option value=""/>*/}
-                                    {/*<option value='yes'>Yes</option>*/}
-                                    {/*<option value='no'>No</option>*/}
-                                    {/*</Select>*/}
-                                    {/*</div>*/}
-
-                                    {/*<div className={classes.formControl}>*/}
-                                    {/*<InputLabel htmlFor="age-simple">Personality</InputLabel>*/}
-                                    {/*<Select*/}
-                                    {/*value={personality}*/}
-                                    {/*native*/}
-                                    {/*onChange={this.handleChangeInput('personality')}*/}
-                                    {/*>*/}
-                                    {/*<option value=""/>*/}
-                                    {/*<option value='calm'>Calm</option>*/}
-                                    {/*<option value='stable'>Stable</option>*/}
-                                    {/*<option value='alert'>Alert</option>*/}
-                                    {/*<option value='nervous'>Nervous</option>*/}
-                                    {/*<option value='anxious'>Anxious</option>*/}
-                                    {/*<option value='defensive'>Defensive</option>*/}
-                                    {/*<option value='aggressive'>Aggressive</option>*/}
-                                    {/*</Select>*/}
-                                    {/*</div>*/}
                                 </div>
 
                                 {/*---------------------------------------------------------------------*/}
@@ -545,67 +518,6 @@ class AnimalWindow extends Component {
                                     </div>
                                 </div>
 
-                                {/*<div className={classes.formControl}>*/}
-                                {/*<InputLabel htmlFor="age-simple">Energy Level</InputLabel>*/}
-                                {/*<Select*/}
-                                {/*value={energy_level}*/}
-                                {/*native*/}
-                                {/*onChange={this.handleChangeInput('energy_level')}*/}
-                                {/*>*/}
-                                {/*<option value=""/>*/}
-                                {/*<option value='lazy'>1: Lazy</option>*/}
-                                {/*<option value='chill'>2: Chill</option>*/}
-                                {/*<option value='active'>3: Active</option>*/}
-                                {/*<option value='energetic'>4: Energetic</option>*/}
-                                {/*<option value='hyper'>5: Hyper</option>*/}
-                                {/*</Select>*/}
-                                {/*</div>*/}
-
-
-                                {/*<div className={classes.formControl}>*/}
-                                {/*<InputLabel htmlFor="age-simple">Cats Friendly</InputLabel>*/}
-                                {/*<Select*/}
-                                {/*value={cats_friendly}*/}
-                                {/*native*/}
-                                {/*onChange={this.handleChangeInput('cats_friendly')}*/}
-                                {/*>*/}
-                                {/*<option value=""/>*/}
-                                {/*<option value='yes'>Yes</option>*/}
-                                {/*<option value='no'>No</option>*/}
-                                {/*<option value='only_females'>Only females</option>*/}
-                                {/*<option value='only_males'>Only males</option>*/}
-                                {/*</Select>*/}
-                                {/*</div>*/}
-
-                                {/*<div className={classes.formControl}>*/}
-                                {/*<InputLabel htmlFor="age-simple">Dogs Friendly</InputLabel>*/}
-                                {/*<Select*/}
-                                {/*value={dogs_friendly}*/}
-                                {/*native*/}
-                                {/*onChange={this.handleChangeInput('dogs_friendly')}*/}
-                                {/*>*/}
-                                {/*<option value=""/>*/}
-                                {/*<option value='yes'>Yes</option>*/}
-                                {/*<option value='no'>No</option>*/}
-                                {/*<option value='only_females'>Only females</option>*/}
-                                {/*<option value='only_males'>Only males</option>*/}
-                                {/*</Select>*/}
-                                {/*</div>*/}
-
-                                {/*<div className={classes.formControl}>*/}
-                                {/*<InputLabel htmlFor="age-simple">Animals Friendly</InputLabel>*/}
-                                {/*<Select*/}
-                                {/*value={animals_friendly}*/}
-                                {/*native*/}
-                                {/*onChange={this.handleChangeInput('animals_friendly')}*/}
-                                {/*>*/}
-                                {/*<option value=""/>*/}
-                                {/*<option value='yes'>Yes</option>*/}
-                                {/*<option value='no'>No</option>*/}
-                                {/*<option value='only_small_animals'>Only Small Animals</option>*/}
-                                {/*<option value='only_big_animals'>Only Big Animals</option>*/}
-                                {/*</Select>*/}
-                                {/*</div>*/}
 
                                 {/*<div className={classes.formControl}>*/}
                                 {/*<InputLabel htmlFor="age-simple">Human Friendly</InputLabel>*/}
@@ -638,64 +550,6 @@ class AnimalWindow extends Component {
                                 {/*<option value='only_young_kids'>Only young kids</option>*/}
                                 {/*<option value='only_old_kids'>Only old kids</option>*/}
                                 {/*<option value='both_young_and_old'>Both young & old</option>*/}
-                                {/*</Select>*/}
-                                {/*</div>*/}
-
-                                {/*<div className={classes.formControl}>*/}
-                                {/*<InputLabel htmlFor="age-simple">Bites</InputLabel>*/}
-                                {/*<Select*/}
-                                {/*value={bites}*/}
-                                {/*native*/}
-                                {/*onChange={this.handleChangeInput('bites')}*/}
-                                {/*>*/}
-                                {/*<option value=""/>*/}
-                                {/*<option value='yes'>Yes</option>*/}
-                                {/*<option value='no'>No</option>*/}
-                                {/*</Select>*/}
-                                {/*</div>*/}
-
-                                {/*<div className={classes.formControl}>*/}
-                                {/*<InputLabel htmlFor="age-simple">For Adoption</InputLabel>*/}
-                                {/*<Select*/}
-                                {/*value={adoption}*/}
-                                {/*native*/}
-                                {/*onChange={this.handleChangeInput('adoption')}*/}
-                                {/*>*/}
-                                {/*<option value=""/>*/}
-                                {/*<option value='yes'>Yes</option>*/}
-                                {/*<option value='no'>No</option>*/}
-                                {/*<option value='hold'>Hold</option>*/}
-                                {/*</Select>*/}
-                                {/*</div>*/}
-
-                                {/*<div className={classes.formControl}>*/}
-                                {/*<InputLabel htmlFor="age-simple">For Foster</InputLabel>*/}
-                                {/*<Select*/}
-                                {/*value={foster}*/}
-                                {/*native*/}
-                                {/*onChange={this.handleChangeInput('foster')}*/}
-                                {/*>*/}
-                                {/*<option value=""/>*/}
-                                {/*<option value='yes'>Yes</option>*/}
-                                {/*<option value='no'>No</option>*/}
-                                {/*<option value='hold'>Hold</option>*/}
-                                {/*</Select>*/}
-                                {/*</div>*/}
-
-
-                                {/*<div className={classes.formControl}>*/}
-                                {/*<InputLabel htmlFor="age-simple">Accommodation</InputLabel>*/}
-                                {/*<Select*/}
-                                {/*value={accommodation}*/}
-                                {/*native*/}
-                                {/*onChange={this.handleChangeInput('accommodation')}*/}
-                                {/*>*/}
-                                {/*<option value=""/>*/}
-                                {/*<option value='apartment'>Apartment</option>*/}
-                                {/*<option value='house'>House</option>*/}
-                                {/*<option value='villa'>Villa</option>*/}
-                                {/*<option value='farm'>Farm</option>*/}
-                                {/*<option value='other'>Other</option>*/}
                                 {/*</Select>*/}
                                 {/*</div>*/}
 
@@ -794,35 +648,557 @@ class AnimalWindow extends Component {
 
                     {value === 1 && <div className='tab2'>
                         <form className={classes.root} autoComplete="off" onSubmit={this.handleSaveAnimal}>
-                            <div className='flex flex-row justify-between flex-wrap'>
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="name">Height</InputLabel>
+                            <div className='flex justify-between width-100'>
+                                <div className='drop-block'>
+                                    <Avatar className="w-96 h-96" alt="contact avatar"
+                                            src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+
+                                    <span className='mt-6'>{name || 'Name'}</span>
+                                </div>
+
+                                <div className='width-80'>
+                                    <div className='flex justify-between width-100'>
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">Temperament</InputLabel>
+                                            <Select
+                                                value={personality}
+                                                native
+                                                onChange={this.handleChangeInput('personality')}
+                                            >
+                                                <option value=""/>
+                                                <option value='calm'>Calm</option>
+                                                <option value='stable'>Stable</option>
+                                                <option value='alert'>Alert</option>
+                                                <option value='nervous'>Nervous</option>
+                                                <option value='anxious'>Anxious</option>
+                                                <option value='defensive'>Defensive</option>
+                                                <option value='aggressive'>Aggressive</option>
+                                            </Select>
+                                        </div>
+
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">Bites</InputLabel>
+                                            <Select
+                                                value={bites}
+                                                native
+                                                onChange={this.handleChangeInput('bites')}
+                                            >
+                                                <option value=""/>
+                                                <option value='yes'>Yes</option>
+                                                <option value='no'>No</option>
+                                            </Select>
+                                        </div>
+
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">Energy Level</InputLabel>
+                                            <Select
+                                                value={energy_level}
+                                                native
+                                                onChange={this.handleChangeInput('energy_level')}
+                                            >
+                                                <option value=""/>
+                                                <option value='lazy'>1: Lazy</option>
+                                                <option value='chill'>2: Chill</option>
+                                                <option value='active'>3: Active</option>
+                                                <option value='energetic'>4: Energetic</option>
+                                                <option value='hyper'>5: Hyper</option>
+                                            </Select>
+                                        </div>
+                                    </div>
+
+                                    <div className='flex justify-between width-100'>
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">Animals Friendly</InputLabel>
+                                            <Select
+                                                value={animals_friendly}
+                                                native
+                                                onChange={this.handleChangeInput('animals_friendly')}
+                                            >
+                                                <option value=""/>
+                                                <option value='yes'>Yes</option>
+                                                <option value='no'>No</option>
+                                                <option value='only_small_animals'>Only Small Animals</option>
+                                                <option value='only_big_animals'>Only Big Animals</option>
+                                            </Select>
+                                        </div>
+
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">Dogs Friendly</InputLabel>
+                                            <Select
+                                                value={dogs_friendly}
+                                                native
+                                                onChange={this.handleChangeInput('dogs_friendly')}
+                                            >
+                                                <option value=""/>
+                                                <option value='yes'>Yes</option>
+                                                <option value='no'>No</option>
+                                                <option value='only_females'>Only females</option>
+                                                <option value='only_males'>Only males</option>
+                                            </Select>
+                                        </div>
+
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">Cats Friendly</InputLabel>
+                                            <Select
+                                                value={cats_friendly}
+                                                native
+                                                onChange={this.handleChangeInput('cats_friendly')}
+                                            >
+                                                <option value=""/>
+                                                <option value='yes'>Yes</option>
+                                                <option value='no'>No</option>
+                                                <option value='only_females'>Only females</option>
+                                                <option value='only_males'>Only males</option>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className='width-100'>
+                                <div className={classes.formHistoryControl}>
+                                    <InputLabel htmlFor="name">Personality Description</InputLabel>
                                     <TextField
                                         id="name"
-                                        type="number"
-                                        value={height}
-                                        onChange={this.handleChangeInput('height')}
+                                        type="text"
+                                        rows={3}
+                                        multiline={true}
+                                        fullWidth
+                                        value={describe_health}
+                                        onChange={this.handleChangeInput('describe_health')}
                                     />
+                                </div>
+                            </div>
+
+
+                            <DialogActions>
+                                <Button onClick={onClose} color="secondary" className={classes.button}>
+                                    Cancel
+                                </Button>
+
+                                <Button type='submit' color="secondary" className={classes.button}>
+                                    Save
+                                </Button>
+                            </DialogActions>
+                        </form>
+                    </div>}
+
+                    {value === 2 && <div className='tab3'>
+                        <form className={classes.root} autoComplete="off" onSubmit={this.handleSaveAnimal}>
+                            <div className='flex justify-between width-100'>
+                                <div className='drop-block'>
+                                    <Avatar className="w-96 h-96" alt="contact avatar"
+                                            src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+
+                                    <span className='mt-6'>{name || 'Name'}</span>
+                                </div>
+
+                                <div className='width-80'>
+                                    <div className='flex justify-between width-100'>
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">Coat Type</InputLabel>
+                                            <Select
+                                                value={coat_type}
+                                                native
+                                                onChange={this.handleChangeInput('coat_type')}
+                                            >
+                                                <option value=""/>
+                                                <option value='short'>Short</option>
+                                                <option value='long'>Long</option>
+                                                <option value='docked'>Docked</option>
+                                            </Select>
+                                        </div>
+
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">Size</InputLabel>
+                                            <Select
+                                                value={size}
+                                                native
+                                                onChange={this.handleChangeInput('size')}
+                                            >
+                                                <option value=""/>
+                                                <option value='extra_small'>Extra small</option>
+                                                <option value='small'>Small</option>
+                                                <option value='medium'>Medium</option>
+                                                <option value='large'>Large</option>
+                                                <option value='extra_large'>Extra large</option>
+                                            </Select>
+                                        </div>
+                                    </div>
+
+                                    <div className='flex justify-between width-100'>
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">1st Coat Color</InputLabel>
+                                            <Select
+                                                value={st_coat_color}
+                                                native
+                                                onChange={this.handleChangeInput('st_coat_color')}
+                                            >
+                                                <option value=""/>
+                                                <option value='black'>Black</option>
+                                                <option value='grey'>Grey</option>
+                                                <option value='white'>White</option>
+                                                <option value='brown'>Brown</option>
+                                                <option value='red'>Red</option>
+                                                <option value='orange'>Orange</option>
+                                                <option value='yellow'>Yellow</option>
+                                                <option value='cream'>Cream</option>
+                                                <option value='fawn'>Fawn</option>
+                                            </Select>
+                                        </div>
+
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">2nd Coat Color</InputLabel>
+                                            <Select
+                                                value={nd_coat_color}
+                                                native
+                                                onChange={this.handleChangeInput('nd_coat_color')}
+                                            >
+                                                <option value=""/>
+                                                <option value='black'>Black</option>
+                                                <option value='grey'>Grey</option>
+                                                <option value='white'>White</option>
+                                                <option value='brown'>Brown</option>
+                                                <option value='red'>Red</option>
+                                                <option value='orange'>Orange</option>
+                                                <option value='yellow'>Yellow</option>
+                                                <option value='cream'>Cream</option>
+                                                <option value='fawn'>Fawn</option>
+                                            </Select>
+                                        </div>
+
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">3rd Coat Color</InputLabel>
+                                            <Select
+                                                value={rd_coat_color}
+                                                native
+                                                onChange={this.handleChangeInput('rd_coat_color')}
+                                            >
+                                                <option value=""/>
+                                                <option value='black'>Black</option>
+                                                <option value='grey'>Grey</option>
+                                                <option value='white'>White</option>
+                                                <option value='brown'>Brown</option>
+                                                <option value='red'>Red</option>
+                                                <option value='orange'>Orange</option>
+                                                <option value='yellow'>Yellow</option>
+                                                <option value='cream'>Cream</option>
+                                                <option value='fawn'>Fawn</option>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className='flex justify-between width-100'>
+                                <div className={classes.formControl}>
+                                    <InputLabel htmlFor="age-simple">1st Eye Color</InputLabel>
+                                    <Select
+                                        value={st_eye_color}
+                                        native
+                                        onChange={this.handleChangeInput('st_eye_color')}
+                                    >
+                                        <option value=""/>
+                                        <option value='black'>Black</option>
+                                        <option value='grey'>Grey</option>
+                                        <option value='brown'>Brown</option>
+                                        <option value='hazel'>Hazel</option>
+                                        <option value='green'>Green</option>
+                                        <option value='blue'>Blue</option>
+                                    </Select>
                                 </div>
 
                                 <div className={classes.formControl}>
-                                    <InputLabel htmlFor="name">Length</InputLabel>
-                                    <TextField
-                                        id="name"
-                                        type="number"
-                                        value={length}
-                                        onChange={this.handleChangeInput('length')}
-                                    />
+                                    <InputLabel htmlFor="age-simple">Ears</InputLabel>
+                                    <Select
+                                        value={ears}
+                                        native
+                                        onChange={this.handleChangeInput('ears')}
+                                    >
+                                        <option value=""/>
+                                        <option value='pointing'>Pointing</option>
+                                        <option value='cropped'>Cropped</option>
+                                        <option value='flapping'>Flapping</option>
+                                        <option value='round'>Round</option>
+                                    </Select>
+                                </div>
+                            </div>
+
+                            <div className='flex justify-between width-100'>
+                                <div className={classes.formControl}>
+                                    <InputLabel htmlFor="age-simple">2nd Eye Color</InputLabel>
+                                    <Select
+                                        value={nd_eye_color}
+                                        native
+                                        onChange={this.handleChangeInput('nd_eye_color')}
+                                    >
+                                        <option value=""/>
+                                        <option value='black'>Black</option>
+                                        <option value='grey'>Grey</option>
+                                        <option value='brown'>Brown</option>
+                                        <option value='hazel'>Hazel</option>
+                                        <option value='green'>Green</option>
+                                        <option value='blue'>Blue</option>
+                                    </Select>
                                 </div>
 
                                 <div className={classes.formControl}>
-                                    <InputLabel htmlFor="name">Weight</InputLabel>
+                                    <InputLabel htmlFor="age-simple">Tail</InputLabel>
+                                    <Select
+                                        value={tail}
+                                        native
+                                        onChange={this.handleChangeInput('tail')}
+                                    >
+                                        <option value=""/>
+                                        <option value='short'>Short</option>
+                                        <option value='long'>Long</option>
+                                        <option value='docked'>Docked</option>
+                                    </Select>
+                                </div>
+                            </div>
+
+                            <div className='flex justify-between width-100'>
+                                <div className={classes.formHistoryControl}>
+                                    <InputLabel htmlFor="name">Appearance Description</InputLabel>
                                     <TextField
                                         id="name"
-                                        type="number"
-                                        value={weight}
-                                        onChange={this.handleChangeInput('weight')}
+                                        type="text"
+                                        rows={3}
+                                        multiline={true}
+                                        fullWidth={true}
+                                        value={describe_appearance}
+                                        onChange={this.handleChangeInput('describe_appearance')}
                                     />
+                                </div>
+                            </div>
+
+                            {/*<div className='flex flex-row justify-between flex-wrap'>*/}
+                            {/**/}
+                            {/*<div className={classes.formControl}>*/}
+                            {/*<InputLabel htmlFor="age-simple">Coat Marks</InputLabel>*/}
+                            {/*<Select*/}
+                            {/*value={coat_marks}*/}
+                            {/*native*/}
+                            {/*onChange={this.handleChangeInput('coat_marks')}*/}
+                            {/*>*/}
+                            {/*<option value=""/>*/}
+                            {/*<option value='stripped'>Stripped</option>*/}
+                            {/*<option value='dotted'>Dotted</option>*/}
+                            {/*</Select>*/}
+                            {/*</div>*/}
+                            {/*</div>*/}
+
+
+                            <DialogActions>
+                                <Button onClick={onClose} color="secondary" className={classes.button}>
+                                    Cancel
+                                </Button>
+
+                                <Button type='submit' color="secondary" className={classes.button}>
+                                    Save
+                                </Button>
+                            </DialogActions>
+                        </form>
+                    </div>}
+
+                    {value === 3 && <div className='tab4'>
+                        <form className={classes.root} autoComplete="off" onSubmit={this.handleSaveAnimal}>
+                            <div className='flex justify-between width-100'>
+                                <div className='drop-block'>
+                                    <Avatar className="w-96 h-96" alt="contact avatar"
+                                            src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+
+                                    <span className='mt-6'>{name || 'Name'}</span>
+                                </div>
+
+                                <div className='width-80'>
+                                    <div className='flex justify-between width-100'>
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">Obedience</InputLabel>
+                                            <Select
+                                                value={obedience}
+                                                native
+                                                onChange={this.handleChangeInput('obedience')}
+                                            >
+                                                <option value=""/>
+                                                <option value='none'>None</option>
+                                                <option value='basic'>Basic</option>
+                                                <option value='advanced'>Advanced</option>
+                                                <option value='professional'>Professional</option>
+                                            </Select>
+                                        </div>
+
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">House trained</InputLabel>
+                                            <Select
+                                                value={house_trained}
+                                                native
+                                                onChange={this.handleChangeInput('house_trained')}
+                                            >
+                                                <option value=""/>
+                                                <option value='yes'>Yes</option>
+                                                <option value='no'>No</option>
+                                            </Select>
+                                        </div>
+                                    </div>
+
+                                    <div className='flex justify-between width-100'>
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">Crate trained</InputLabel>
+                                            <Select
+                                                value={crate_trained}
+                                                native
+                                                onChange={this.handleChangeInput('crate_trained')}
+                                            >
+                                                <option value=""/>
+                                                <option value='yes'>Yes</option>
+                                                <option value='no'>No</option>
+                                            </Select>
+                                        </div>
+
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">Fence Needed</InputLabel>
+                                            <Select
+                                                value={fence_required}
+                                                native
+                                                onChange={this.handleChangeInput('fence_required')}
+                                            >
+                                                <option value=""/>
+                                                <option value='yes'>Yes</option>
+                                                <option value='no'>No</option>
+                                            </Select>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className='width-100'>
+                                <div className={classes.formHistoryControl}>
+                                    <InputLabel htmlFor="name">Describe Training</InputLabel>
+                                    <TextField
+                                        id="name"
+                                        type="text"
+                                        fullWidth={true}
+                                        multiline={true}
+                                        rows={3}
+                                        value={describe_training}
+                                        onChange={this.handleChangeInput('describe_training')}
+                                    />
+                                </div>
+                            </div>
+
+
+                            <DialogActions>
+                                <Button onClick={onClose} color="secondary" className={classes.button}>
+                                    Cancel
+                                </Button>
+
+                                <Button type='submit' color="secondary" className={classes.button}>
+                                    Save
+                                </Button>
+                            </DialogActions>
+                        </form>
+                    </div>}
+
+                    {value === 4 && <div className='tab5'>
+                        <form className={classes.root} autoComplete="off" onSubmit={this.handleSaveAnimal}>
+                            <div className='flex justify-between width-100'>
+                                <div className='drop-block'>
+                                    <Avatar className="w-96 h-96" alt="contact avatar"
+                                            src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+
+                                    <span className='mt-6'>{name || 'Name'}</span>
+                                </div>
+
+                                <div className='width-80'>
+                                    <div className='flex justify-between width-100'>
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="name">Height</InputLabel>
+                                            <TextField
+                                                id="name"
+                                                type="number"
+                                                value={height}
+                                                onChange={this.handleChangeInput('height')}
+                                            />
+                                        </div>
+
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="name">Length</InputLabel>
+                                            <TextField
+                                                id="name"
+                                                type="number"
+                                                value={length}
+                                                onChange={this.handleChangeInput('length')}
+                                            />
+                                        </div>
+
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="name">Weight</InputLabel>
+                                            <TextField
+                                                id="name"
+                                                type="number"
+                                                value={weight}
+                                                onChange={this.handleChangeInput('weight')}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className='flex justify-between width-100'>
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">Cryptorchid</InputLabel>
+                                            <Select
+                                                value={cryptorchid}
+                                                native
+                                                onChange={this.handleChangeInput('cryptorchid')}
+                                            >
+                                                <option value=""/>
+                                                <option value='yes'>Yes</option>
+                                                <option value='no'>No</option>
+                                            </Select>
+                                        </div>
+
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">Pregnant</InputLabel>
+                                            <Select
+                                                value={pregnant}
+                                                native
+                                                onChange={this.handleChangeInput('pregnant')}
+                                            >
+                                                <option value=""/>
+                                                <option value='yes'>Yes</option>
+                                                <option value='no'>No</option>
+                                            </Select>
+                                        </div>
+
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">Disabled</InputLabel>
+                                            <Select
+                                                value={disabled}
+                                                native
+                                                onChange={this.handleChangeInput('disabled')}
+                                            >
+                                                <option value=""/>
+                                                <option value='yes'>Yes</option>
+                                                <option value='no'>No</option>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className='flex flex-row justify-between width-100'>
+                                <div className={classes.formControl}>
+                                    <InputLabel htmlFor="age-simple">Sterilized</InputLabel>
+                                    <Select
+                                        value={sterilized}
+                                        native
+                                        onChange={this.handleChangeInput('sterilized')}
+                                    >
+                                        <option value=""/>
+                                        <option value='spayed'>Spayed</option>
+                                        <option value='neutered'>Neutered</option>
+                                    </Select>
                                 </div>
 
                                 <div className={classes.formControl}>
@@ -839,18 +1215,6 @@ class AnimalWindow extends Component {
                                     </Select>
                                 </div>
 
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">Disabled</InputLabel>
-                                    <Select
-                                        value={disabled}
-                                        native
-                                        onChange={this.handleChangeInput('disabled')}
-                                    >
-                                        <option value=""/>
-                                        <option value='yes'>Yes</option>
-                                        <option value='no'>No</option>
-                                    </Select>
-                                </div>
 
                                 <div className={classes.formControl}>
                                     <InputLabel htmlFor="age-simple">Injured</InputLabel>
@@ -864,36 +1228,11 @@ class AnimalWindow extends Component {
                                         <option value='no'>No</option>
                                     </Select>
                                 </div>
+                            </div>
 
+                            <div className='flex flex-row justify-between width-100'>
                                 <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">Cryptorchid</InputLabel>
-                                    <Select
-                                        value={cryptorchid}
-                                        native
-                                        onChange={this.handleChangeInput('cryptorchid')}
-                                    >
-                                        <option value=""/>
-                                        <option value='yes'>Yes</option>
-                                        <option value='no'>No</option>
-                                    </Select>
-                                </div>
-
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">Sterilized</InputLabel>
-                                    <Select
-                                        value={sterilized}
-                                        native
-                                        onChange={this.handleChangeInput('sterilized')}
-                                    >
-                                        <option value=""/>
-                                        <option value='spayed'>Spayed</option>
-                                        <option value='neutered'>Neutered</option>
-                                    </Select>
-                                </div>
-
-
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">Sterilized Date</InputLabel>
+                                    <InputLabel htmlFor="age-simple">Sterilization Date</InputLabel>
                                     <TextField
                                         id="date"
                                         onChange={this.handleChangeInput('sterilized_date')}
@@ -903,7 +1242,7 @@ class AnimalWindow extends Component {
                                 </div>
 
                                 <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">Eyes Sight</InputLabel>
+                                    <InputLabel htmlFor="age-simple">Eye Sight</InputLabel>
                                     <Select
                                         value={eyes_sight}
                                         native
@@ -916,6 +1255,7 @@ class AnimalWindow extends Component {
                                         <option value='injuired'>Injuired</option>
                                     </Select>
                                 </div>
+
 
                                 <div className={classes.formControl}>
                                     <InputLabel htmlFor="age-simple">Blind</InputLabel>
@@ -944,46 +1284,323 @@ class AnimalWindow extends Component {
                                         <option value='one_ear'>One ear</option>
                                     </Select>
                                 </div>
+                            </div>
 
+                            <div className='flex flex-row justify-between width-100'>
+                                <div className='width-20 flex flex-col'>
+                                    <div className={classes.formHistoryControl}>
+                                        <InputLabel htmlFor="age-simple">Teeth</InputLabel>
+                                        <Select
+                                            value={teeth}
+                                            native
+                                            onChange={this.handleChangeInput('teeth')}
+                                        >
+                                            <option value=""/>
+                                            <option value='clean'>Clean</option>
+                                            <option value='tartar'>Tartar</option>
+                                            <option value='rotten'>Rotten</option>
+                                            <option value='abscess_sores'>Abscess/Sores</option>
+                                            <option value='worn'>Worn</option>
+                                            <option value='impacted'>Impacted</option>
+                                            <option value='few_missing'>Few missing</option>
+                                            <option value='none'>None</option>
+                                        </Select>
+                                    </div>
+
+                                    <div className={classes.formHistoryControl}>
+                                        <InputLabel htmlFor="age-simple">Gums</InputLabel>
+                                        <Select
+                                            value={gums}
+                                            native
+                                            onChange={this.handleChangeInput('gums')}
+                                        >
+                                            <option value=""/>
+                                            <option value='pink'>Pink</option>
+                                            <option value='red'>Red</option>
+                                            <option value='white'>White</option>
+                                            <option value='abscess_sores'>Abscess/Sores</option>
+                                        </Select>
+                                    </div>
+                                </div>
+
+                                <div className='width-80 flex flex-col'>
+                                    <div className='width-100'>
+                                        <div className={classes.formHistoryControl}>
+                                            <InputLabel htmlFor="name">Health Description</InputLabel>
+                                            <TextField
+                                                id="name"
+                                                type="text"
+                                                rows={3}
+                                                multiline={true}
+                                                fullWidth
+                                                value={describe_health}
+                                                onChange={this.handleChangeInput('describe_health')}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            {/*<div className='flex flex-row justify-between flex-wrap'>*/}
+
+
+                            {/*<div className={classes.formControl}>*/}
+                            {/*<InputLabel htmlFor="name">Date</InputLabel>*/}
+                            {/*<TextField*/}
+                            {/*id="name"*/}
+                            {/*type="date"*/}
+                            {/*value={date}*/}
+                            {/*onChange={this.handleChangeInput('date')}*/}
+                            {/*/>*/}
+                            {/*</div>*/}
+
+                            {/*<div className={classes.formControl}>*/}
+                            {/*<InputLabel htmlFor="name">Comments</InputLabel>*/}
+                            {/*<TextField*/}
+                            {/*id="name"*/}
+                            {/*type="text"*/}
+                            {/*value={comments}*/}
+                            {/*multiline={true}*/}
+                            {/*rows={3}*/}
+                            {/*onChange={this.handleChangeInput('comments')}*/}
+                            {/*/>*/}
+                            {/*</div>*/}
+
+
+                            {/*</div>*/}
+                            {/*</div>*/}
+
+                            <DialogActions>
+                                <Button onClick={onClose} color="secondary" className={classes.button}>
+                                    Cancel
+                                </Button>
+
+                                <Button type='submit' color="secondary" className={classes.button}>
+                                    Save
+                                </Button>
+                            </DialogActions>
+                        </form>
+                    </div>}
+
+
+                    {value === 5 && <div className='tab6'>
+                        <form className={classes.root} autoComplete="off" onSubmit={this.handleSaveAnimal}>
+                            <div className='flex justify-between width-100'>
+                                <div className='drop-block'>
+                                    <Avatar className="w-96 h-96" alt="contact avatar"
+                                            src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+
+                                    <span className='mt-6'>{name || 'Name'}</span>
+                                </div>
+
+                                <div className='width-80'>
+                                    <div className='flex justify-between width-100'>
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">Care Type</InputLabel>
+                                            <Select
+                                                value={LifeStages}
+                                                native
+                                                onChange={this.handleChangeInput('LifeStages')}
+                                            >
+                                                <option value=""/>
+                                                <option value='baby'>Vaccination</option>
+                                                <option value='young'>Medicine</option>
+                                                <option value='adult'>Grooming</option>
+                                                <option value='senior'>Boarding</option>
+                                                <option value='senior'>Other</option>
+                                            </Select>
+                                        </div>
+
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="name">Care Note</InputLabel>
+                                            <TextField
+                                                id="name"
+                                                type="text"
+                                                value={describe_health}
+                                                onChange={this.handleChangeInput('describe_health')}
+                                            />
+                                        </div>
+
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">Care Date</InputLabel>
+                                            <TextField
+                                                id="date"
+                                                onChange={this.handleChangeInput('dateOfBirth')}
+                                                value={dateOfBirth}
+                                                type="date"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <DialogActions>
+                                <Button onClick={onClose} color="secondary" className={classes.button}>
+                                    Cancel
+                                </Button>
+
+                                <Button type='submit' color="secondary" className={classes.button}>
+                                    Save
+                                </Button>
+                            </DialogActions>
+                        </form>
+                    </div>}
+
+                    {value === 6 && <div className='tab7'>
+                        <form className={classes.root} autoComplete="off" onSubmit={this.handleSaveAnimal}>
+                            <div className='flex justify-between width-100'>
+                                <div className='drop-block'>
+                                    <Avatar className="w-96 h-96" alt="contact avatar"
+                                            src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+
+                                    <span className='mt-6'>{name || 'Name'}</span>
+                                </div>
+
+                                <div className='flex width-80'>
+                                    <div className='flex justify-between width-20'>
+                                        <div className={classes.formHistoryControl}>
+                                            <InputLabel htmlFor="age-simple">Accommodation</InputLabel>
+                                            <Select
+                                                value={accommodation}
+                                                native
+                                                onChange={this.handleChangeInput('accommodation')}
+                                            >
+                                                <option value=""/>
+                                                <option value='apartment'>Apartment</option>
+                                                <option value='house'>House</option>
+                                                <option value='villa'>Villa</option>
+                                                <option value='farm'>Farm</option>
+                                                <option value='other'>Other</option>
+                                            </Select>
+                                        </div>
+                                    </div>
+
+                                    <div className='flex flex-col justify-between width-80'>
+                                        <div className='flex justify-between width-100'>
+                                            <div className={classes.formControl}>
+                                                <InputLabel htmlFor="age-simple">Adopted</InputLabel>
+                                                <Select
+                                                    value={adoption}
+                                                    native
+                                                    onChange={this.handleChangeInput('adoption')}
+                                                >
+                                                    <option value=""/>
+                                                    <option value='yes'>Yes</option>
+                                                    <option value='no'>No</option>
+                                                    <option value='no'>To Be</option>
+                                                    <option value='hold'>Hold</option>
+                                                </Select>
+                                            </div>
+
+                                            <div className={classes.formControl}>
+                                                <InputLabel htmlFor="age-simple">Adoption Date</InputLabel>
+                                                <TextField
+                                                    id="date"
+                                                    onChange={this.handleChangeInput('dateOfBirth')}
+                                                    value={dateOfBirth}
+                                                    type="date"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className='flex justify-between width-100'>
+                                            <div className={classes.formControl}>
+                                                <InputLabel htmlFor="age-simple">For Foster</InputLabel>
+                                                <Select
+                                                    value={foster}
+                                                    native
+                                                    onChange={this.handleChangeInput('foster')}
+                                                >
+                                                    <option value=""/>
+                                                    <option value='yes'>Yes</option>
+                                                    <option value='no'>No</option>
+                                                    <option value='hold'>Hold</option>
+                                                </Select>
+                                            </div>
+
+                                            <div className={classes.formControl}>
+                                                <InputLabel htmlFor="age-simple">Adoption Date</InputLabel>
+                                                <TextField
+                                                    id="date"
+                                                    onChange={this.handleChangeInput('dateOfBirth')}
+                                                    value={dateOfBirth}
+                                                    type="date"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className='flex justify-between width-100'>
                                 <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">Teeth</InputLabel>
+                                    <InputLabel htmlFor="age-simple">Entry Reason</InputLabel>
                                     <Select
-                                        value={teeth}
+                                        value={foster}
                                         native
-                                        onChange={this.handleChangeInput('teeth')}
+                                        onChange={this.handleChangeInput('foster')}
                                     >
                                         <option value=""/>
-                                        <option value='clean'>Clean</option>
-                                        <option value='tartar'>Tartar</option>
-                                        <option value='rotten'>Rotten</option>
-                                        <option value='abscess_sores'>Abscess/Sores</option>
-                                        <option value='worn'>Worn</option>
-                                        <option value='impacted'>Impacted</option>
-                                        <option value='few_missing'>Few missing</option>
-                                        <option value='none'>None</option>
+                                        <option value='yes'>Stray</option>
+                                        <option value='no'>Rescue</option>
+                                        <option value='hold'>Transfer</option>
+                                        <option value='hold'>Medical</option>
+                                        <option value='hold'>Temporary</option>
+                                        <option value='hold'>Neglectance</option>
+                                        <option value='hold'>Other</option>
                                     </Select>
                                 </div>
 
                                 <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">Gums</InputLabel>
+                                    <InputLabel htmlFor="age-simple">Entry Date</InputLabel>
+                                    <TextField
+                                        id="date"
+                                        onChange={this.handleChangeInput('dateOfBirth')}
+                                        value={dateOfBirth}
+                                        type="date"
+                                    />
+                                </div>
+
+                                <div className={classes.formControl}>
+                                    <InputLabel htmlFor="age-simple">Leave Reason </InputLabel>
                                     <Select
-                                        value={gums}
+                                        value={foster}
                                         native
-                                        onChange={this.handleChangeInput('gums')}
+                                        onChange={this.handleChangeInput('foster')}
                                     >
                                         <option value=""/>
-                                        <option value='pink'>Pink</option>
-                                        <option value='red'>Red</option>
-                                        <option value='white'>White</option>
-                                        <option value='abscess_sores'>Abscess/Sores</option>
+                                        <option value='yes'>Adoption</option>
+                                        <option value='no'>Foster</option>
+                                        <option value='hold'>Transfer</option>
+                                        <option value='hold'>Medical</option>
+                                        <option value='hold'>Temporary</option>
+                                        <option value='hold'>Death</option>
+                                        <option value='hold'>Other</option>
                                     </Select>
                                 </div>
 
                                 <div className={classes.formControl}>
-                                    <InputLabel htmlFor="name">Describe Health</InputLabel>
+                                    <InputLabel htmlFor="age-simple">Leave Date</InputLabel>
+                                    <TextField
+                                        id="date"
+                                        onChange={this.handleChangeInput('dateOfBirth')}
+                                        value={dateOfBirth}
+                                        type="date"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className='flex justify-between width-100'>
+                                <div className={classes.formHistoryControl}>
+                                    <InputLabel htmlFor="name">Health Description</InputLabel>
                                     <TextField
                                         id="name"
                                         type="text"
+                                        rows={3}
+                                        multiline={true}
+                                        fullWidth
                                         value={describe_health}
                                         onChange={this.handleChangeInput('describe_health')}
                                     />
@@ -1003,337 +1620,92 @@ class AnimalWindow extends Component {
                         </form>
                     </div>}
 
-                    {value === 2 && <div className='tab3'>
+
+                    {value === 7 && <div className='tab8'>
                         <form className={classes.root} autoComplete="off" onSubmit={this.handleSaveAnimal}>
-                            <div className='flex flex-row justify-between flex-wrap'>
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">Size</InputLabel>
-                                    <Select
-                                        value={size}
-                                        native
-                                        onChange={this.handleChangeInput('size')}
-                                    >
-                                        <option value=""/>
-                                        <option value='extra_small'>Extra small</option>
-                                        <option value='small'>Small</option>
-                                        <option value='medium'>Medium</option>
-                                        <option value='large'>Large</option>
-                                        <option value='extra_large'>Extra large</option>
-                                    </Select>
+                            <div className='flex justify-between width-100'>
+                                <div className='drop-block'>
+                                    <Avatar className="w-96 h-96" alt="contact avatar"
+                                            src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+
+                                    <span className='mt-6'>{name || 'Name'}</span>
                                 </div>
 
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">1st Coat Color</InputLabel>
-                                    <Select
-                                        value={st_coat_color}
-                                        native
-                                        onChange={this.handleChangeInput('st_coat_color')}
-                                    >
-                                        <option value=""/>
-                                        <option value='black'>Black</option>
-                                        <option value='grey'>Grey</option>
-                                        <option value='white'>White</option>
-                                        <option value='brown'>Brown</option>
-                                        <option value='red'>Red</option>
-                                        <option value='orange'>Orange</option>
-                                        <option value='yellow'>Yellow</option>
-                                        <option value='cream'>Cream</option>
-                                        <option value='fawn'>Fawn</option>
-                                    </Select>
-                                </div>
+                                <div className='width-80 flex flex-col'>
+                                    <div className='flex justify-between width-100'>
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">Owner Status</InputLabel>
+                                            <Select
+                                                value={owner_status}
+                                                native
+                                                onChange={this.handleChangeInput('owner_status')}
+                                            >
+                                                <option value=""/>
+                                                <option value='existing_owner'>Existing Owner</option>
+                                                <option value='previous_owner'>Previous Owner</option>
+                                                <option value='foster'>Foster</option>
+                                                <option value='adopter'>Adopter</option>
+                                                <option value='no_owner'>No Owner</option>
+                                            </Select>
+                                        </div>
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="name">First Name </InputLabel>
+                                            <TextField
+                                                id="name"
+                                                type="text"
+                                                value={owner_name}
+                                                onChange={this.handleChangeInput('owner_name')}
+                                            />
+                                        </div>
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="name">Last Name</InputLabel>
+                                            <TextField
+                                                id="name"
+                                                type="text"
+                                                value={owner_last_name}
+                                                onChange={this.handleChangeInput('owner_last_name')}
+                                            />
+                                        </div>
+                                    </div>
 
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">2nd Coat Color</InputLabel>
-                                    <Select
-                                        value={nd_coat_color}
-                                        native
-                                        onChange={this.handleChangeInput('nd_coat_color')}
-                                    >
-                                        <option value=""/>
-                                        <option value='black'>Black</option>
-                                        <option value='grey'>Grey</option>
-                                        <option value='white'>White</option>
-                                        <option value='brown'>Brown</option>
-                                        <option value='red'>Red</option>
-                                        <option value='orange'>Orange</option>
-                                        <option value='yellow'>Yellow</option>
-                                        <option value='cream'>Cream</option>
-                                        <option value='fawn'>Fawn</option>
-                                    </Select>
-                                </div>
+                                    <div className='flex justify-between width-100'>
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="name">Email</InputLabel>
+                                            <TextField
+                                                id="name"
+                                                type="text"
+                                                value={email}
+                                                onChange={this.handleChangeInput('email')}
+                                            />
+                                        </div>
 
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">3rd Coat Color</InputLabel>
-                                    <Select
-                                        value={rd_coat_color}
-                                        native
-                                        onChange={this.handleChangeInput('rd_coat_color')}
-                                    >
-                                        <option value=""/>
-                                        <option value='black'>Black</option>
-                                        <option value='grey'>Grey</option>
-                                        <option value='white'>White</option>
-                                        <option value='brown'>Brown</option>
-                                        <option value='red'>Red</option>
-                                        <option value='orange'>Orange</option>
-                                        <option value='yellow'>Yellow</option>
-                                        <option value='cream'>Cream</option>
-                                        <option value='fawn'>Fawn</option>
-                                    </Select>
-                                </div>
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="name">Phone</InputLabel>
+                                            <TextField
+                                                id="name"
+                                                type="text"
+                                                value={phone}
+                                                onChange={this.handleChangeInput('phone')}
+                                            />
+                                        </div>
 
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">Coat Marks</InputLabel>
-                                    <Select
-                                        value={coat_marks}
-                                        native
-                                        onChange={this.handleChangeInput('coat_marks')}
-                                    >
-                                        <option value=""/>
-                                        <option value='stripped'>Stripped</option>
-                                        <option value='dotted'>Dotted</option>
-                                    </Select>
-                                </div>
 
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">1st Eye Color</InputLabel>
-                                    <Select
-                                        value={st_eye_color}
-                                        native
-                                        onChange={this.handleChangeInput('st_eye_color')}
-                                    >
-                                        <option value=""/>
-                                        <option value='black'>Black</option>
-                                        <option value='grey'>Grey</option>
-                                        <option value='brown'>Brown</option>
-                                        <option value='hazel'>Hazel</option>
-                                        <option value='green'>Green</option>
-                                        <option value='blue'>Blue</option>
-                                    </Select>
-                                </div>
-
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">2nd Eye Color</InputLabel>
-                                    <Select
-                                        value={nd_eye_color}
-                                        native
-                                        onChange={this.handleChangeInput('nd_eye_color')}
-                                    >
-                                        <option value=""/>
-                                        <option value='black'>Black</option>
-                                        <option value='grey'>Grey</option>
-                                        <option value='brown'>Brown</option>
-                                        <option value='hazel'>Hazel</option>
-                                        <option value='green'>Green</option>
-                                        <option value='blue'>Blue</option>
-                                    </Select>
-                                </div>
-
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">Ears</InputLabel>
-                                    <Select
-                                        value={ears}
-                                        native
-                                        onChange={this.handleChangeInput('ears')}
-                                    >
-                                        <option value=""/>
-                                        <option value='pointing'>Pointing</option>
-                                        <option value='cropped'>Cropped</option>
-                                        <option value='flapping'>Flapping</option>
-                                        <option value='round'>Round</option>
-                                    </Select>
-                                </div>
-
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">Tail</InputLabel>
-                                    <Select
-                                        value={tail}
-                                        native
-                                        onChange={this.handleChangeInput('tail')}
-                                    >
-                                        <option value=""/>
-                                        <option value='short'>Short</option>
-                                        <option value='long'>Long</option>
-                                        <option value='docked'>Docked</option>
-                                    </Select>
-                                </div>
-
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="name">Describe Appearance</InputLabel>
-                                    <TextField
-                                        id="name"
-                                        type="text"
-                                        value={describe_appearance}
-                                        onChange={this.handleChangeInput('describe_appearance')}
-                                    />
+                                        <div className={classes.formControl}>
+                                            <InputLabel htmlFor="age-simple">Country</InputLabel>
+                                            <Select
+                                                value={country}
+                                                native
+                                                onChange={this.handleChangeInput('country')}
+                                            >
+                                                <option value=""/>
+                                                <option value='us'>US</option>
+                                            </Select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-
-                            <DialogActions>
-                                <Button onClick={onClose} color="secondary" className={classes.button}>
-                                    Cancel
-                                </Button>
-
-                                <Button type='submit' color="secondary" className={classes.button}>
-                                    Save
-                                </Button>
-                            </DialogActions>
-                        </form>
-                    </div>}
-
-                    {value === 3 && <div className='tab4'>
-                        <form className={classes.root} autoComplete="off" onSubmit={this.handleSaveAnimal}>
-                            <div className='flex flex-row justify-between flex-wrap'>
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">Obedience</InputLabel>
-                                    <Select
-                                        value={obedience}
-                                        native
-                                        onChange={this.handleChangeInput('obedience')}
-                                    >
-                                        <option value=""/>
-                                        <option value='none'>None</option>
-                                        <option value='basic'>Basic</option>
-                                        <option value='advanced'>Advanced</option>
-                                        <option value='professional'>Professional</option>
-                                    </Select>
-                                </div>
-
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">House trained</InputLabel>
-                                    <Select
-                                        value={house_trained}
-                                        native
-                                        onChange={this.handleChangeInput('house_trained')}
-                                    >
-                                        <option value=""/>
-                                        <option value='yes'>Yes</option>
-                                        <option value='no'>No</option>
-                                    </Select>
-                                </div>
-
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">Crate trained</InputLabel>
-                                    <Select
-                                        value={crate_trained}
-                                        native
-                                        onChange={this.handleChangeInput('crate_trained')}
-                                    >
-                                        <option value=""/>
-                                        <option value='yes'>Yes</option>
-                                        <option value='no'>No</option>
-                                    </Select>
-                                </div>
-
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">Fence required</InputLabel>
-                                    <Select
-                                        value={fence_required}
-                                        native
-                                        onChange={this.handleChangeInput('fence_required')}
-                                    >
-                                        <option value=""/>
-                                        <option value='yes'>Yes</option>
-                                        <option value='no'>No</option>
-                                    </Select>
-                                </div>
-
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="name">Describe Training</InputLabel>
-                                    <TextField
-                                        id="name"
-                                        type="text"
-                                        value={describe_training}
-                                        onChange={this.handleChangeInput('describe_training')}
-                                    />
-                                </div>
-                            </div>
-
-
-                            <DialogActions>
-                                <Button onClick={onClose} color="secondary" className={classes.button}>
-                                    Cancel
-                                </Button>
-
-                                <Button type='submit' color="secondary" className={classes.button}>
-                                    Save
-                                </Button>
-                            </DialogActions>
-                        </form>
-                    </div>}
-
-                    {value === 4 && <div className='tab5'>
-                        <form className={classes.root} autoComplete="off" onSubmit={this.handleSaveAnimal}>
-                            <div className='flex flex-row justify-between flex-wrap'>
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">Owner Status</InputLabel>
-                                    <Select
-                                        value={owner_status}
-                                        native
-                                        onChange={this.handleChangeInput('owner_status')}
-                                    >
-                                        <option value=""/>
-                                        <option value='existing_owner'>Existing Owner</option>
-                                        <option value='previous_owner'>Previous Owner</option>
-                                        <option value='foster'>Foster</option>
-                                        <option value='adopter'>Adopter</option>
-                                        <option value='no_owner'>No Owner</option>
-                                    </Select>
-                                </div>
-
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="name">Name</InputLabel>
-                                    <TextField
-                                        id="name"
-                                        type="text"
-                                        value={owner_name}
-                                        onChange={this.handleChangeInput('owner_name')}
-                                    />
-                                </div>
-
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="name">Last Name</InputLabel>
-                                    <TextField
-                                        id="name"
-                                        type="text"
-                                        value={owner_last_name}
-                                        onChange={this.handleChangeInput('owner_last_name')}
-                                    />
-                                </div>
-
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="name">Email</InputLabel>
-                                    <TextField
-                                        id="name"
-                                        type="text"
-                                        value={email}
-                                        onChange={this.handleChangeInput('email')}
-                                    />
-                                </div>
-
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="name">Phone</InputLabel>
-                                    <TextField
-                                        id="name"
-                                        type="text"
-                                        value={phone}
-                                        onChange={this.handleChangeInput('phone')}
-                                    />
-                                </div>
-
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="age-simple">Country</InputLabel>
-                                    <Select
-                                        value={country}
-                                        native
-                                        onChange={this.handleChangeInput('country')}
-                                    >
-                                        <option value=""/>
-                                        <option value='us'>US</option>
-                                    </Select>
-                                </div>
-
+                            <div className='flex justify-between width-100'>
                                 <div className={classes.formControl}>
                                     <InputLabel htmlFor="name">Address</InputLabel>
                                     <TextField
@@ -1345,31 +1717,57 @@ class AnimalWindow extends Component {
                                 </div>
 
                                 <div className={classes.formControl}>
-                                    <InputLabel htmlFor="name">Date</InputLabel>
+                                    <InputLabel htmlFor="age-simple">Registration Date</InputLabel>
                                     <TextField
-                                        id="name"
+                                        id="date"
+                                        onChange={this.handleChangeInput('dateOfBirth')}
+                                        value={dateOfBirth}
                                         type="date"
-                                        value={date}
-                                        onChange={this.handleChangeInput('date')}
                                     />
                                 </div>
+                            </div>
 
-                                <div className={classes.formControl}>
-                                    <InputLabel htmlFor="name">Comments</InputLabel>
+                            <div className='width-100'>
+                                <div className={classes.formHistoryControl}>
+                                    <InputLabel htmlFor="name"> Comments</InputLabel>
                                     <TextField
                                         id="name"
                                         type="text"
-                                        value={comments}
+                                        fullWidth={true}
                                         multiline={true}
-                                        rows={3}
-                                        onChange={this.handleChangeInput('comments')}
+                                        rows={5}
+                                        value={describe_training}
+                                        onChange={this.handleChangeInput('describe_training')}
                                     />
                                 </div>
+                            </div>
 
-                                <div className='drop-block owner-photos'>
+                            <DialogActions>
+                                <Button onClick={onClose} color="secondary" className={classes.button}>
+                                    Cancel
+                                </Button>
+
+                                <Button type='submit' color="secondary" className={classes.button}>
+                                    Save
+                                </Button>
+                            </DialogActions>
+                        </form>
+                    </div>}
+
+                    {value === 8 && <div className='tab9'>
+                        <form className={classes.root} autoComplete="off" onSubmit={this.handleSaveAnimal}>
+                            <div className='flex justify-between width-100'>
+                                <div className='drop-block'>
+                                    <Avatar className="w-96 h-96" alt="contact avatar"
+                                            src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+
+                                    <span className='mt-6'>{name || 'Name'}</span>
+                                </div>
+
+                                <div className='width-80 flex flex-col'>
                                     <ImageUploader
                                         withIcon={true}
-                                        buttonText='Owner Photo'
+                                        buttonText='User ID'
                                         onChange={this.onDrop}
                                         imgExtension={['.jpg', '.gif', '.png']}
                                         maxFileSize={5242880}
@@ -1378,7 +1776,7 @@ class AnimalWindow extends Component {
 
                                     <ImageUploader
                                         withIcon={true}
-                                        buttonText='Owner ID'
+                                        buttonText='Animal ID'
                                         onChange={this.onDrop}
                                         imgExtension={['.jpg', '.gif', '.png']}
                                         maxFileSize={5242880}
@@ -1386,6 +1784,7 @@ class AnimalWindow extends Component {
                                     />
                                 </div>
                             </div>
+
 
                             <DialogActions>
                                 <Button onClick={onClose} color="secondary" className={classes.button}>
