@@ -138,7 +138,7 @@ class ContactsList extends PureComponent {
 
     state = {
         selectedContactsMenu: null,
-        selectedUsersIds: [],
+        selectedAnimalsIds: [],
 
         filterType2: 'contains',
         filterValue2: '',
@@ -154,46 +154,47 @@ class ContactsList extends PureComponent {
         focus: ''
     };
 
-    getFilteredArray = (entities, searchText) => {
+    getFilteredArray = (entities, searchText = '') => {
         const arr = Object.keys(entities).map((id) => entities[id]);
         if (searchText.length === 0) {
             return arr;
         }
+
         return FuseUtils.filterArrayByString(arr, searchText);
     };
 
     selectAllContacts = async () => {
         let arr = [];
-        await this.props.users.forEach(item => {
+        await this.props.animals.forEach(item => {
             arr.push(item.id)
         });
 
         this.setState({
-            selectedUsersIds: arr
-        })
-    };
-
-    selectUser = id => {
-        this.setState({
-            selectedUsersIds: [
-                ...this.state.selectedUsersIds,
-                id
-            ]
-        })
-    };
-
-    deSelectUser = id => {
-        let arr = this.state.selectedUsersIds.filter(item => item !== id);
-
-        this.setState({
-            selectedUsersIds: arr
+            selectedAnimalsIds: arr
         })
     };
 
     deSelectAllContacts = () => {
         this.setState({
-            selectedUsersIds: [],
-            userMenu: null
+            selectedAnimalsIds: [],
+            selectedContactsMenu: null
+        })
+    };
+
+    selectAnimal = id => {
+        this.setState({
+            selectedAnimalsIds: [
+                ...this.state.selectedAnimalsIds,
+                id
+            ]
+        })
+    };
+
+    deSelectAnimal = id => {
+        let arr = this.state.selectedAnimalsIds.filter(item => item !== id);
+
+        this.setState({
+            selectedAnimalsIds: arr
         })
     };
 
@@ -445,6 +446,7 @@ class ContactsList extends PureComponent {
     render() {
         const {
                 users = [],
+                animals,
                 onAddUser,
                 classes,
                 page,
@@ -461,7 +463,7 @@ class ContactsList extends PureComponent {
             } = this.props,
 
             {
-                selectedUsersIds,
+                selectedAnimalsIds,
                 anchorEl
             } = this.state,
 
@@ -473,7 +475,7 @@ class ContactsList extends PureComponent {
             };
 
 
-        const data = this.getFilteredArray(users, searchText);
+        const data = this.getFilteredArray(animals, searchText);
 
 
         const
@@ -485,11 +487,11 @@ class ContactsList extends PureComponent {
                             onClick={(event) => {
                                 event.stopPropagation();
                             }}
-                            // onChange={(event) => {
-                            //     event.target.checked ? this.selectAllContacts() : this.deSelectAllContacts();
-                            // }}
-                            checked={selectedUsersIds.length === Object.keys(users).length && selectedUsersIds.length > 0}
-                            indeterminate={selectedUsersIds.length !== Object.keys(users).length && selectedUsersIds.length > 0}
+                            onChange={(event) => {
+                                event.target.checked ? this.selectAllContacts() : this.deSelectAllContacts();
+                            }}
+                            checked={selectedAnimalsIds.length === Object.keys(animals).length && selectedAnimalsIds.length > 0}
+                            indeterminate={selectedAnimalsIds.length !== Object.keys(animals).length && selectedAnimalsIds.length > 0}
                         />
                     ),
                     accessor: "",
@@ -498,11 +500,10 @@ class ContactsList extends PureComponent {
                                 onClick={(event) => {
                                     event.stopPropagation();
                                 }}
-                                // onChange={(event) => {
-                                //     event.target.checked ? this.selectUser(row.value.id) : this.deSelectUser(row.value.id);
-                                // }}
-                                checked={selectedUsersIds.includes(row.value.id)}
-                                // onChange={() => toggleInSelectedContacts(row.value.id)}
+                                onChange={(event) => {
+                                    event.target.checked ? this.selectAnimal(row.value.id) : this.deSelectAnimal(row.value.id);
+                                }}
+                                checked={selectedAnimalsIds.includes(row.value.id)}
                             />
                         )
                     },
@@ -512,18 +513,18 @@ class ContactsList extends PureComponent {
                 },
                 {
                     Header: () => (
-                        selectedUsersIds.length > 0 && (
+                        selectedAnimalsIds.length > 0 && (
                             <IconButton
                                 onClick={(ev) => {
                                     ev.stopPropagation();
-                                    // onRemove(selectedUsersIds);
+                                    onRemove(selectedAnimalsIds);
                                 }}
                             >
                                 <Icon>delete</Icon>
                             </IconButton>
                         )
                     ),
-                    accessor: "avatar",
+                    accessor: "image",
                     Cell: row => (
                         <Avatar className="mr-8" alt={row.original.name}
                                 src={row.value || 'assets/images/avatars/avatar.svg'}/>
@@ -576,7 +577,7 @@ class ContactsList extends PureComponent {
                 },
                 {
                     Header: () => (
-                       <span>
+                        <span>
                            Animals <br/> Friendly
                        </span>
                     ),
@@ -629,7 +630,7 @@ class ContactsList extends PureComponent {
                         <Tooltip title="Add user" className={classes.toolTip}>
                             <Fab color="secondary" aria-label="Edit" className={classes.fab}
                                  onClick={onAddUser}>
-                                <PlusOne />
+                                <PlusOne/>
                             </Fab>
                         </Tooltip>
                     ),
@@ -641,7 +642,7 @@ class ContactsList extends PureComponent {
                             <IconButton
                                 onClick={(ev) => {
                                     ev.stopPropagation();
-                                    // onEdit(row.original)
+                                    onEdit(row.original)
                                 }}
                             >
                                 <Icon>edit</Icon>
@@ -650,7 +651,7 @@ class ContactsList extends PureComponent {
                             <IconButton
                                 onClick={(ev) => {
                                     ev.stopPropagation();
-                                    // onRemove(row.original.id);
+                                    onRemove(row.original.id);
                                 }}
                             >
                                 <Icon>delete</Icon>
@@ -661,30 +662,29 @@ class ContactsList extends PureComponent {
             ];
 
         return (
-
             <FuseAnimate animation="transition.slideUpIn" delay={300}>
                 <ReactTable
                     className="-striped -highlight border-0"
                     manual
-                    data={this.props.data}
+                    data={data}
                     page={page}
                     pages={Math.ceil(count / pageSize)}
-                    // onPageChange={(pageIndex) => {
-                    //     onChangePagination(pageIndex);
-                    // }}
-                    //
-                    // onSortedChange={(newSorted) => {
-                    //     onSortUsers(newSorted)
-                    // }}
-                    //
-                    // onFilteredChange={(filter) => {
-                    //     onFilterUser(filter)
-                    // }}
+                    onPageChange={(pageIndex) => {
+                        onChangePagination(pageIndex);
+                    }}
+
+                    onSortedChange={(newSorted) => {
+                        onSortUsers(newSorted)
+                    }}
+
+                    onFilteredChange={(filter) => {
+                        onFilterUser(filter)
+                    }}
 
                     defaultPageSize={10}
                     pageSize={pageSize}
                     pageSizeOptions={[5, 10, 15, 20]}
-                    // onPageSizeChange={onChangePageSize}
+                    onPageSizeChange={onChangePageSize}
                     noDataText="No animals found"
                     columns={columns}
                 />

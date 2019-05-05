@@ -56,7 +56,7 @@ class animalsService extends FuseUtils.EventEmitter {
 
     updateAnimal = (animal, id) => {
         return new Promise((resolve, reject) => {
-            axios.patch(`${baseUrl}animals/${id}/`, animal)
+            axios.put(`${baseUrl}animals/${id}/`, animal)
                 .then(response => {
                     if (response.data) {
                         resolve(response.data);
@@ -82,7 +82,38 @@ class animalsService extends FuseUtils.EventEmitter {
                     reject(error.response.data);
                 });
         });
-    }
+    };
+
+    removeAnimal = (id) => {
+        return new Promise((resolve, reject) => {
+            axios.delete(`${baseUrl}animals/${id}/`)
+                .then(response => {
+                    console.log(response);
+                    resolve(response.data);
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.handleError(error);
+                    reject(error.response.data);
+                });
+        });
+    };
+
+    removeAnimals = (animalsId) => {
+        return new Promise((resolve, reject) => {
+            axios.post(`${baseUrl}animals/bulk_delete/`, animalsId)
+                .then(response => {
+                    if (response.data) {
+                        resolve(response.data);
+                    }
+                })
+                .catch(error => {
+                    this.handleError(error);
+                    reject(error.response.data);
+                });
+        });
+    };
+
 
     // removeUser = (id) => {
     //     return new Promise((resolve, reject) => {

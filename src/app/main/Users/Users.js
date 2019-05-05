@@ -166,11 +166,9 @@ class Users extends Component {
         this.setState({
             sorted: newSorted[0]
         }, () => this.getUsers());
-        console.log(newSorted)
     };
 
     handleChangePagination = (page) => {
-        console.log(page);
         this.setState({
             page: page
         }, () => this.getUsers())

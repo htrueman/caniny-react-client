@@ -3,8 +3,7 @@ import {withStyles} from '@material-ui/core/styles';
 import {FusePageSimple} from '@fuse';
 import Icon from '@material-ui/core/Icon';
 import AnimalsList from './AnimalsList';
-import animalsService from 'app/services/animalsService';
-import AnimalWindow from './AnimalWindow';
+import {Dialog, DialogActions, DialogTitle, Button} from '@material-ui/core';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faPaw} from "@fortawesome/free-solid-svg-icons";
 import Paper from '@material-ui/core/Paper';
@@ -15,6 +14,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import {faUser} from '@fortawesome/free-solid-svg-icons'
 import {FuseAnimate} from '@fuse';
+
+import animalsService from 'app/services/animalsService';
+import AnimalWindow from './AnimalWindow';
 
 const styles = theme => ({
     layoutRoot: {},
@@ -39,15 +41,28 @@ const styles = theme => ({
     },
 });
 
+const animalParams = {
+    firstName: 'first_name',
+    lastName: 'last_name',
+    phoneNumber: 'phone_number',
+    email: 'email',
+    userType: 'user_type',
+    joinDate: 'join_date'
+};
+
 class Animals extends Component {
     state = {
         animals: [],
         selectedAnimal: {},
         open: false,
+        openRemove: false,
         search: '',
+        removeAnimalId: '',
+        filters: [],
 
         count: 0,
         page: 0,
+        pageSize: 10,
         tab: 'all'
     };
 
@@ -56,7 +71,10 @@ class Animals extends Component {
     };
 
     handleClose = () => {
-        this.setState({open: false});
+        this.setState({
+            open: false,
+            selectedAnimal: {}
+        });
     };
 
     handleSearch = ({target: {value}}) => {
@@ -68,11 +86,30 @@ class Animals extends Component {
 
 
     getAnimals = async (search) => {
-        const {page} = this.state;
+        const {page, tab, pageSize, sorted, filters} = this.state;
 
-        let params = search ? `?page=${page}&search=${search}` : '';
+        let urlParams = [
+            search ? `&search=${search}` : '',
+            tab !== 'all' ? `&user_type__iexact=${tab === 'all' ? '' : tab}` : '',
+            sorted ? `&ordering=${sorted.desc ? animalParams[sorted.id] : `-${animalParams[sorted.id]}`}` : '',
+        ];
+
+        await filters.forEach(filter => {
+            if (filter.type === 'date') {
+                if (filter.filterType) {
+                    urlParams.push(`&${animalParams[filter.column]}__${filter.filterType}=${filter.filterValue}`)
+                } else {
+                    urlParams.push(`&${animalParams[filter.column]}=${filter.filterValue}`)
+                }
+            } else {
+                urlParams.push(`&${animalParams[filter.column]}__i${filter.filterType}=${filter.filterValue}`)
+            }
+        });
+
+        const params = `?page_size=${pageSize}&page=${(page + 1) + urlParams.join('')}`;
 
         const res = await animalsService.getAnimals(params);
+
         this.setState({
             animals: res.results,
             count: res.count
@@ -89,8 +126,81 @@ class Animals extends Component {
     updateWindow = () => {
         this.getAnimals();
         this.handleClose();
+
+        this.setState({
+            selectedAnimal: {}
+        })
     };
 
+    handleEditAnimal = animal => {
+        this.setState({
+            selectedAnimal: animal,
+            open: true,
+        })
+    };
+
+    handleOpenRemoveWindow = id => {
+        this.setState({
+            openRemove: true,
+            removeAnimalId: id
+        })
+    };
+
+    handleChangePagination = (page) => {
+        this.setState({
+            page: page
+        }, () => this.getAnimals())
+    };
+    handleChangePageSize = (pageSize) => {
+        this.setState({
+            pageSize: pageSize,
+            page: 0
+        }, () => this.getAnimals())
+    };
+    handleChangeSort = (newSorted) => {
+        this.setState({
+            sorted: newSorted[0]
+        }, () => this.getUsers());
+    };
+    handleFilterUser = (filter) => {
+        const filtersArr = filter.map(item => {
+
+            if (item.value.type === 'date') {
+                return {
+                    type: item.value.type,
+                    column: item.id,
+                    filterType: item.value.filterType,
+                    filterValue: item.value.filterValue
+                }
+            } else {
+                return {
+                    type: item.value.type,
+                    column: item.id,
+                    filterType: item.value.filterType,
+                    filterValue: window.btoa(item.value.filterValue)
+                }
+            }
+        });
+
+        this.setState({
+            filters: filtersArr
+        }, () => this.getUsers());
+    };
+
+
+    handleRemoveAnimals = async () => {
+        if (typeof this.state.removeAnimalId === 'string') {
+            await animalsService.removeAnimal(this.state.removeAnimalId);
+        } else {
+            await animalsService.removeAnimals({ids: this.state.removeAnimalId});
+        }
+
+        this.setState({
+            openRemove: false,
+            removeAnimalId: '',
+        });
+        this.getAnimals();
+    };
 
     componentDidMount() {
         const token = sessionStorage.getItem('token');
@@ -106,7 +216,9 @@ class Animals extends Component {
                 page,
                 count,
                 search,
-                tab
+                tab,
+                openRemove,
+                pageSize
             } = this.state,
             {classes} = this.props;
 
@@ -188,9 +300,18 @@ class Animals extends Component {
                         <div className="p-24">
                             <AnimalsList
                                 onAddUser={this.handleClickOpen}
-                                data={animals}
+                                animals={animals}
                                 page={page}
+                                pageSize={pageSize}
                                 count={count}
+
+                                onEdit={this.handleEditAnimal}
+                                onRemove={this.handleOpenRemoveWindow}
+                                onChangePagination={this.handleChangePagination}
+                                onChangePageSize={this.handleChangePageSize}
+                                onSortUsers={this.handleChangeSort}
+                                onFilterUser={this.handleFilterUser}
+
                             />
                         </div>
                     }
@@ -202,6 +323,28 @@ class Animals extends Component {
                     onUpdate={this.updateWindow}
                     animal={selectedAnimal}
                 />
+
+                <Dialog
+                    open={openRemove}
+                    onClose={() => this.setState({openRemove: false, removeUserId: ''})}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Do you want to continue the deletion?"}</DialogTitle>
+
+                    <DialogActions>
+                        <Button onClick={this.handleRemoveAnimals} style={{color: '#33ADFF'}} autoFocus>
+                            Yes
+                        </Button>
+
+                        <Button style={{color: '#b61423'}}
+                                onClick={() => this.setState({openRemove: false, removeUserId: ''})} color="primary">
+                            No
+                        </Button>
+
+                    </DialogActions>
+                </Dialog>
+
             </Fragment>
 
         )

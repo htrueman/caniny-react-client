@@ -96,7 +96,6 @@ const animalFields = {
     gender: 'male',
     species: 'dog',
     joinDate: moment(new Date()).format('YYYY-MM-DD'),
-    dateOfBirth: '',
 };
 
 class AnimalWindow extends Component {
@@ -112,13 +111,29 @@ class AnimalWindow extends Component {
 
     handleSaveAnimal = async (e) => {
         e.preventDefault();
+        const {animal} = this.state;
 
-        await animalsService.createNewAnimal(
-            this.state.animal
-        );
+        if (animal.id) {
+            let newAnimal = {};
+
+            for (let key in animal) {
+                if (animal[key] && key !== 'id') {
+                    newAnimal[key] = animal[key]
+                }
+            }
+            newAnimal.image = animal.avatar;
+
+            await animalsService.updateAnimal(newAnimal, animal.id)
+        } else {
+            await animalsService.createNewAnimal(
+                this.state.animal
+            );
+        }
 
         this.setState({
-            animal: {}
+            animal: {
+                ...animalFields
+            }
         });
 
         this.props.onUpdate();
@@ -183,11 +198,13 @@ class AnimalWindow extends Component {
         };
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //     if (nextProps.user.id) {
-    //         this.setState({...nextProps.user})
-    //     }
-    // }
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.animal.id) {
+            this.setState({animal: {...nextProps.animal}})
+        } else {
+            this.setState({animal: {...animalFields}})
+        }
+    }
 
 
     handleChangeInput = name => ({target: {value}}) => {
@@ -225,7 +242,7 @@ class AnimalWindow extends Component {
                 accommodation,
                 dateOfBirth,
                 temperament,
-                LifeStages,
+                lifeStage,
                 gender,
                 species_details,
                 origin_country,
@@ -450,9 +467,9 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Life Stage</InputLabel>
                                                 <Select
-                                                    value={LifeStages}
+                                                    value={lifeStage}
                                                     native
-                                                    onChange={this.handleChangeInput('LifeStages')}
+                                                    onChange={this.handleChangeInput('lifeStage')}
                                                 >
                                                     <option value=""/>
                                                     <option value='baby'>Baby</option>
@@ -1378,9 +1395,9 @@ class AnimalWindow extends Component {
                                         <div className={classes.formControl}>
                                             <InputLabel htmlFor="age-simple">Care Type</InputLabel>
                                             <Select
-                                                value={LifeStages}
+                                                value={lifeStage}
                                                 native
-                                                onChange={this.handleChangeInput('LifeStages')}
+                                                onChange={this.handleChangeInput('lifeStage')}
                                             >
                                                 <option value=""/>
                                                 <option value='baby'>Vaccination</option>

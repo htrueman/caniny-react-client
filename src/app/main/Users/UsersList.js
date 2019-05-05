@@ -181,6 +181,13 @@ class ContactsList extends PureComponent {
         })
     };
 
+    deSelectAllContacts = () => {
+        this.setState({
+            selectedUsersIds: [],
+            userMenu: null
+        })
+    };
+
     selectUser = id => {
         this.setState({
             selectedUsersIds: [
@@ -198,12 +205,7 @@ class ContactsList extends PureComponent {
         })
     };
 
-    deSelectAllContacts = () => {
-        this.setState({
-            selectedUsersIds: [],
-            userMenu: null
-        })
-    };
+
 
 
     customFilter1 = (filter, onChangeFilter) => {
