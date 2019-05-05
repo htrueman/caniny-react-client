@@ -666,7 +666,7 @@ class ContactsList extends PureComponent {
                 <ReactTable
                     className="-striped -highlight border-0"
                     manual
-                    data={data}
+                    data={this.props.data}
                     page={page}
                     pages={Math.ceil(count / pageSize)}
                     // onPageChange={(pageIndex) => {

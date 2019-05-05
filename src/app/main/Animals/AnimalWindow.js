@@ -91,20 +91,11 @@ const styles = theme => ({
 });
 
 const animalFields = {
-    id: '',
     name: '',
     gender: 'male',
     species: 'dog',
     joinDate: moment(new Date()).format('YYYY-MM-DD'),
-    breed: '',
     dateOfBirth: '',
-    age: '',
-    birthday: '',
-    size: '',
-    social: '',
-    accommodation: '',
-    tag: '',
-    microchip: '',
 };
 
 class AnimalWindow extends Component {
@@ -120,22 +111,13 @@ class AnimalWindow extends Component {
 
     handleSaveAnimal = async (e) => {
         e.preventDefault();
-        const {firstName, lastName, email, phoneNumber, userType} = this.state;
 
-        // if (this.state.id) {
-        //     await animalsService.updateAnimal({
-        //         firstName,
-        //         lastName,
-        //         email,
-        //         phoneNumber,
-        //         userType
-        //     }, this.state.id);
-        // } else {
-        await animalsService.createNewAnimal(this.state.animal);
-        // }
+        await animalsService.createNewAnimal(
+            this.state.animal
+        );
 
         this.setState({
-            ...animalFields
+            animal: {}
         });
 
         this.props.onClose();
