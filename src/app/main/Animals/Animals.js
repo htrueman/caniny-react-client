@@ -90,7 +90,7 @@ class Animals extends Component {
 
         let urlParams = [
             search ? `&search=${search}` : '',
-            tab !== 'all' ? `&user_type__iexact=${tab === 'all' ? '' : tab}` : '',
+            tab !== 'all' ? `&species__iexact=${tab === 'all' ? '' : tab}` : '',
             sorted ? `&ordering=${sorted.desc ? animalParams[sorted.id] : `-${animalParams[sorted.id]}`}` : '',
         ];
 
@@ -267,7 +267,7 @@ class Animals extends Component {
                                             button
                                             activeClassName="active"
                                             className={tab === 'dogs' ? classes.activeListItem : classes.listItem}
-                                            onClick={() => this.handleChangeTab('dogs')}
+                                            onClick={() => this.handleChangeTab('dog')}
                                         >
                                             <ListItemText className="truncate pr-0" primary="Dogs"
                                                           disableTypography={true}/>
@@ -276,7 +276,7 @@ class Animals extends Component {
                                             button
                                             activeClassName="active"
                                             className={tab === 'cats' ? classes.activeListItem : classes.listItem}
-                                            onClick={() => this.handleChangeTab('cats')}
+                                            onClick={() => this.handleChangeTab('cat')}
                                         >
                                             <ListItemText className="truncate pr-0" primary="Cats"
                                                           disableTypography={true}/>
