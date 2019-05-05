@@ -81,7 +81,7 @@ class Animals extends Component {
         this.setState({
             search: value
         });
-        this.getUsers(value);
+        this.getAnimals(value);
     };
 
 
@@ -160,7 +160,7 @@ class Animals extends Component {
     handleChangeSort = (newSorted) => {
         this.setState({
             sorted: newSorted[0]
-        }, () => this.getUsers());
+        }, () => this.getAnimals());
     };
     handleFilterUser = (filter) => {
         const filtersArr = filter.map(item => {
@@ -184,7 +184,7 @@ class Animals extends Component {
 
         this.setState({
             filters: filtersArr
-        }, () => this.getUsers());
+        }, () => this.getAnimals());
     };
 
 
