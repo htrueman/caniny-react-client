@@ -69,18 +69,33 @@ class animalsService extends FuseUtils.EventEmitter {
         });
     };
 
-    removeUser = (id) => {
+    getBreeds = (type) => {
         return new Promise((resolve, reject) => {
-            axios.delete(`${baseUrl}animals/${id}/`)
+            axios.get(`${baseUrl}breeds/?species=${type}`)
                 .then(response => {
-                    resolve(response.data);
+                    if (response.data) {
+                        resolve(response.data);
+                    }
                 })
                 .catch(error => {
                     this.handleError(error);
                     reject(error.response.data);
                 });
         });
-    };
+    }
+
+    // removeUser = (id) => {
+    //     return new Promise((resolve, reject) => {
+    //         axios.delete(`${baseUrl}animals/${id}/`)
+    //             .then(response => {
+    //                 resolve(response.data);
+    //             })
+    //             .catch(error => {
+    //                 this.handleError(error);
+    //                 reject(error.response.data);
+    //             });
+    //     });
+    // };
 }
 
 const instance = new animalsService();
