@@ -266,7 +266,7 @@ class Animals extends Component {
                                         <ListItem
                                             button
                                             activeClassName="active"
-                                            className={tab === 'dogs' ? classes.activeListItem : classes.listItem}
+                                            className={tab === 'dog' ? classes.activeListItem : classes.listItem}
                                             onClick={() => this.handleChangeTab('dog')}
                                         >
                                             <ListItemText className="truncate pr-0" primary="Dogs"
@@ -275,7 +275,7 @@ class Animals extends Component {
                                         <ListItem
                                             button
                                             activeClassName="active"
-                                            className={tab === 'cats' ? classes.activeListItem : classes.listItem}
+                                            className={tab === 'cat' ? classes.activeListItem : classes.listItem}
                                             onClick={() => this.handleChangeTab('cat')}
                                         >
                                             <ListItemText className="truncate pr-0" primary="Cats"
