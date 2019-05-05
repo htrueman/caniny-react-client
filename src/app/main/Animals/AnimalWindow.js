@@ -19,6 +19,7 @@ import Select from '@material-ui/core/Select';
 import {Avatar} from "@material-ui/core";
 import ImageUploader from 'react-images-upload';
 import moment from 'moment';
+import {countryList} from './countryList';
 
 const styles = theme => ({
     layoutRoot: {},
@@ -120,7 +121,7 @@ class AnimalWindow extends Component {
             animal: {}
         });
 
-        this.props.onClose();
+        this.props.onUpdate();
     };
 
     getAnimalsList = async () => {
@@ -531,12 +532,18 @@ class AnimalWindow extends Component {
 
                                         <div className={classes.formControl}>
                                             <InputLabel htmlFor="age-simple">Origin Country</InputLabel>
-                                            <TextField
-                                                id="name"
-                                                type="text"
+
+
+                                            <Select
                                                 value={origin_country}
+                                                required={true}
+                                                native
                                                 onChange={this.handleChangeInput('origin_country')}
-                                            />
+                                            >
+                                                {countryList.map(item => (
+                                                    <option value={item.id}>{item.title}</option>
+                                                ))}
+                                            </Select>
                                         </div>
                                     </div>
 
@@ -547,7 +554,7 @@ class AnimalWindow extends Component {
                                             <InputLabel htmlFor="age-simple">Tag ID</InputLabel>
                                             <TextField
                                                 id="name"
-                                                type="text"
+                                                type="number"
                                                 value={tag_number}
                                                 onChange={this.handleChangeInput('tag_number')}
                                             />
@@ -567,7 +574,7 @@ class AnimalWindow extends Component {
                                             <InputLabel htmlFor="age-simple">Chip ID</InputLabel>
                                             <TextField
                                                 id="name"
-                                                type="text"
+                                                type="number"
                                                 value={chip_id}
                                                 onChange={this.handleChangeInput('chip_id')}
                                             />

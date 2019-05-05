@@ -86,6 +86,12 @@ class Animals extends Component {
         }, () => this.getAnimals())
     };
 
+    updateWindow = () => {
+        this.getAnimals();
+        this.handleClose();
+    };
+
+
     componentDidMount() {
         const token = sessionStorage.getItem('token');
         if (!token) this.props.history.push('/');
@@ -193,6 +199,7 @@ class Animals extends Component {
                 <AnimalWindow
                     open={open}
                     onClose={this.handleClose}
+                    onUpdate={this.updateWindow}
                     animal={selectedAnimal}
                 />
             </Fragment>
