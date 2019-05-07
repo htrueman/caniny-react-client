@@ -18,6 +18,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import {withStyles} from '@material-ui/core/styles';
 import moment from 'moment';
 import PlusOne from '@material-ui/icons/ExposurePlus1';
+import {faPaw} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 function arrowGenerator(color) {
     return {
@@ -97,6 +99,7 @@ const styles = theme => ({
     },
     fab: {
         boxShadow: 'none',
+        fontSize: '20px'
     },
     bootstrapPopper: arrowGenerator(theme.palette.common.black),
     bootstrapTooltip: {
@@ -533,15 +536,15 @@ class ContactsList extends PureComponent {
                     width: 64,
                     sortable: false
                 },
-                {
-                    Header: "ID",
-                    accessor: "id",
-                    filterable: true,
-                    className: "font-bold",
-                    // Filter: ({filter, onChange}) => (
-                    //     this.customFilter1(filter, onChange)
-                    // ),
-                },
+                // {
+                //     Header: "ID",
+                //     accessor: "id",
+                //     filterable: true,
+                //     className: "font-bold",
+                //     // Filter: ({filter, onChange}) => (
+                //     //     this.customFilter1(filter, onChange)
+                //     // ),
+                // },
                 {
                     Header: "Name",
                     accessor: "name",
@@ -554,6 +557,14 @@ class ContactsList extends PureComponent {
                 {
                     Header: "Age",
                     accessor: "age",
+                    filterable: true,
+                    // Filter: ({filter, onChange}) => (
+                    //     this.customFilter5(filter, onChange)
+                    // ),
+                },
+                {
+                    Header: "Gender",
+                    accessor: "gender",
                     filterable: true,
                     // Filter: ({filter, onChange}) => (
                     //     this.customFilter5(filter, onChange)
@@ -578,6 +589,18 @@ class ContactsList extends PureComponent {
                 {
                     Header: () => (
                         <span>
+                           Human <br/> Friendly
+                       </span>
+                    ),
+                    accessor: "human_friendly",
+                    filterable: true,
+                    // Filter: ({filter, onChange}) => (
+                    //     this.customFilter4(filter, onChange)
+                    // ),
+                },
+                {
+                    Header: () => (
+                        <span>
                            Animals <br/> Friendly
                        </span>
                     ),
@@ -587,35 +610,23 @@ class ContactsList extends PureComponent {
                     //     this.customFilter4(filter, onChange)
                     // ),
                 },
-                {
-                    Header: () => (
-                        <span>
-                           Kids <br/> Friendly
-                       </span>
-                    ),
-                    accessor: "kids_friendly",
-                    filterable: true,
-                    // Filter: ({filter, onChange}) => (
-                    //     this.customFilter4(filter, onChange)
-                    // ),
-                },
-                {
-                    Header: "Energy Level",
-                    accessor: "size",
-                    filterable: true,
-                    // Filter: ({filter, onChange}) => (
-                    //     this.customFilter5(filter, onChange)
-                    // ),
-                },
-                {
-                    Header: "Accommodation",
-                    accessor: "accommodation",
-                    filterable: true,
-                    width: 130
-                    // Filter: ({filter, onChange}) => (
-                    //     this.customFilter5(filter, onChange)
-                    // ),
-                },
+                // {
+                //     Header: "Energy Level",
+                //     accessor: "size",
+                //     filterable: true,
+                //     // Filter: ({filter, onChange}) => (
+                //     //     this.customFilter5(filter, onChange)
+                //     // ),
+                // },
+                // {
+                //     Header: "Accommodation",
+                //     accessor: "accommodation",
+                //     filterable: true,
+                //     width: 130
+                //     // Filter: ({filter, onChange}) => (
+                //     //     this.customFilter5(filter, onChange)
+                //     // ),
+                // },
                 {
                     Header: "Entry Date",
                     accessor: "date",
@@ -630,7 +641,9 @@ class ContactsList extends PureComponent {
                         <Tooltip title="Add user" className={classes.toolTip}>
                             <Fab color="secondary" aria-label="Edit" className={classes.fab}
                                  onClick={onAddUser}>
-                                <PlusOne/>
+                                <span style={{fontSize: '25px', margin: '0 5px 0 0'}}>+</span>
+
+                                <FontAwesomeIcon icon={faPaw}/>
                             </Fab>
                         </Tooltip>
                     ),

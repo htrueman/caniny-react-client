@@ -15,12 +15,14 @@ const baseUrl = 'http://165.22.152.38:8000/api/v1/';
 
 class animalsService extends FuseUtils.EventEmitter {
     handleError = ({response}) => {
-        if (typeof response.data === 'object') {
-            for (let key in response.data) {
-                if (typeof response.data[key] === 'string') {
-                    NotificationManager.error(response.data[key], 'Error');
-                } else {
-                    NotificationManager.error(response.data[key][0], 'Error');
+        if (response) {
+            if (typeof response.data === 'object') {
+                for (let key in response.data) {
+                    if (typeof response.data[key] === 'string') {
+                        NotificationManager.error(response.data[key], 'Error');
+                    } else {
+                        NotificationManager.error(response.data[key][0], 'Error');
+                    }
                 }
             }
         }
