@@ -20,6 +20,8 @@ class animalsService extends FuseUtils.EventEmitter {
                 for (let key in response.data) {
                     if (typeof response.data[key] === 'string') {
                         NotificationManager.error(response.data[key], 'Error');
+                    } else if (typeof response.data[key][0] === 'object') {
+                        console.log(response.data[key][0])
                     } else {
                         NotificationManager.error(response.data[key][0], 'Error');
                     }

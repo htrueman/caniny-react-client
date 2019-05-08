@@ -94,7 +94,7 @@ const Layout2 = ({classes, settings, children}) => {
 
                             <FuseDialog/>
 
-                            <div className="flex flex-auto flex-col relative">
+                            <div className="flex flex-auto flex-col relative" style={{minHeight: 'calc(100vh - 64px)'}}>
                                 {renderRoutes(routes)}
                                 {children}
                                 {layoutConfig.footer.display && layoutConfig.footer.style === 'static' && (
