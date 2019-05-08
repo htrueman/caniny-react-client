@@ -42,12 +42,14 @@ const styles = theme => ({
 });
 
 const animalParams = {
-    firstName: 'first_name',
-    lastName: 'last_name',
-    phoneNumber: 'phone_number',
-    email: 'email',
-    userType: 'user_type',
-    joinDate: 'join_date'
+    name: 'name',
+    gender: 'gender',
+    species: 'species',
+    breed: 'breed__name',
+    human_friendly: 'humans_friendly',
+    animals_friendly: 'animals_friendly',
+    age: 'age',
+    date: 'entry_date',
 };
 
 class Animals extends Component {
@@ -163,6 +165,7 @@ class Animals extends Component {
         }, () => this.getAnimals());
     };
     handleFilterUser = (filter) => {
+        console.log(filter);
         const filtersArr = filter.map(item => {
 
             if (item.value.type === 'date') {
@@ -177,7 +180,7 @@ class Animals extends Component {
                     type: item.value.type,
                     column: item.id,
                     filterType: item.value.filterType,
-                    filterValue: window.btoa(item.value.filterValue)
+                    filterValue: item.value.filterValue
                 }
             }
         });
