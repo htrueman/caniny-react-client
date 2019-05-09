@@ -7,8 +7,6 @@ import {
     Typography,
     TextField
 } from '@material-ui/core';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 
 import PlusIcon from '@material-ui/icons/PersonAdd';
 import Fab from '@material-ui/core/Fab';
@@ -18,8 +16,14 @@ import Tooltip from '@material-ui/core/Tooltip';
 import {withStyles} from '@material-ui/core/styles';
 import moment from 'moment';
 import PlusOne from '@material-ui/icons/ExposurePlus1';
-import {faPaw} from "@fortawesome/free-solid-svg-icons";
+import {faPlusSquare, faPaw} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button';
+import {SortableContainer, SortableElement} from 'react-sortable-hoc';
+import arrayMove from 'array-move';
+import animalsService from 'app/services/animalsService';
 
 function arrowGenerator(color) {
     return {
@@ -137,10 +141,130 @@ const filterParams = {
     exact: 'Matches'
 };
 
+const allColumns = [
+    {
+        id: 'id',
+        title: 'ID'
+    },
+    {
+        id: 'name',
+        title: 'Name'
+    },
+    {
+        id: 'age',
+        title: 'Age'
+    },
+    {
+        id: 'life_stage',
+        title: 'Life Stage'
+    },
+    {
+        id: 'gender',
+        title: 'Gender'
+    },
+    {
+        id: 'species',
+        title: 'Species'
+    },
+    {
+        id: 'breed__name',
+        title: 'Breed'
+    },
+    {
+        id: 'species_details',
+        title: 'Species Details'
+    },
+    {
+        id: 'origin_country',
+        title: 'Origin Country'
+    },
+    {
+        id: 'pregnant',
+        title: 'Pregnant'
+    },
+    {
+        id: 'personality',
+        title: 'Personality'
+    },
+    {
+        id: 'energy_level',
+        title: 'Energy Level'
+    },
+    {
+        id: 'cats_friendly',
+        title: 'Cats Friendly'
+    },
+    {
+        id: 'dogs_friendly',
+        title: 'Dogs Friendly'
+    },
+    {
+        id: 'animals_friendly',
+        title: 'Animals Friendly'
+    },
+    {
+        id: 'humans_friendly',
+        title: 'Humans Friendly'
+    },
+    {
+        id: 'kids_friendly',
+        title: 'Kids Friendly'
+    },
+    {
+        id: 'bites',
+        title: 'Bites'
+    },
+    {
+        id: 'for_adoption',
+        title: 'Adoption'
+    },
+    {
+        id: 'for_foster',
+        title: 'Foster'
+    },
+    {
+        id: 'accommodation',
+        title: 'Accommodation'
+    },
+    {
+        id: 'tag_id',
+        title: 'Tag'
+    },
+    {
+        id: 'chip_producer',
+        title: 'Chip Producer'
+    },
+    {
+        id: 'chip_id',
+        title: 'Chip ID'
+    },
+    {
+        id: 'joined_reason',
+        title: 'Entry Reason'
+    },
+    {
+        id: 'entry_date',
+        title: 'Entry Date'
+    },
+    {
+        id: 'leave_reason',
+        title: 'Leave Reason'
+    },
+    {
+        id: 'leave_date',
+        title: 'Leave Date'
+    },
+    {
+        id: 'history',
+        title: 'History'
+    },
+];
+
 class ContactsList extends PureComponent {
 
     state = {
         selectedContactsMenu: null,
+        anchorEl: null,
         selectedAnimalsIds: [],
 
         filterType2: 'contains',
@@ -201,6 +325,14 @@ class ContactsList extends PureComponent {
         })
     };
 
+    handleClick = event => {
+        this.setState({anchorEl: event.currentTarget});
+    };
+
+    handleClose = () => {
+        this.setState({anchorEl: null});
+    };
+
 
     customFilter1 = (filter, onChangeFilter) => {
         const {filterType1, filterValue1, focus} = this.state;
@@ -241,200 +373,6 @@ class ContactsList extends PureComponent {
                     />
 
                     {filterParams[filterType1]}
-                </div>
-
-
-                <RenderMenu
-                    changeFilterType={changeFilterType}
-                />
-
-            </div>
-        )
-    };
-    customFilter2 = (filter, onChangeFilter) => {
-        const {filterType2, filterValue2, focus} = this.state;
-        const changeFilterType = (value) => {
-            this.setState({
-                filterType2: value,
-            }, () => {
-                onChangeFilter({
-                    filterValue: filterValue2,
-                    filterType: value
-                });
-            });
-        };
-        const changeFilterValue = ({target: {value}}) => {
-            this.setState({
-                filterValue2: value,
-                focus: 'filterValue2'
-            }, () => onChangeFilter({
-                filterValue: value,
-                filterType: filterType2
-            }));
-        };
-        return (
-            <div className="filter-block">
-                <div className='filter-input' key='2'>
-                    <TextField
-                        onChange={changeFilterValue}
-                        name='value1'
-                        key='value1'
-                        placeholder="Filter"
-                        style={{
-                            width: '100%',
-                            height: '40px',
-                            float: 'left',
-                            fontSize: '12px'
-                        }}
-                        value={filterValue2}
-                        autoFocus={focus === 'filterValue2'}
-                    />
-
-                    {filterParams[filterType2]}
-                </div>
-
-
-                <RenderMenu
-                    changeFilterType={changeFilterType}
-                />
-
-            </div>
-        )
-    };
-    customFilter3 = (filter, onChangeFilter) => {
-        const {filterType3, filterValue3, focus} = this.state;
-        const changeFilterType = (value) => {
-            this.setState({
-                filterType3: value,
-            }, () => {
-                onChangeFilter({
-                    filterValue: filterValue3,
-                    filterType: value
-                });
-            });
-        };
-        const changeFilterValue = ({target: {value}}) => {
-            this.setState({
-                filterValue3: value,
-                focus: 'filterValue3'
-            }, () => onChangeFilter({
-                filterValue: value,
-                filterType: filterType3
-            }));
-        };
-        return (
-            <div className="filter-block">
-                <div className='filter-input'>
-                    <TextField
-                        onChange={changeFilterValue}
-                        placeholder="Filter"
-                        style={{
-                            width: '100%',
-                            height: '40px',
-                            float: 'left',
-                            fontSize: '12px'
-                        }}
-                        value={filterValue3}
-                        autoFocus={focus === 'filterValue3'}
-                    />
-
-                    {filterParams[filterType3]}
-                </div>
-
-
-                <RenderMenu
-                    changeFilterType={changeFilterType}
-                />
-
-            </div>
-        )
-    };
-    customFilter4 = (filter, onChangeFilter) => {
-        const {filterType4, filterValue4, focus} = this.state;
-        const changeFilterType = (value) => {
-            this.setState({
-                filterType4: value,
-            }, () => {
-                onChangeFilter({
-                    filterValue: filterValue4,
-                    filterType: value
-                });
-            });
-        };
-        const changeFilterValue = ({target: {value}}) => {
-            this.setState({
-                filterValue4: value,
-                focus: 'filterValue4'
-            }, () => onChangeFilter({
-                filterValue: value,
-                filterType: filterType4
-            }));
-        };
-        return (
-            <div className="filter-block">
-                <div className='filter-input'>
-                    <TextField
-                        onChange={changeFilterValue}
-                        placeholder="Filter"
-                        style={{
-                            width: '100%',
-                            height: '40px',
-                            float: 'left',
-                            fontSize: '12px'
-                        }}
-                        value={filterValue4}
-                        autoFocus={focus === 'filterValue4'}
-                    />
-
-                    {filterParams[filterType4]}
-                </div>
-
-
-                <RenderMenu
-                    changeFilterType={changeFilterType}
-                />
-
-            </div>
-        )
-    };
-    customFilter5 = (filter, onChangeFilter) => {
-        const {filterType5, filterValue5, focus} = this.state;
-        const changeFilterType = (value) => {
-            this.setState({
-                filterType5: value,
-            }, () => {
-                onChangeFilter({
-                    filterValue: filterValue5,
-                    filterType: value
-                });
-            });
-        };
-        const changeFilterValue = ({target: {value}}) => {
-            this.setState({
-                filterValue5: value,
-                focus: 'filterValue5'
-            }, () => onChangeFilter({
-                filterValue: value,
-                filterType: filterType5
-            }));
-        };
-        return (
-            <div className="filter-block">
-                <div className='filter-input'>
-                    <TextField
-                        onChange={changeFilterValue}
-                        placeholder="Filter"
-                        style={{
-                            width: '100%',
-                            height: '40px',
-                            float: 'left',
-                            fontSize: '12px'
-                        }}
-                        value={filterValue5}
-                        autoFocus={focus === 'filterValue5'}
-                    />
-
-                    {filterParams[filterType5]}
                 </div>
 
 
@@ -516,7 +454,7 @@ class ContactsList extends PureComponent {
                 },
                 {
                     Header: () => (
-                        selectedAnimalsIds.length > 0 && (
+                        selectedAnimalsIds.length > 0 ? (
                             <IconButton
                                 onClick={(ev) => {
                                     ev.stopPropagation();
@@ -525,6 +463,8 @@ class ContactsList extends PureComponent {
                             >
                                 <Icon>delete</Icon>
                             </IconButton>
+                        ) : (
+                            <RenderColumsMenu/>
                         )
                     ),
                     accessor: "image",
@@ -761,6 +701,186 @@ class RenderMenu extends Component {
                         this.handleClose();
                         this.props.changeFilterType('exact')
                     }}>Matches</MenuItem>
+                </Menu>
+            </Fragment>
+        )
+
+    }
+}
+
+//
+// const SortableItem = SortableElement(({value}) => (
+//     <Fragment>
+//         <MenuItem key={value.id}>{value.title}</MenuItem>
+//     </Fragment>
+//
+// ));
+//
+// const SortableList = SortableContainer(({items}) => {
+//     return (
+//         <ul className='columns-list'>
+//             {items.map((value, index) => (
+//                 <SortableItem key={`item-${index}`} index={index} value={value}/>
+//             ))}
+//         </ul>
+//     )
+// });
+
+class RenderColumsMenu extends Component {
+    state = {
+        anchorEl: null,
+        selectedItems: [],
+        items: allColumns,
+
+        columns: {
+            id: false,
+            name: false,
+            age: false,
+            life_stage: false,
+            gender: false,
+            species: false,
+            breed__name: false,
+            species_details: false,
+            origin_country: false,
+            pregnant: false,
+            personality: false,
+            energy_level: false,
+            cats_friendly: false,
+            dogs_friendly: false,
+            animals_friendly: false,
+            humans_friendly: false,
+            kids_friendly: false,
+            bites: false,
+            for_adoption: false,
+            for_foster: false,
+            accommodation: false,
+            tag_id: false,
+            chip_producer: false,
+            chip_id: false,
+            joined_reason: false,
+            entry_date: false,
+            leave_reason: false,
+            leave_date: false,
+            history: false,
+        }
+    };
+
+    handleClick = event => {
+        this.setState({anchorEl: event.currentTarget});
+    };
+
+    handleClose = () => {
+        this.setState({anchorEl: null});
+
+        animalsService.updateColums({columns: this.state.selectedItems});
+    };
+
+    onSortEnd = ({oldIndex, newIndex}) => {
+        this.setState(({items}) => ({
+            items: arrayMove(items, oldIndex, newIndex),
+        }));
+    };
+
+    handleChangeCheckbox = name => event => {
+        if(this.state.selectedItems )
+        this.setState({
+            columns: {
+                ...this.state.columns,
+                [name]: event.target.checked
+            }
+        }, () => {
+            let newColumns = this.state.selectedItems;
+
+            for (let key in this.state.columns) {
+                if (this.state.columns[key]) {
+                    if (newColumns.indexOf(key) === -1) {
+                        newColumns.push(key);
+                    }
+
+                    this.setState({
+                        selectedItems: newColumns
+                    });
+                } else {
+                    if (newColumns.indexOf(key) !== -1) {
+                        newColumns.splice(newColumns.indexOf(key), 1);
+                        this.setState({
+                            selectedItems: newColumns
+                        });
+                    }
+                }
+            }
+        })
+    };
+
+    render() {
+        const {
+                anchorEl,
+                selectedItems,
+            } = this.state,
+
+            {
+                id,
+                name,
+                age,
+                life_stage,
+                gender,
+                species,
+                breed__name,
+                species_details,
+                origin_country,
+                pregnant,
+                personality,
+                energy_level,
+                cats_friendly,
+                dogs_friendly,
+                animals_friendly,
+                humans_friendly,
+                kids_friendly,
+                bites,
+                for_adoption,
+                for_foster,
+                accommodation,
+                tag_id,
+                chip_producer,
+                chip_id,
+                joined_reason,
+                entry_date,
+                leave_reason,
+                leave_date,
+                history,
+            } = this.state.columns;
+
+        console.log(selectedItems);
+        return (
+            <Fragment>
+                <Button
+                    aria-owns={anchorEl ? 'simple-menu' : undefined}
+                    aria-haspopup="true"
+                    onClick={this.handleClick}
+                >
+                    <FontAwesomeIcon icon={faPlusSquare}/>
+                </Button>
+
+
+                <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={this.handleClose}
+                >
+                    {
+                        allColumns.map(col => (
+                            <MenuItem key={col.id}>
+                                {(selectedItems.indexOf(col.id) + 1) === 0 ? '' : selectedItems.indexOf(col.id) + 1}
+                                <Checkbox
+                                    checked={this.state.columns[col.id]}
+                                    onChange={this.handleChangeCheckbox(col.id)}
+                                    value={col.id}
+                                />
+                                {col.title}
+                            </MenuItem>
+                        ))
+                    }
                 </Menu>
             </Fragment>
         )

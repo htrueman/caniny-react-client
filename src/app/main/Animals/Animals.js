@@ -61,6 +61,7 @@ class Animals extends Component {
         search: '',
         removeAnimalId: '',
         filters: [],
+        selectedColums: [],
 
         count: 0,
         page: 0,
@@ -148,6 +149,14 @@ class Animals extends Component {
         })
     };
 
+    getAllColums = async () => {
+       const res = await animalsService.getColums();
+
+       this.setState({
+           selectedColums: res
+       })
+    };
+
     handleChangePagination = (page) => {
         this.setState({
             page: page
@@ -165,7 +174,6 @@ class Animals extends Component {
         }, () => this.getAnimals());
     };
     handleFilterUser = (filter) => {
-        console.log(filter);
         const filtersArr = filter.map(item => {
 
             if (item.value.type === 'date') {
@@ -209,6 +217,7 @@ class Animals extends Component {
         const token = sessionStorage.getItem('token');
         if (!token) this.props.history.push('/');
         this.getAnimals();
+        this.getAllColums();
     }
 
     render() {
