@@ -135,10 +135,15 @@ class Animals extends Component {
         })
     };
 
-    handleEditAnimal = animal => {
+    handleEditAnimal = async (animal) => {
+        const res = await animalsService.getAnimalById(animal.id);
+
         this.setState({
-            selectedAnimal: animal,
-            open: true,
+            selectedAnimal: res,
+        }, () => {
+            this.setState({
+                open: true,
+            })
         })
     };
 
@@ -150,11 +155,11 @@ class Animals extends Component {
     };
 
     getAllColums = async () => {
-       const res = await animalsService.getColums();
+        const res = await animalsService.getColums();
 
-       this.setState({
-           selectedColums: res
-       })
+        this.setState({
+            selectedColums: res
+        })
     };
 
     handleChangePagination = (page) => {

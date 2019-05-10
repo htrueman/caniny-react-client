@@ -171,6 +171,11 @@ a[role=button] {
     cursor: pointer;
 }
 
+.ReactTable .rt-thead.-filters input {
+    border: 0 !important;
+    background: none !important;
+}
+
 /* Medium Devices, Desktops Only */
 @media only screen and (min-width: 992px) {
     ::-webkit-scrollbar {

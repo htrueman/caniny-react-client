@@ -43,6 +43,19 @@ class animalsService extends FuseUtils.EventEmitter {
         });
     };
 
+    getAnimalById = (id) => {
+        return new Promise((resolve, reject) => {
+            axios.get(`${baseUrl}animals/${id}/`)
+                .then(response => {
+                    if (response.data) {
+                        resolve(response.data);
+                    } else {
+                        reject(response.data);
+                    }
+                });
+        });
+    };
+
     createNewAnimal = (animal) => {
         return new Promise((resolve, reject) => {
             axios.post(`${baseUrl}animals/`, animal)
@@ -127,8 +140,10 @@ class animalsService extends FuseUtils.EventEmitter {
                     }
                 })
                 .catch(error => {
-                    this.handleError(error);
-                    reject(error.response.data);
+                    if (error.response) {
+                        this.handleError(error);
+                        reject(error.response.data);
+                    }
                 });
         });
     };
@@ -147,8 +162,6 @@ class animalsService extends FuseUtils.EventEmitter {
                 });
         });
     };
-
-
 
 
     // removeUser = (id) => {

@@ -93,16 +93,14 @@ const styles = theme => ({
 
 const animalFields = {
     name: '',
-    gender: 'male',
-    species: 'dog',
+    gender: '',
+    species: '',
     joinDate: moment(new Date()).format('YYYY-MM-DD'),
 
     appearance: {},
     training: {},
     owners: [{}],
-    health: {
-        careValues: [{}]
-    }
+    health: {}
 };
 
 class AnimalWindow extends Component {
@@ -181,6 +179,18 @@ class AnimalWindow extends Component {
                         ...this.state.animal.owners[0],
                         profileImageBase: result,
                     }]
+                },
+                uploadImg: true
+            })
+        });
+    };
+
+    onDropImageId = (file) => {
+        this.getBase64(file[0], (result) => {
+            this.setState({
+                animal: {
+                    ...this.state.animal,
+                    imageId: result,
                 },
                 uploadImg: true
             })
@@ -363,49 +373,7 @@ class AnimalWindow extends Component {
                 gender,
                 dateOfBirth,
                 age,
-
-                //3
-                appearance: {
-                    coatType,
-                    size,
-                    firstCoatColor,
-                    secondCoatColor,
-                    thirdCoatColor,
-                    firstEyeColor,
-                    secondEyeColor,
-                    ears,
-                    tail,
-                    describeAppearance
-                },
-
-                //4
-                training: {
-                    obedience,
-                    houseTrained,
-                    crateTrained,
-                    fenceRequired,
-                    describeTraining
-                },
-
-                //5
-                health: {
-                    height,
-                    length,
-                    weight,
-                    weightCondition,
-                    disabled,
-                    injured,
-                    cryptorchid,
-                    sterilized,
-                    sterilizedDate,
-                    eyesSight,
-                    blind,
-                    deaf,
-                    teeth,
-                    gums,
-                    describeHealth,
-                    careValues
-                },
+                imageId,
 
                 chipProducer,
                 species,
@@ -468,6 +436,46 @@ class AnimalWindow extends Component {
                 onClose,
                 open
             } = this.props;
+
+        const {
+            coatType,
+            size,
+            firstCoatColor,
+            secondCoatColor,
+            thirdCoatColor,
+            firstEyeColor,
+            secondEyeColor,
+            ears,
+            tail,
+            describeAppearance
+        } = this.state.animal.appearance ? this.state.animal.appearance : {};
+
+        const {
+            obedience,
+            houseTrained,
+            crateTrained,
+            fenceRequired,
+            describeTraining
+        } = this.state.animal.training ? this.state.animal.training : {};
+
+        const {
+            height,
+            length,
+            weight,
+            weightCondition,
+            disabled,
+            injured,
+            cryptorchid,
+            sterilized,
+            sterilizedDate,
+            eyesSight,
+            blind,
+            deaf,
+            teeth,
+            gums,
+            describeHealth,
+            careValues
+        } = this.state.animal.health ? this.state.animal.health : {};
 
 
         return (
@@ -575,6 +583,7 @@ class AnimalWindow extends Component {
                                                     input={<Input id="name"/>}
                                                     onChange={this.handleChangeInput('gender')}
                                                 >
+                                                    <option value=''></option>
                                                     <option value='male'>Male</option>
                                                     <option value='female'>Female</option>
                                                 </Select>
@@ -590,6 +599,7 @@ class AnimalWindow extends Component {
                                                     id="date"
                                                     onChange={this.handleChangeInput('dateOfBirth')}
                                                     value={dateOfBirth}
+                                                    format='MM/DD/YYYY'
                                                     type="date"
                                                 />
                                             </div>
@@ -638,6 +648,7 @@ class AnimalWindow extends Component {
                                                     native
                                                     onChange={this.handleChangeInput('species')}
                                                 >
+                                                    <option value=''></option>
                                                     <option value='dog'>Dogs</option>
                                                     <option value='cat'>Cats</option>
                                                     <option value='other'>Other</option>
@@ -653,6 +664,8 @@ class AnimalWindow extends Component {
                                                     disabled={species === 'other'}
                                                     onChange={this.handleChangeInput('breed')}
                                                 >
+                                                    <option value=''></option>
+
                                                     {species === 'dog' && dogBreeds.map(item => (
                                                         <option value={item.id}>{item.name}</option>
                                                     ))}
@@ -691,13 +704,14 @@ class AnimalWindow extends Component {
                                         </div>
 
                                         <div className={classes.formControl}>
-                                            <InputLabel htmlFor="age-simple">Origin Country</InputLabel>
+                                            <InputLabel htmlFor="age-simple">Origin Country*</InputLabel>
                                             <Select
                                                 value={this.state.animal.originCountry}
                                                 required={true}
                                                 native
                                                 onChange={this.handleChangeInput('originCountry')}
                                             >
+                                                <option value=''></option>
                                                 {countryList.map(item => (
                                                     <option value={item.id}>{item.title}</option>
                                                 ))}
@@ -971,7 +985,7 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Coat Type</InputLabel>
                                                 <Select
-                                                    value={coatType}
+                                                    value={coatType ? coatType : ''}
                                                     native
                                                     onChange={this.handleChangeInput('coatType', 'appearance')}
                                                 >
@@ -1561,7 +1575,7 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Care Type</InputLabel>
                                                 <Select
-                                                    value={careValues[index] ? careValues[index].careType : ''}
+                                                    value={careValues ? (careValues[index] ? careValues[index].careType : '') : ''}
                                                     native
                                                     onChange={this.handleChangeInputCare('careType', index)}
                                                 >
@@ -1579,7 +1593,7 @@ class AnimalWindow extends Component {
                                                 <TextField
                                                     id="name"
                                                     type="text"
-                                                    value={careValues[index] ? careValues[index].note : ''}
+                                                    value={careValues ? (careValues[index] ? careValues[index].note : '') : ''}
                                                     onChange={this.handleChangeInputCare('note', index)}
                                                 />
                                             </div>
@@ -1589,7 +1603,7 @@ class AnimalWindow extends Component {
                                                 <TextField
                                                     id="date"
                                                     onChange={this.handleChangeInputCare('date', index)}
-                                                    value={careValues[index] ? careValues[index].date : ''}
+                                                    value={careValues ? (careValues[index] ? careValues[index].date : '') : ''}
                                                     type="date"
                                                 />
                                             </div>
@@ -2010,12 +2024,12 @@ class AnimalWindow extends Component {
                                             <ImageUploader
                                                 withIcon={true}
                                                 buttonText='Animal ID'
-                                                onChange={this.onDropAnimalId}
+                                                onChange={this.onDropImageId}
                                                 imgExtension={['.jpg', '.gif', '.png']}
                                                 maxFileSize={5242880}
                                                 singleImage={true}
                                             />
-                                            <img src={animalId} alt="" className='id-photo'/>
+                                            <img src={imageId} alt="" className='id-photo'/>
                                         </div>
                                     </div>
                                 </div>

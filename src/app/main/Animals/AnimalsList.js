@@ -4,25 +4,19 @@ import {
     Checkbox,
     Icon,
     IconButton,
-    Typography,
     TextField
 } from '@material-ui/core';
 
-import PlusIcon from '@material-ui/icons/PersonAdd';
 import Fab from '@material-ui/core/Fab';
 import {FuseUtils, FuseAnimate} from '@fuse';
 import ReactTable from "react-table";
 import Tooltip from '@material-ui/core/Tooltip';
 import {withStyles} from '@material-ui/core/styles';
-import moment from 'moment';
-import PlusOne from '@material-ui/icons/ExposurePlus1';
 import {faPlusSquare, faPaw} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
-import {SortableContainer, SortableElement} from 'react-sortable-hoc';
-import arrayMove from 'array-move';
 import animalsService from 'app/services/animalsService';
 
 function arrowGenerator(color) {
@@ -139,6 +133,38 @@ const filterParams = {
     startswith: 'Starts with',
     endswith: 'Ends with',
     exact: 'Matches'
+};
+
+const paramsAllColumns = {
+    id: 'ID',
+    name: 'Name',
+    age: 'Age',
+    life_stage: 'Life Stage',
+    gender: 'Gender',
+    species: 'Species',
+    breed: 'Breed',
+    species_details: 'Species Details',
+    origin_country: 'Origin Country',
+    pregnant: 'Pregnant',
+    personality: 'Personality',
+    energy_level: 'Energy Level',
+    cats_friendly: 'Cats Friendly',
+    dogs_friendly: 'Dogs Friendly',
+    animals_friendly: 'Animals Friendly',
+    human_friendly: 'Humans Friendly',
+    kids_friendly: 'Kids Friendly',
+    bites: 'Bites',
+    for_adoption: 'Adoption',
+    for_foster: 'Foster',
+    accommodation: 'Accommodation',
+    tag_id: 'Tag',
+    chip_producer: 'Chip Producer',
+    chip_id: 'Chip ID',
+    joined_reason: 'Entry Reason',
+    entry_date: 'Entry Date',
+    leave_reason: 'Leave Reason',
+    leave_date: 'Leave Date',
+    history: 'History'
 };
 
 const allColumns = [
@@ -266,6 +292,7 @@ class ContactsList extends PureComponent {
         selectedContactsMenu: null,
         anchorEl: null,
         selectedAnimalsIds: [],
+        selectedColumns: [],
 
         filterType2: 'contains',
         filterValue2: '',
@@ -288,6 +315,18 @@ class ContactsList extends PureComponent {
         }
 
         return FuseUtils.filterArrayByString(arr, searchText);
+    };
+
+    getMyColuns = async () => {
+        const res = await animalsService.getColums();
+
+        this.setState({
+            selectedColumns: res.columns
+        })
+    };
+
+    updateColumns = () => {
+        this.getMyColuns();
     };
 
     selectAllContacts = async () => {
@@ -332,6 +371,10 @@ class ContactsList extends PureComponent {
     handleClose = () => {
         this.setState({anchorEl: null});
     };
+
+    componentDidMount() {
+        this.getMyColuns();
+    }
 
 
     customFilter1 = (filter, onChangeFilter) => {
@@ -405,7 +448,8 @@ class ContactsList extends PureComponent {
 
             {
                 selectedAnimalsIds,
-                anchorEl
+                anchorEl,
+                selectedColumns
             } = this.state,
 
             userTypes = {
@@ -419,200 +463,117 @@ class ContactsList extends PureComponent {
         const data = this.getFilteredArray(animals, searchText);
 
 
-        const
-            columns = [
-                // userProfile.userType === 'super_admin' ?
-                {
-                    Header: () => (
-                        <Checkbox
+        let dynamicColumns = selectedColumns.map(item => ({
+            Header: paramsAllColumns[item],
+            accessor: item,
+            filterable: true,
+            className: "font-bold",
+        }));
+
+
+        let columns = [
+            // userProfile.userType === 'super_admin' ?
+            {
+                Header: () => (
+                    <Checkbox
+                        onClick={(event) => {
+                            event.stopPropagation();
+                        }}
+                        onChange={(event) => {
+                            event.target.checked ? this.selectAllContacts() : this.deSelectAllContacts();
+                        }}
+                        checked={selectedAnimalsIds.length === Object.keys(animals).length && selectedAnimalsIds.length > 0}
+                        indeterminate={selectedAnimalsIds.length !== Object.keys(animals).length && selectedAnimalsIds.length > 0}
+                    />
+                ),
+                accessor: "",
+                Cell: row => {
+                    return (<Checkbox
                             onClick={(event) => {
                                 event.stopPropagation();
                             }}
                             onChange={(event) => {
-                                event.target.checked ? this.selectAllContacts() : this.deSelectAllContacts();
+                                event.target.checked ? this.selectAnimal(row.value.id) : this.deSelectAnimal(row.value.id);
                             }}
-                            checked={selectedAnimalsIds.length === Object.keys(animals).length && selectedAnimalsIds.length > 0}
-                            indeterminate={selectedAnimalsIds.length !== Object.keys(animals).length && selectedAnimalsIds.length > 0}
+                            checked={selectedAnimalsIds.includes(row.value.id)}
                         />
-                    ),
-                    accessor: "",
-                    Cell: row => {
-                        return (<Checkbox
-                                onClick={(event) => {
-                                    event.stopPropagation();
-                                }}
-                                onChange={(event) => {
-                                    event.target.checked ? this.selectAnimal(row.value.id) : this.deSelectAnimal(row.value.id);
-                                }}
-                                checked={selectedAnimalsIds.includes(row.value.id)}
-                            />
-                        )
-                    },
-                    className: "justify-center",
-                    sortable: false,
-                    width: 64
-                },
-                {
-                    Header: () => (
-                        selectedAnimalsIds.length > 0 ? (
-                            <IconButton
-                                onClick={(ev) => {
-                                    ev.stopPropagation();
-                                    onRemove(selectedAnimalsIds);
-                                }}
-                            >
-                                <Icon>delete</Icon>
-                            </IconButton>
-                        ) : (
-                            <RenderColumsMenu/>
-                        )
-                    ),
-                    accessor: "image",
-                    Cell: row => (
-                        <Avatar className="mr-8" alt={row.original.name}
-                                src={row.value || 'assets/images/avatars/avatar.svg'}/>
-                    ),
-                    className: "justify-center",
-                    width: 64,
-                    sortable: false
-                },
-                // {
-                //     Header: "ID",
-                //     accessor: "id",
-                //     filterable: true,
-                //     className: "font-bold",
-                //     // Filter: ({filter, onChange}) => (
-                //     //     this.customFilter1(filter, onChange)
-                //     // ),
-                // },
-                {
-                    Header: "Name",
-                    accessor: "name",
-                    filterable: true,
-                    className: "font-bold",
-                    // Filter: ({filter, onChange}) => (
-                    //     this.customFilter2(filter, onChange)
-                    // ),
-                },
-                {
-                    Header: "Age",
-                    accessor: "age",
-                    filterable: true,
-                    // Filter: ({filter, onChange}) => (
-                    //     this.customFilter5(filter, onChange)
-                    // ),
-                },
-                {
-                    Header: "Gender",
-                    accessor: "gender",
-                    filterable: true,
-                    // Filter: ({filter, onChange}) => (
-                    //     this.customFilter5(filter, onChange)
-                    // ),
-                },
-                {
-                    Header: "Species",
-                    accessor: "species",
-                    filterable: true,
-                    // Filter: ({filter, onChange}) => (
-                    //     this.customFilter3(filter, onChange)
-                    // ),
-                },
-                {
-                    Header: "Breed",
-                    accessor: "breed",
-                    filterable: true,
-                    // Filter: ({filter, onChange}) => (
-                    //     this.customFilter4(filter, onChange)
-                    // ),
-                },
-                {
-                    Header: () => (
-                        <span>
-                           Human <br/> Friendly
-                       </span>
-                    ),
-                    accessor: "human_friendly",
-                    filterable: true,
-                    // Filter: ({filter, onChange}) => (
-                    //     this.customFilter4(filter, onChange)
-                    // ),
-                },
-                {
-                    Header: () => (
-                        <span>
-                           Animals <br/> Friendly
-                       </span>
-                    ),
-                    accessor: "animals_friendly",
-                    filterable: true,
-                    // Filter: ({filter, onChange}) => (
-                    //     this.customFilter4(filter, onChange)
-                    // ),
-                },
-                // {
-                //     Header: "Energy Level",
-                //     accessor: "size",
-                //     filterable: true,
-                //     // Filter: ({filter, onChange}) => (
-                //     //     this.customFilter5(filter, onChange)
-                //     // ),
-                // },
-                // {
-                //     Header: "Accommodation",
-                //     accessor: "accommodation",
-                //     filterable: true,
-                //     width: 130
-                //     // Filter: ({filter, onChange}) => (
-                //     //     this.customFilter5(filter, onChange)
-                //     // ),
-                // },
-                {
-                    Header: "Entry Date",
-                    accessor: "date",
-                    filterable: true,
-                    // Filter: ({filter, onChange}) => (
-                    //     this.customFilter5(filter, onChange)
-                    // ),
-                },
-                // userProfile.userType === 'super_admin' ?
-                {
-                    Header: () => (
-                        <Tooltip title="Add user" className={classes.toolTip}>
-                            <Fab color="secondary" aria-label="Edit" className={classes.fab}
-                                 onClick={onAddUser}>
-                                <span style={{fontSize: '25px', margin: '0 5px 0 0'}}>+</span>
-
-                                <FontAwesomeIcon icon={faPaw}/>
-                            </Fab>
-                        </Tooltip>
-                    ),
-                    width: 128,
-                    filterable: false,
-                    sortable: false,
-                    Cell: row => (
-                        <div className="flex items-center">
-                            <IconButton
-                                onClick={(ev) => {
-                                    ev.stopPropagation();
-                                    onEdit(row.original)
-                                }}
-                            >
-                                <Icon>edit</Icon>
-                            </IconButton>
-
-                            <IconButton
-                                onClick={(ev) => {
-                                    ev.stopPropagation();
-                                    onRemove(row.original.id);
-                                }}
-                            >
-                                <Icon>delete</Icon>
-                            </IconButton>
-                        </div>
                     )
-                }
-            ];
+                },
+                className: "justify-center",
+                sortable: false,
+                width: 64
+            },
+            {
+                Header: () => (
+                    selectedAnimalsIds.length > 0 ? (
+                        <IconButton
+                            onClick={(ev) => {
+                                ev.stopPropagation();
+                                onRemove(selectedAnimalsIds);
+                            }}
+                        >
+                            <Icon>delete</Icon>
+                        </IconButton>
+                    ) : (
+                        <RenderColumsMenu
+                            columns={selectedColumns}
+                            onUpdateColumns={this.updateColumns}
+                        />
+                    )
+                ),
+                accessor: "image",
+                Cell: row => (
+                    <Avatar className="mr-8" alt={row.original.name}
+                            src={row.value || 'assets/images/avatars/avatar.svg'}/>
+                ),
+                className: "justify-center",
+                width: 64,
+                sortable: false
+            },
+
+            ...dynamicColumns,
+
+            // userProfile.userType === 'super_admin' ?
+            {
+                Header: () => (
+                    <Tooltip title="Add user" className={classes.toolTip}>
+                        <Fab color="secondary" aria-label="Edit" className={classes.fab}
+                             onClick={onAddUser}>
+                            <span style={{fontSize: '25px', margin: '0 5px 0 0'}}>+</span>
+
+                            <FontAwesomeIcon icon={faPaw}/>
+                        </Fab>
+                    </Tooltip>
+                ),
+                width: 128,
+                filterable: false,
+                sortable: false,
+                Cell: row => (
+                    <div className="flex items-center">
+                        <IconButton
+                            onClick={(ev) => {
+                                ev.stopPropagation();
+                                onEdit(row.original)
+                            }}
+                        >
+                            <Icon>edit</Icon>
+                        </IconButton>
+
+                        <IconButton
+                            onClick={(ev) => {
+                                ev.stopPropagation();
+                                onRemove(row.original.id);
+                            }}
+                        >
+                            <Icon>delete</Icon>
+                        </IconButton>
+                    </div>
+                )
+            }
+        ];
+
+        // columns.splice(2, 0, ...dynamicColumns);
+
 
         return (
             <FuseAnimate animation="transition.slideUpIn" delay={300}>
@@ -708,28 +669,10 @@ class RenderMenu extends Component {
     }
 }
 
-//
-// const SortableItem = SortableElement(({value}) => (
-//     <Fragment>
-//         <MenuItem key={value.id}>{value.title}</MenuItem>
-//     </Fragment>
-//
-// ));
-//
-// const SortableList = SortableContainer(({items}) => {
-//     return (
-//         <ul className='columns-list'>
-//             {items.map((value, index) => (
-//                 <SortableItem key={`item-${index}`} index={index} value={value}/>
-//             ))}
-//         </ul>
-//     )
-// });
-
 class RenderColumsMenu extends Component {
     state = {
         anchorEl: null,
-        selectedItems: [],
+        selectedItems: this.props.columns,
         items: allColumns,
 
         columns: {
@@ -769,47 +712,88 @@ class RenderColumsMenu extends Component {
         this.setState({anchorEl: event.currentTarget});
     };
 
-    handleClose = () => {
+    handleClose = async () => {
         this.setState({anchorEl: null});
 
-        animalsService.updateColums({columns: this.state.selectedItems});
+        await animalsService.updateColums({columns: this.state.selectedItems});
+        this.props.onUpdateColumns();
     };
 
-    onSortEnd = ({oldIndex, newIndex}) => {
-        this.setState(({items}) => ({
-            items: arrayMove(items, oldIndex, newIndex),
-        }));
-    };
+    componentDidMount() {
+        let newColumns = {};
+
+        this.props.columns.forEach(item => {
+            console.log(item);
+            newColumns[item] = true
+        });
+
+        this.setState({
+            columns: newColumns
+
+        })
+    }
 
     handleChangeCheckbox = name => event => {
-        if(this.state.selectedItems )
-        this.setState({
-            columns: {
-                ...this.state.columns,
-                [name]: event.target.checked
-            }
-        }, () => {
-            let newColumns = this.state.selectedItems;
-
-            for (let key in this.state.columns) {
-                if (this.state.columns[key]) {
-                    if (newColumns.indexOf(key) === -1) {
-                        newColumns.push(key);
+        if (this.state.selectedItems) {
+            if (this.state.selectedItems.length === 8) {
+                this.setState({
+                    columns: {
+                        ...this.state.columns,
+                        [name]: event.target.checked,
+                        [this.state.selectedItems[7]]: false
                     }
+                }, () => {
+                    let newColumns = this.state.selectedItems;
 
-                    this.setState({
-                        selectedItems: newColumns
-                    });
-                } else {
-                    if (newColumns.indexOf(key) !== -1) {
-                        newColumns.splice(newColumns.indexOf(key), 1);
-                        this.setState({
-                            selectedItems: newColumns
-                        });
+                    for (let key in this.state.columns) {
+                        if (this.state.columns[key]) {
+                            if (newColumns.indexOf(key) === -1) {
+                                newColumns.push(key);
+                            }
+
+                            this.setState({
+                                selectedItems: newColumns
+                            });
+                        } else {
+                            if (newColumns.indexOf(key) !== -1) {
+                                newColumns.splice(newColumns.indexOf(key), 1);
+                                this.setState({
+                                    selectedItems: newColumns
+                                });
+                            }
+                        }
                     }
-                }
+                })
+            } else {
+                this.setState({
+                    columns: {
+                        ...this.state.columns,
+                        [name]: event.target.checked
+                    }
+                }, () => {
+                    let newColumns = this.state.selectedItems;
+
+                    for (let key in this.state.columns) {
+                        if (this.state.columns[key]) {
+                            if (newColumns.indexOf(key) === -1) {
+                                newColumns.push(key);
+                            }
+
+                            this.setState({
+                                selectedItems: newColumns
+                            });
+                        } else {
+                            if (newColumns.indexOf(key) !== -1) {
+                                newColumns.splice(newColumns.indexOf(key), 1);
+                                this.setState({
+                                    selectedItems: newColumns
+                                });
+                            }
+                        }
+                    }
+                })
             }
-        })
+        }
     };
 
     render() {
@@ -850,7 +834,6 @@ class RenderColumsMenu extends Component {
                 history,
             } = this.state.columns;
 
-        console.log(selectedItems);
         return (
             <Fragment>
                 <Button
