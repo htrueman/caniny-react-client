@@ -213,6 +213,32 @@ class jwtService extends FuseUtils.EventEmitter {
         });
     };
 
+    updateUserProfile = (user) => {
+        return new Promise((resolve, reject) => {
+            axios.patch(`${baseUrl}profile/`, user)
+                .then(response => {
+                    if (response.data) {
+                        resolve(response.data);
+                    } else {
+                        reject(response.data);
+                    }
+                });
+        });
+    };
+
+    resetPassword = (pass) => {
+        return new Promise((resolve, reject) => {
+            axios.post(`${baseUrl}profile/`, pass)
+                .then(response => {
+                    if (response.data) {
+                        resolve(response.data);
+                    } else {
+                        reject(response.data);
+                    }
+                });
+        });
+    };
+
     getUsers = (search) => {
         return new Promise((resolve, reject) => {
             console.log(search);

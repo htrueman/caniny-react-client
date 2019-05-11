@@ -5,6 +5,13 @@ import * as authActions from 'app/auth/store/actions';
 import {bindActionCreators} from 'redux';
 import {Link} from 'react-router-dom';
 
+const userTypes = {
+    helper: 'Assistance',
+    admin: 'Staff',
+    super_admin: 'Admin',
+    django_admin: 'Django admin'
+};
+
 class UserMenu extends Component {
 
     state = {
@@ -26,28 +33,29 @@ class UserMenu extends Component {
         return (
             <React.Fragment>
                 <Button className="h-64" onClick={this.userMenuClick}>
-                    {/*{user.data.photoURL ?*/}
-                        {/*(*/}
-                            <Avatar className="" alt="user photo" />
-                        {/*)*/}
-                        {/*:*/}
-                        {/*(*/}
-                            {/*<Avatar className="">*/}
-                                {/*{user.data.displayName[0]}*/}
-                            {/*</Avatar>*/}
-                        {/*)*/}
-                    {/*}*/}
+                    {!user.avatar ?
+                        (
+                            <Avatar className="" alt="user photo"/>
+                        )
+                        :
+                        (
+                            <Avatar className="">
+                                {user.avatar}
+                            </Avatar>
+                        )
+                    }
 
                     <div className="hidden md:flex flex-col ml-12 items-start">
                         <Typography component="span" className="normal-case font-600 flex display-user-name">
-                            {user.data.displayName}
+                            {user.firstName || 'User'}
                         </Typography>
                         <Typography className="text-11 capitalize display-role" color="textSecondary">
-                            {user.role}
+                            {userTypes[user.userType]}
                         </Typography>
                     </div>
 
-                    <Icon className="text-16 ml-12 hidden sm:flex" variant="action" style={{color: '#fff'}}>keyboard_arrow_down</Icon>
+                    <Icon className="text-16 ml-12 hidden sm:flex" variant="action"
+                          style={{color: '#fff'}}>keyboard_arrow_down</Icon>
                 </Button>
 
                 <Popover
@@ -67,7 +75,7 @@ class UserMenu extends Component {
                     }}
                 >
                     <React.Fragment>
-                        <MenuItem component={Link} to="/pages/profile" onClick={this.userMenuClose}>
+                        <MenuItem component={Link} to="/profile" onClick={this.userMenuClose}>
                             <ListItemIcon>
                                 <Icon>account_circle</Icon>
                             </ListItemIcon>

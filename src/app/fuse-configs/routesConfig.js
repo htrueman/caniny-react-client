@@ -9,6 +9,7 @@ import {ResetPasswordConfig} from 'app/main/ResetPassword/ResetPasswordConfig';
 import {ActivateAccountConfig} from 'app/main/ActivateAccount/ActivateAccountConfig';
 import {UsersConfig} from 'app/main/Users/UsersConfig';
 import {AnimalsConfig} from 'app/main/Animals/AnimalsConfig';
+import {UserProfileConfig} from 'app/main/UserProfile/UserProfileConfig';
 
 
 const logging = () => {
@@ -25,7 +26,8 @@ const routeConfigs =  [
     ResetPasswordConfig,
     ActivateAccountConfig,
     UsersConfig,
-    AnimalsConfig
+    AnimalsConfig,
+    UserProfileConfig
 ];
 
 

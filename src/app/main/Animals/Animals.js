@@ -247,7 +247,7 @@ class Animals extends Component {
                     }}
                     header={
                         <div className="p-24 size-container header-users-page">
-                            <h4><FontAwesomeIcon icon={faPaw}/>Animals </h4>
+                            <h4><FontAwesomeIcon icon={faPaw}/>Animals</h4>
 
                             <div className='search-block'>
                                 <Icon>search</Icon>

@@ -8,6 +8,7 @@
 @import 'landing.css';
 @import 'users.css';
 @import 'animals.css';
+@import 'profile.css';
 
 * {
     outline: none !important;

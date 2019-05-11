@@ -193,7 +193,7 @@ const allColumns = [
         title: 'Species'
     },
     {
-        id: 'breed__name',
+        id: 'breed',
         title: 'Breed'
     },
     {
@@ -229,7 +229,7 @@ const allColumns = [
         title: 'Animals Friendly'
     },
     {
-        id: 'humans_friendly',
+        id: 'human_friendly',
         title: 'Humans Friendly'
     },
     {
@@ -280,10 +280,10 @@ const allColumns = [
         id: 'leave_date',
         title: 'Leave Date'
     },
-    {
-        id: 'history',
-        title: 'History'
-    },
+    // {
+    //     id: 'history',
+    //     title: 'History'
+    // },
 ];
 
 class ContactsList extends PureComponent {
@@ -682,7 +682,7 @@ class RenderColumsMenu extends Component {
             life_stage: false,
             gender: false,
             species: false,
-            breed__name: false,
+            breed: false,
             species_details: false,
             origin_country: false,
             pregnant: false,
@@ -691,7 +691,7 @@ class RenderColumsMenu extends Component {
             cats_friendly: false,
             dogs_friendly: false,
             animals_friendly: false,
-            humans_friendly: false,
+            human_friendly: false,
             kids_friendly: false,
             bites: false,
             for_adoption: false,
@@ -704,7 +704,7 @@ class RenderColumsMenu extends Component {
             entry_date: false,
             leave_reason: false,
             leave_date: false,
-            history: false,
+            // history: false,
         }
     };
 
@@ -716,6 +716,7 @@ class RenderColumsMenu extends Component {
         this.setState({anchorEl: null});
 
         await animalsService.updateColums({columns: this.state.selectedItems});
+        // await animalsService.updateColums({columns: ["human_friendly", "leave_date", "id", "name", "age", "life_stage", "gender", "species"]});
         this.props.onUpdateColumns();
     };
 
@@ -743,6 +744,7 @@ class RenderColumsMenu extends Component {
                         [this.state.selectedItems[7]]: false
                     }
                 }, () => {
+                    console.log(this.state.columns)
                     let newColumns = this.state.selectedItems;
 
                     for (let key in this.state.columns) {
@@ -809,7 +811,7 @@ class RenderColumsMenu extends Component {
                 life_stage,
                 gender,
                 species,
-                breed__name,
+                breed,
                 species_details,
                 origin_country,
                 pregnant,
@@ -818,7 +820,7 @@ class RenderColumsMenu extends Component {
                 cats_friendly,
                 dogs_friendly,
                 animals_friendly,
-                humans_friendly,
+                human_friendly,
                 kids_friendly,
                 bites,
                 for_adoption,

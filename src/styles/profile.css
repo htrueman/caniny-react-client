@@ -1,0 +1,106 @@
+.profile-header {
+    height: 200px !important;
+}
+
+.user-profile-page {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0 100px 0;
+}
+
+.profile-form {
+    width: 70%;
+    padding: 20px;
+    border-radius: 10px;
+    margin: -50px 0 0 0;
+    background: #fff;
+    -webkit-box-shadow: 0px 5px 9px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 5px 9px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 5px 9px 0px rgba(0, 0, 0, 0.75);
+}
+
+.profile-form .reset-block label {
+    font-size: 20px !important;
+}
+
+.profile-form .reset-block {
+    position: relative;
+}
+
+.profile-form .general-title {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0 0 30px 0;
+}
+
+.profile-form section {
+    width: 100%;
+    margin: 0 0 30px 0;
+    padding: 0 0 30px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.profile-form .save-btn {
+    display: block;
+    padding: 5px 0;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.11);
+    font-size: 15px;
+    font-weight: normal;
+    width: 10%;
+    color: #039be5;
+    background: none !important;
+}
+
+.profile-form .reset-btn {
+    position: absolute;
+    top: -55px;
+    right: 0;
+}
+
+.profile-form .save-btn:hover {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.profile-form .section-title {
+    color: #8898aa;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+}
+
+.user-avatar {
+    width: 25%;
+    padding: 20px;
+    border-radius: 10px;
+    margin: -50px 0 0 0;
+    background: #fff;
+    -webkit-box-shadow: 0px 5px 9px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 5px 9px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 5px 9px 0px rgba(0, 0, 0, 0.75);
+}
+
+.user-avatar .photo {
+    width: 200px;
+    height: 200px;
+    margin: -100px auto 0 auto;
+    background: #fff;
+}
+
+.user-avatar .name {
+    width: 100%;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 600;
+    margin: 50px 0 30px 0;
+}
+
+.user-avatar .role {
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+}

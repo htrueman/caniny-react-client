@@ -7,6 +7,7 @@ import firebase from 'firebase/app';
 import firebaseService from 'app/services/firebaseService';
 import auth0Service from 'app/services/auth0Service';
 import jwtService from 'app/services/jwtService';
+import {LOGIN_ERROR} from "./login.actions";
 
 export const SET_USER_DATA = '[USER] SET DATA';
 export const REMOVE_USER_DATA = '[USER] REMOVE DATA';
@@ -83,15 +84,16 @@ export function createUserSettingsFirebase(authUser) {
  * Set User Data
  */
 export function setUserData() {
-    jwtService.getUserProfile()
-        .then(res => {
-            return (dispatch) => {
-                dispatch({
-                    type: SET_USER_DATA,
-                    payload: res
-                })
-            }
-        })
+    return (dispatch) =>
+        jwtService.getUserProfile()
+            .then((res) => {
+                    return dispatch({
+                        type: SET_USER_DATA,
+                        payload: res
+                    });
+                }
+            )
+
 }
 
 /**
@@ -163,44 +165,15 @@ export function logoutUser() {
 /**
  * Update User Data
  */
-function updateUserData(user) {
-    if (user.role === 'guest') {
-        return;
-    }
+export function updateUserData(user) {
+    return (dispatch) =>
+        jwtService.updateUserProfile(user)
+            .then((res) => {
+                    return dispatch({
+                        type: SET_USER_DATA,
+                        payload: res
+                    });
+                }
+            )
 
-    switch (user.from) {
-        case 'firebase': {
-            firebaseService.updateUserData(user)
-                .then(() => {
-                    store.dispatch(Actions.showMessage({message: "User data saved to firebase"}));
-                })
-                .catch(error => {
-                    store.dispatch(Actions.showMessage({message: error.message}));
-                });
-            break;
-        }
-        case 'auth0': {
-            auth0Service.updateUserData({
-                settings: user.data.settings,
-                shortcuts: user.data.shortcuts
-            })
-                .then(() => {
-                    store.dispatch(Actions.showMessage({message: "User data saved to auth0"}));
-                })
-                .catch(error => {
-                    store.dispatch(Actions.showMessage({message: error.message}));
-                });
-            break;
-        }
-        default: {
-            jwtService.updateUserData(user)
-                .then(() => {
-                    store.dispatch(Actions.showMessage({message: "User data saved with api"}));
-                })
-                .catch(error => {
-                    store.dispatch(Actions.showMessage({message: error.message}));
-                });
-            break;
-        }
-    }
 }

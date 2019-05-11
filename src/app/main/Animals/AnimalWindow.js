@@ -154,7 +154,7 @@ class AnimalWindow extends Component {
     };
 
     handleChange = (event, value) => {
-        this.setState({value}, () => console.log(this.state));
+        this.setState({value});
     };
 
     onDrop = (file) => {
@@ -272,8 +272,10 @@ class AnimalWindow extends Component {
                         }
                     })
                 } else {
+
                     this.setState({
                         animal: {
+                            ...this.state.animal,
                             [object]: {
                                 ...this.state.animal[object],
                                 [name]: value
@@ -293,9 +295,9 @@ class AnimalWindow extends Component {
     };
 
     handleChangeInputCare = (name, index) => (e) => {
-        let newCareValues = [];
+        let newCareValues = this.state.animal.health.careValues ? this.state.animal.health.careValues : new Array(6);
         newCareValues[index] = {
-            ...this.state.animal.health.careValues[index],
+            ...(this.state.animal.health.careValues ? this.state.animal.health.careValues[index] : {}),
             [name]: e.target.value
         };
 
@@ -704,10 +706,9 @@ class AnimalWindow extends Component {
                                         </div>
 
                                         <div className={classes.formControl}>
-                                            <InputLabel htmlFor="age-simple">Origin Country*</InputLabel>
+                                            <InputLabel htmlFor="age-simple">Origin Country</InputLabel>
                                             <Select
                                                 value={this.state.animal.originCountry}
-                                                required={true}
                                                 native
                                                 onChange={this.handleChangeInput('originCountry')}
                                             >
