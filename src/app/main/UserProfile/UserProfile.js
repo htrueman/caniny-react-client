@@ -13,6 +13,7 @@ import jwtService from 'app/services/jwtService';
 import {formatPhoneNumberIntl} from "react-phone-number-input";
 import PhoneInput from 'react-phone-number-input'
 import * as Actions from 'app/auth/store/actions';
+import ImageUploader from 'react-images-upload';
 
 const styles = theme => ({
     layoutRoot: {},
@@ -39,17 +40,7 @@ const userTypes = {
 };
 
 class UserProfile extends Component {
-    state = {
-        // first_name: '',
-        // last_name: '',
-        // email: '',
-        // address: '',
-        // city: '',
-        // country: '',
-        // postal_code: '',
-        // avatar: '',
-        // userType: ''
-    };
+    state = {};
 
     handleChangeInput = (name) => ({target: {value}}) => {
         this.setState({
@@ -59,8 +50,31 @@ class UserProfile extends Component {
 
     handleUpdateUser = async () => {
         await this.props.updateUserData(this.state);
-        console.log(this.state)
     };
+
+    onDrop = async (file) => {
+        this.getBase64(file[0], (result) => {
+            this.setState({
+                avatar: result,
+            });
+
+            this.props.updateUserData({
+                avatar: result
+            });
+        });
+
+    };
+
+    getBase64(file, cb) {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            cb(reader.result)
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
+    }
 
     onResetPass = async (pass) => {
         jwtService.resetPassword({
@@ -217,6 +231,7 @@ class UserProfile extends Component {
                                         className="mb-16"
                                         type="text"
                                         name="currentPassword"
+                                        autocomplete={false}
                                         label="Current Password"
                                         // validations="equalsField:password2"
                                         // validationErrors={{
@@ -231,6 +246,7 @@ class UserProfile extends Component {
                                     <TextFieldFormsy
                                         className="mb-16"
                                         type="password"
+                                        autocomplete={false}
                                         name="password1"
                                         label="New Password"
                                         validations="equalsField:password2"
@@ -246,6 +262,7 @@ class UserProfile extends Component {
                                     <TextFieldFormsy
                                         className="mb-16"
                                         type="password"
+                                        autocomplete={false}
                                         name="password2"
                                         label="Confirm Password"
                                         validations="equalsField:password1"
@@ -265,6 +282,15 @@ class UserProfile extends Component {
                             <div className="user-avatar">
                                 <Avatar className="photo" alt="contact avatar"
                                         src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+
+                                <ImageUploader
+                                    withIcon={true}
+                                    buttonText='Choose images'
+                                    onChange={this.onDrop}
+                                    imgExtension={['.jpg', '.gif', '.png']}
+                                    maxFileSize={5242880}
+                                    singleImage={true}
+                                />
 
                                 <div
                                     className='name'>{this.state.firstName ? this.state.firstName : (firstName ? firstName : 'User')} {this.state.lastName ? this.state.lastName : lastName}</div>

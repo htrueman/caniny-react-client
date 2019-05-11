@@ -87,7 +87,8 @@ export function setUserData() {
     return (dispatch) =>
         jwtService.getUserProfile()
             .then((res) => {
-                    return dispatch({
+                console.log(res);
+                return dispatch({
                         type: SET_USER_DATA,
                         payload: res
                     });

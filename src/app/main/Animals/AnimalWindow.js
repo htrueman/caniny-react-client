@@ -6,20 +6,20 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
 import {withStyles} from "@material-ui/core/styles/index";
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import {Input} from '@material-ui/core';
 import animalsService from 'app/services/animalsService';
-import DatePicker, {CalendarContainer} from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 import Select from '@material-ui/core/Select';
 import {Avatar} from "@material-ui/core";
 import ImageUploader from 'react-images-upload';
 import moment from 'moment';
 import {countryList} from './countryList';
+import DatePicker from 'react-datepicker'
+import "react-datepicker/dist/react-datepicker.css";
+
 
 const styles = theme => ({
     layoutRoot: {},
@@ -95,7 +95,7 @@ const animalFields = {
     name: '',
     gender: '',
     species: '',
-    joinDate: moment(new Date()).format('YYYY-MM-DD'),
+    joinDate: new Date(),
 
     appearance: {},
     training: {},
@@ -127,11 +127,28 @@ class AnimalWindow extends Component {
                 }
             }
             newAnimal.image = animal.avatar;
+            newAnimal.dateOfBirth = moment(animal.dateOfBirth).format('YYYY-MM-DD');
 
             await animalsService.updateAnimal(newAnimal, animal.id)
         } else {
+            let newAnimal = {};
+
+            for (let key in animal) {
+                if (animal[key] && key !== 'id') {
+                    newAnimal[key] = animal[key]
+                }
+            }
+
+            if (animal.dateOfBirth) {
+                delete newAnimal.age
+            }
+
+            newAnimal.image = animal.avatar;
+            newAnimal.dateOfBirth = animal.dateOfBirth ? moment(animal.dateOfBirth).format('YYYY-MM-DD') : '';
+            newAnimal.joinDate = animal.joinDate ? moment(animal.joinDate).format('YYYY-MM-DD') : '';
+
             await animalsService.createNewAnimal(
-                this.state.animal
+                newAnimal
             );
         }
 
@@ -236,6 +253,42 @@ class AnimalWindow extends Component {
         };
     }
 
+    handleChangeDatePicker = (name, object) => (value) => {
+        console.log(name);
+        console.log(value);
+
+        if (name === 'dateOfBirth') {
+            const age = moment().diff(new Date(value), 'years');
+
+            this.setState({
+                animal: {
+                    ...this.state.animal,
+                    dateOfBirth: value,
+                    age
+                }
+            })
+        } else {
+            if (object) {
+                this.setState({
+                    animal: {
+                        ...this.state.animal,
+                        [object]: {
+                            ...this.state.animal[object],
+                            [name]: value
+                        }
+                    }
+                })
+            } else {
+                this.setState({
+                    animal: {
+                        ...this.state.animal,
+                        [name]: value,
+                    }
+                })
+            }
+        }
+    };
+
     handleChangeInput = (name, object) => (e) => {
         const value = e.target.value;
 
@@ -299,6 +352,24 @@ class AnimalWindow extends Component {
         newCareValues[index] = {
             ...(this.state.animal.health.careValues ? this.state.animal.health.careValues[index] : {}),
             [name]: e.target.value
+        };
+
+        this.setState({
+            animal: {
+                ...this.state.animal,
+                health: {
+                    ...this.state.animal.health,
+                    careValues: newCareValues
+                }
+            }
+        })
+    };
+
+    handleChangeDatePickerCare = (name, index) => (value) => {
+        let newCareValues = this.state.animal.health.careValues ? this.state.animal.health.careValues : new Array(6);
+        newCareValues[index] = {
+            ...(this.state.animal.health.careValues ? this.state.animal.health.careValues[index] : {}),
+            [name]: value
         };
 
         this.setState({
@@ -597,12 +668,11 @@ class AnimalWindow extends Component {
                                         <div className='flex justify-between width-100'>
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Birthday</InputLabel>
-                                                <TextField
-                                                    id="date"
-                                                    onChange={this.handleChangeInput('dateOfBirth')}
-                                                    value={dateOfBirth}
-                                                    format='MM/DD/YYYY'
-                                                    type="date"
+                                                <DatePicker
+                                                    selected={dateOfBirth}
+                                                    onChange={this.handleChangeDatePicker('dateOfBirth')}
+                                                    className="date-filter"
+                                                    dateFormat="dd-MM-yyyy"
                                                 />
                                             </div>
 
@@ -697,12 +767,13 @@ class AnimalWindow extends Component {
                                     <div className='flex justify-between width-100 shadow-section'>
                                         <div className={classes.formControl}>
                                             <InputLabel htmlFor="age-simple">Join Date</InputLabel>
-                                            <TextField
-                                                id="Age"
-                                                type="date"
-                                                value={joinDate}
+                                            <DatePicker
+                                                selected={joinDate}
+                                                className="date-filter"
+                                                dateFormat="dd-MM-yyyy"
                                                 disabled
                                             />
+
                                         </div>
 
                                         <div className={classes.formControl}>
@@ -1374,12 +1445,13 @@ class AnimalWindow extends Component {
 
                                     <div className={classes.formHistoryControl}>
                                         <InputLabel htmlFor="age-simple">Sterilization Date</InputLabel>
-                                        <TextField
-                                            id="date"
-                                            onChange={this.handleChangeInput('sterilizedDate', 'health')}
-                                            value={sterilizedDate}
-                                            type="date"
+                                        <DatePicker
+                                            selected={sterilizedDate}
+                                            onChange={this.handleChangeDatePicker('sterilizedDate', 'health')}
+                                            className="date-filter"
+                                            dateFormat="dd-MM-yyyy"
                                         />
+
                                     </div>
                                 </div>
 
@@ -1601,11 +1673,11 @@ class AnimalWindow extends Component {
 
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Care Date</InputLabel>
-                                                <TextField
-                                                    id="date"
-                                                    onChange={this.handleChangeInputCare('date', index)}
-                                                    value={careValues ? (careValues[index] ? careValues[index].date : '') : ''}
-                                                    type="date"
+                                                <DatePicker
+                                                    selected={careValues ? (careValues[index] ? careValues[index].date : '') : ''}
+                                                    onChange={this.handleChangeDatePickerCare('date', index)}
+                                                    className="date-filter"
+                                                    dateFormat="dd-MM-yyyy"
                                                 />
                                             </div>
                                         </div>
@@ -1679,12 +1751,13 @@ class AnimalWindow extends Component {
 
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Adoption Date</InputLabel>
-                                                <TextField
-                                                    id="date"
-                                                    onChange={this.handleChangeInput('dateOfBirth')}
-                                                    value={dateOfBirth}
-                                                    type="date"
+                                                <DatePicker
+                                                    selected={dateOfBirth}
+                                                    onChange={this.handleChangeDatePicker('dateOfBirth')}
+                                                    className="date-filter"
+                                                    dateFormat="dd-MM-yyyy"
                                                 />
+
                                             </div>
                                         </div>
 
@@ -1706,12 +1779,13 @@ class AnimalWindow extends Component {
 
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Fostering Date</InputLabel>
-                                                <TextField
-                                                    id="date"
-                                                    onChange={this.handleChangeInput('dateOfBirth')}
-                                                    value={dateOfBirth}
-                                                    type="date"
+                                                <DatePicker
+                                                    selected={dateOfBirth}
+                                                    onChange={this.handleChangeDatePicker('dateOfBirth')}
+                                                    className="date-filter"
+                                                    dateFormat="dd-MM-yyyy"
                                                 />
+
                                             </div>
                                         </div>
                                     </div>
@@ -1739,12 +1813,13 @@ class AnimalWindow extends Component {
 
                                 <div className={`${classes.formControl} mr-36`}>
                                     <InputLabel htmlFor="age-simple">Entry Date</InputLabel>
-                                    <TextField
-                                        id="date"
-                                        onChange={this.handleChangeInput('entryDate')}
-                                        value={entryDate}
-                                        type="date"
+                                    <DatePicker
+                                        selected={entryDate}
+                                        onChange={this.handleChangeDatePicker('entryDate')}
+                                        className="date-filter"
+                                        dateFormat="dd-MM-yyyy"
                                     />
+
                                 </div>
 
                                 <div className={`${classes.formControl} mr-36`}>
@@ -1767,12 +1842,13 @@ class AnimalWindow extends Component {
 
                                 <div className={classes.formControl}>
                                     <InputLabel htmlFor="age-simple">Leave Date</InputLabel>
-                                    <TextField
-                                        id="date"
-                                        onChange={this.handleChangeInput('leaveDate')}
-                                        value={leaveDate}
-                                        type="date"
+                                    <DatePicker
+                                        selected={leaveDate}
+                                        onChange={this.handleChangeDatePicker('leaveDate')}
+                                        className="date-filter"
+                                        dateFormat="dd-MM-yyyy"
                                     />
+
                                 </div>
                             </div>
 
@@ -1949,12 +2025,13 @@ class AnimalWindow extends Component {
                                             <div style={{width: '25%'}}>
                                                 <div className={classes.formHistoryControl}>
                                                     <InputLabel htmlFor="age-simple">Registration Date</InputLabel>
-                                                    <TextField
-                                                        id="date"
-                                                        onChange={this.handleChangeInput('dateOfBirth', 'owners')}
-                                                        value={dateOfBirth}
-                                                        type="date"
+                                                    <DatePicker
+                                                        selected={dateOfBirth}
+                                                        onChange={this.handleChangeDatePicker('dateOfBirth', 'owners')}
+                                                        className="date-filter"
+                                                        dateFormat="dd-MM-yyyy"
                                                     />
+
                                                 </div>
                                             </div>
                                         </div>

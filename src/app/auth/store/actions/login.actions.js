@@ -9,20 +9,22 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 
 export function defaultLogin(user) {
     return (dispatch) =>
-        user ? jwtService.signInWithEmailAndPassword(user) : ''
-            .then(() => {
+        user ? jwtService.signInWithEmailAndPassword(user)
+                .then(() => {
+
+                        return dispatch({
+                            type: 'LOGIN_SUCCESS'
+                        });
+                    }
+                )
+                .catch(error => {
                     return dispatch({
-                        type: 'LOGIN_SUCCESS'
-                    }, setUserData());
-                }
-            )
-            .catch(error => {
-                return dispatch({
-                        type: LOGIN_ERROR,
-                        payload: error
-                    },
-                );
-            });
+                            type: LOGIN_ERROR,
+                            payload: error
+                        },
+                    );
+                })
+            : ''
 }
 
 export function googleLogin(user) {

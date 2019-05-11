@@ -327,6 +327,12 @@ form button[disabled] {
 /*background: none !important;*/
 /*}*/
 
+.react-datepicker-popper {
+    z-index: 10000 !important;
+}
+.date-filter {
+    border-radius: 0;
+}
 .filter-block {
     display: flex;
 }

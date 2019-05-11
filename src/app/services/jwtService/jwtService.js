@@ -134,8 +134,6 @@ class jwtService extends FuseUtils.EventEmitter {
         return new Promise((resolve, reject) => {
             axios.post(`${baseUrl}login/`, user)
                 .then(response => {
-                    console.log(response);
-
                     this.setSession(response.data.access);
                     resolve(response);
                 })

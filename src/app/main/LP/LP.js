@@ -67,6 +67,7 @@ class LP extends Component {
         console.log(model);
         this.props.defaultLogin(model)
             .then(res => {
+                this.props.getUser();
                 this.props.history.push('/users')
             })
     };
@@ -393,6 +394,7 @@ const mapDispatchToProps = dispatch => {
         facebookLogin: authActions.facebookLogin,
         instagramLogin: authActions.instagramLogin,
         showMessage: Actions.showMessage,
+        getUser: Actions.setUserData,
 
     }, dispatch);
 };

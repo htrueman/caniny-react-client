@@ -33,17 +33,7 @@ class UserMenu extends Component {
         return (
             <React.Fragment>
                 <Button className="h-64" onClick={this.userMenuClick}>
-                    {!user.avatar ?
-                        (
-                            <Avatar className="" alt="user photo"/>
-                        )
-                        :
-                        (
-                            <Avatar className="">
-                                {user.avatar}
-                            </Avatar>
-                        )
-                    }
+                    <Avatar className="" src={user.avatar ? user.avatar : 'assets/images/avatars/avatar.svg'}/>
 
                     <div className="hidden md:flex flex-col ml-12 items-start">
                         <Typography component="span" className="normal-case font-600 flex display-user-name">
