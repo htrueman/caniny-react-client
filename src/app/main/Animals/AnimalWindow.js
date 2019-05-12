@@ -271,8 +271,8 @@ class AnimalWindow extends Component {
                 humansFriendly,
                 chipId,
                 bites,
-                adoption,
-                foster,
+                adoptionChoices,
+                fosterChoices,
                 tagId,
                 history,
                 avatar,
@@ -285,16 +285,17 @@ class AnimalWindow extends Component {
                 state,
                 injured,
                 cryptorchid,
-                sterilized,
+                sterilizedChoices,
                 sterilizedDate,
                 eyesSight,
-                blind,
-                deaf,
-                teeth,
+                blindChoices,
+                deafChoices,
+                teethChoices,
                 gums,
                 describe_health,
                 describeHealth,
                 size,
+                joinedReason,
                 stCoatColor,
                 ndCoatColor,
                 rdCoatColor,
@@ -310,12 +311,14 @@ class AnimalWindow extends Component {
                 houseTrained,
                 crateTrained,
                 fenceNeeded,
+                entryDate,
                 describe_training,
                 //5
-                ownerStatus,
+                ownerChoices,
                 owner_name,
                 owner_last_name,
                 email,
+                leaveReason,
                 phone,
                 country,
                 address,
@@ -1211,9 +1214,9 @@ class AnimalWindow extends Component {
                                     <div className={classes.formHistoryControl}>
                                         <InputLabel htmlFor="age-simple">Sterilized</InputLabel>
                                         <Select
-                                            value={sterilized}
+                                            value={sterilizedChoices}
                                             native
-                                            onChange={this.handleChangeInput('sterilized')}
+                                            onChange={this.handleChangeInput('sterilizedChoices')}
                                         >
                                             <option value=""/>
                                             <option value='spayed'>Spayed</option>
@@ -1309,9 +1312,9 @@ class AnimalWindow extends Component {
                                         <div className={classes.formControl}>
                                             <InputLabel htmlFor="age-simple">Blind</InputLabel>
                                             <Select
-                                                value={blind}
+                                                value={blindChoices}
                                                 native
-                                                onChange={this.handleChangeInput('blind')}
+                                                onChange={this.handleChangeInput('blindChoices')}
                                             >
                                                 <option value=""/>
                                                 <option value='yes'>Yes</option>
@@ -1323,9 +1326,9 @@ class AnimalWindow extends Component {
                                         <div className={classes.formControl}>
                                             <InputLabel htmlFor="age-simple">Deaf</InputLabel>
                                             <Select
-                                                value={deaf}
+                                                value={deafChoices}
                                                 native
-                                                onChange={this.handleChangeInput('deaf')}
+                                                onChange={this.handleChangeInput('deafChoices')}
                                             >
                                                 <option value=""/>
                                                 <option value='yes'>Yes</option>
@@ -1342,15 +1345,15 @@ class AnimalWindow extends Component {
                                     <div className={classes.formHistoryControl}>
                                         <InputLabel htmlFor="age-simple">Teeth</InputLabel>
                                         <Select
-                                            value={teeth}
+                                            value={teethChoices}
                                             native
-                                            onChange={this.handleChangeInput('teeth')}
+                                            onChange={this.handleChangeInput('teethChoices')}
                                         >
                                             <option value=""/>
                                             <option value='clean'>Clean</option>
                                             <option value='tartar'>Tartar</option>
                                             <option value='rotten'>Rotten</option>
-                                            <option value='abscess_sores'>Abscess/Sores</option>
+                                            <option value='abscess_or_sores'>Abscess/Sores</option>
                                             <option value='worn'>Worn</option>
                                             <option value='impacted'>Impacted</option>
                                             <option value='few_missing'>Few missing</option>
@@ -1514,14 +1517,14 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Adopted</InputLabel>
                                                 <Select
-                                                    value={adoption}
+                                                    value={adoptionChoices}
                                                     native
-                                                    onChange={this.handleChangeInput('adoption')}
+                                                    onChange={this.handleChangeInput('adoptionChoices')}
                                                 >
                                                     <option value=""/>
                                                     <option value='yes'>Yes</option>
                                                     <option value='no'>No</option>
-                                                    <option value='no'>To Be</option>
+                                                    <option value='to_be'>To Be</option>
                                                     <option value='hold'>Hold</option>
                                                 </Select>
                                             </div>
@@ -1541,9 +1544,9 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Fostered</InputLabel>
                                                 <Select
-                                                    value={foster}
+                                                    value={fosterChoices}
                                                     native
-                                                    onChange={this.handleChangeInput('foster')}
+                                                    onChange={this.handleChangeInput('fosterChoices')}
                                                 >
                                                     <option value=""/>
                                                     <option value='yes'>Yes</option>
@@ -1571,18 +1574,18 @@ class AnimalWindow extends Component {
                                 <div className={`${classes.formControl} mr-36`}>
                                     <InputLabel htmlFor="age-simple">Entry Reason</InputLabel>
                                     <Select
-                                        value={foster}
+                                        value={joinedReason}
                                         native
-                                        onChange={this.handleChangeInput('foster')}
+                                        onChange={this.handleChangeInput('joinedReason')}
                                     >
                                         <option value=""/>
-                                        <option value='yes'>Stray</option>
-                                        <option value='no'>Rescue</option>
-                                        <option value='hold'>Transfer</option>
-                                        <option value='hold'>Medical</option>
-                                        <option value='hold'>Temporary</option>
-                                        <option value='hold'>Neglectance</option>
-                                        <option value='hold'>Other</option>
+                                        <option value='stray'>Stray</option>
+                                        <option value='rescue'>Rescue</option>
+                                        <option value='transfer'>Transfer</option>
+                                        <option value='medical'>Medical</option>
+                                        <option value='temporary'>Temporary</option>
+                                        <option value='neglected'>Neglectance</option>
+                                        <option value='other'>Other</option>
                                     </Select>
                                 </div>
 
@@ -1590,27 +1593,27 @@ class AnimalWindow extends Component {
                                     <InputLabel htmlFor="age-simple">Entry Date</InputLabel>
                                     <TextField
                                         id="date"
-                                        onChange={this.handleChangeInput('dateOfBirth')}
-                                        value={dateOfBirth}
+                                        onChange={this.handleChangeInput('entryDate')}
+                                        value={entryDate}
                                         type="date"
                                     />
                                 </div>
 
                                 <div className={`${classes.formControl} mr-36`}>
-                                    <InputLabel htmlFor="age-simple">Leave Reason </InputLabel>
+                                    <InputLabel htmlFor="age-simple">Leave Reason</InputLabel>
                                     <Select
-                                        value={foster}
+                                        value={leaveReason}
                                         native
-                                        onChange={this.handleChangeInput('foster')}
+                                        onChange={this.handleChangeInput('leaveReason')}
                                     >
                                         <option value=""/>
-                                        <option value='yes'>Adoption</option>
-                                        <option value='no'>Foster</option>
-                                        <option value='hold'>Transfer</option>
-                                        <option value='hold'>Medical</option>
-                                        <option value='hold'>Temporary</option>
-                                        <option value='hold'>Death</option>
-                                        <option value='hold'>Other</option>
+                                        <option value='adoption'>Adoption</option>
+                                        <option value='foster'>Foster</option>
+                                        <option value='transfer'>Transfer</option>
+                                        <option value='medical'>Medical</option>
+                                        <option value='temporary'>Temporary</option>
+                                        <option value='death'>Death</option>
+                                        <option value='other'>Other</option>
                                     </Select>
                                 </div>
 
@@ -1680,9 +1683,9 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Group</InputLabel>
                                                 <Select
-                                                    value={ownerStatus}
+                                                    value={ownerChoices}
                                                     native
-                                                    onChange={this.handleChangeInput('ownerStatus')}
+                                                    onChange={this.handleChangeInput('ownerChoices')}
                                                 >
                                                     <option value=""/>
                                                     <option value='existing_owner'>Existing Owner</option>
@@ -1694,7 +1697,7 @@ class AnimalWindow extends Component {
                                                 </Select>
                                             </div>
                                             <div className={classes.formControl}>
-                                                <InputLabel htmlFor="name">First Name </InputLabel>
+                                                <InputLabel htmlFor="name">First Name</InputLabel>
                                                 <TextField
                                                     id="name"
                                                     type="text"
