@@ -77,10 +77,8 @@ class UserProfile extends Component {
     }
 
     onResetPass = async (pass) => {
-        jwtService.resetPassword({
-            pass
-        });
-        console.log(pass);
+        await jwtService.resetPassword(pass);
+        this.form.reset();
     };
 
     // getUserInfo = () => {
@@ -230,7 +228,7 @@ class UserProfile extends Component {
                                     <TextFieldFormsy
                                         className="mb-16"
                                         type="text"
-                                        name="currentPassword"
+                                        name="oldPassword"
                                         autocomplete={false}
                                         label="Current Password"
                                         // validations="equalsField:password2"

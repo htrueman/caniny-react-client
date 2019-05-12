@@ -17,7 +17,7 @@ import ReactTable from "react-table";
 import Tooltip from '@material-ui/core/Tooltip';
 import {withStyles} from '@material-ui/core/styles';
 import moment from 'moment';
-import DatePicker, {CalendarContainer} from 'react-datepicker'
+import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 
 function arrowGenerator(color) {
@@ -403,6 +403,7 @@ class ContactsList extends PureComponent {
             </div>
         )
     };
+
     customFilter5 = (filter, onChangeFilter) => {
         const {filterType5, filterValue5, focus} = this.state;
         const changeFilterType = (value) => {

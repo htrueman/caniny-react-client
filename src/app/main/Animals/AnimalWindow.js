@@ -112,6 +112,9 @@ class AnimalWindow extends Component {
         dogBreeds: [],
         catBreeds: [],
         value: 0,
+
+        uploadAnimalAvatar: false,
+        uploadOwnerAvatar: false,
     };
 
     handleSaveAnimal = async (e) => {
@@ -126,8 +129,31 @@ class AnimalWindow extends Component {
                     newAnimal[key] = animal[key]
                 }
             }
-            newAnimal.image = animal.avatar;
-            newAnimal.dateOfBirth = moment(animal.dateOfBirth).format('YYYY-MM-DD');
+
+            if (animal.health) {
+                if (animal.health.careValues) {
+                    newAnimal.health.careValues = animal.health.careValues.map(item => {
+                        if (item.date) {
+                            return ({
+                                ...item,
+                                date: moment(item.date).format('YYYY-MM-DD')
+                            })
+                        } else {
+                            return (item)
+                        }
+                    })
+                }
+            }
+
+            if (animal.dateOfBirth) delete newAnimal.age;
+
+            if (animal.dateOfBirth) newAnimal.dateOfBirth = moment(animal.dateOfBirth).format('YYYY-MM-DD');
+            if (animal.health.sterilizedDate) newAnimal.health.sterilizedDate = moment(animal.health.sterilizedDate).format('YYYY-MM-DD');
+            if (animal.adoptionDate) newAnimal.adoptionDate = moment(animal.adoptionDate).format('YYYY-MM-DD');
+            if (animal.fosteringDate) newAnimal.fosteringDate = moment(animal.fosteringDate).format('YYYY-MM-DD');
+            if (animal.entryDate) newAnimal.entryDate = moment(animal.entryDate).format('YYYY-MM-DD');
+            if (animal.leaveDate) newAnimal.leaveDate = moment(animal.leaveDate).format('YYYY-MM-DD');
+            if (animal.joinDate) newAnimal.joinDate = moment(animal.joinDate).format('YYYY-MM-DD');
 
             await animalsService.updateAnimal(newAnimal, animal.id)
         } else {
@@ -139,12 +165,28 @@ class AnimalWindow extends Component {
                 }
             }
 
-            if (animal.dateOfBirth) {
-                delete newAnimal.age
+            if (animal.health) {
+                if (animal.health.careValues) {
+                    newAnimal.health.careValues = animal.health.careValues.map(item => {
+                        if (item.date) {
+                            return ({
+                                ...item,
+                                date: moment(item.date).format('YYYY-MM-DD')
+                            })
+                        } else {
+                            return (item)
+                        }
+                    })
+                }
             }
 
-            newAnimal.image = animal.avatar;
-            newAnimal.dateOfBirth = animal.dateOfBirth ? moment(animal.dateOfBirth).format('YYYY-MM-DD') : '';
+            if (animal.dateOfBirth) delete newAnimal.age;
+            if (animal.dateOfBirth) newAnimal.dateOfBirth = moment(animal.dateOfBirth).format('YYYY-MM-DD');
+            if (animal.health.sterilizedDate) newAnimal.health.sterilizedDate = moment(animal.health.sterilizedDate).format('YYYY-MM-DD');
+            if (animal.adoptionDate) newAnimal.adoptionDate = moment(animal.adoptionDate).format('YYYY-MM-DD');
+            if (animal.fosteringDate) newAnimal.fosteringDate = moment(animal.fosteringDate).format('YYYY-MM-DD');
+            if (animal.entryDate) newAnimal.entryDate = moment(animal.entryDate).format('YYYY-MM-DD');
+            if (animal.leaveDate) newAnimal.leaveDate = moment(animal.leaveDate).format('YYYY-MM-DD');
             newAnimal.joinDate = animal.joinDate ? moment(animal.joinDate).format('YYYY-MM-DD') : '';
 
             await animalsService.createNewAnimal(
@@ -175,20 +217,19 @@ class AnimalWindow extends Component {
     };
 
     onDrop = (file) => {
-        this.getBase64(file[0], (result) => {
+        this.getBase64(file[file.length - 1], (result) => {
             this.setState({
                 animal: {
                     ...this.state.animal,
-                    avatar: result,
+                    image: result,
                 },
-                uploadImg: true
+                uploadAnimalAvatar: true
             })
         });
     };
 
-
     onDropOwnerAvatar = (file) => {
-        this.getBase64(file[0], (result) => {
+        this.getBase64(file[file.length - 1], (result) => {
             this.setState({
                 animal: {
                     ...this.state.animal,
@@ -197,13 +238,13 @@ class AnimalWindow extends Component {
                         profileImageBase: result,
                     }]
                 },
-                uploadImg: true
+                uploadOwnerAvatar: true
             })
         });
     };
 
     onDropImageId = (file) => {
-        this.getBase64(file[0], (result) => {
+        this.getBase64(file[file.length - 1], (result) => {
             this.setState({
                 animal: {
                     ...this.state.animal,
@@ -215,13 +256,13 @@ class AnimalWindow extends Component {
     };
 
     onDropUserId = (file) => {
-        this.getBase64(file[0], (result) => {
+        this.getBase64(file[file.length - 1], (result) => {
             this.setState({
                 animal: {
                     ...this.state.animal,
                     owners: [{
                         ...this.state.animal.owners[0],
-                        profileImageBase: result,
+                        profileIdImageBase: result,
                     }]
                 },
                 uploadImg: true
@@ -229,34 +270,23 @@ class AnimalWindow extends Component {
         });
     };
 
-
-    onDropAnimalId = (file) => {
-        this.getBase64(file[0], (result) => {
-            this.setState({
-                animal: {
-                    ...this.state.animal,
-                    animalId: result,
-                },
-                uploadImg: true
-            })
-        });
-    };
-
     getBase64(file, cb) {
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-            cb(reader.result)
-        };
-        reader.onerror = function (error) {
-            console.log('Error: ', error);
-        };
+        if (file) {
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+                cb(reader.result.split('base64,')[1])
+            };
+            reader.onerror = function (error) {
+                console.log('Error: ', error);
+            };
+        } else {
+            cb(null)
+        }
+
     }
 
     handleChangeDatePicker = (name, object) => (value) => {
-        console.log(name);
-        console.log(value);
-
         if (name === 'dateOfBirth') {
             const age = moment().diff(new Date(value), 'years');
 
@@ -348,11 +378,20 @@ class AnimalWindow extends Component {
     };
 
     handleChangeInputCare = (name, index) => (e) => {
-        let newCareValues = this.state.animal.health.careValues ? this.state.animal.health.careValues : new Array(6);
-        newCareValues[index] = {
-            ...(this.state.animal.health.careValues ? this.state.animal.health.careValues[index] : {}),
-            [name]: e.target.value
-        };
+        let newCareValues = [];
+
+        if (this.state.animal.health) {
+            newCareValues = this.state.animal.health.careValues ? this.state.animal.health.careValues : [];
+            newCareValues[index] = {
+                ...(this.state.animal.health.careValues ? this.state.animal.health.careValues[index] : {}),
+                [name]: e.target.value
+            };
+        } else {
+            newCareValues[index] = {
+                [name]: e.target.value
+            };
+        }
+
 
         this.setState({
             animal: {
@@ -366,7 +405,7 @@ class AnimalWindow extends Component {
     };
 
     handleChangeDatePickerCare = (name, index) => (value) => {
-        let newCareValues = this.state.animal.health.careValues ? this.state.animal.health.careValues : new Array(6);
+        let newCareValues = this.state.animal.health.careValues ? this.state.animal.health.careValues : [];
         newCareValues[index] = {
             ...(this.state.animal.health.careValues ? this.state.animal.health.careValues[index] : {}),
             [name]: value
@@ -429,9 +468,47 @@ class AnimalWindow extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.animal.id) {
-            this.setState({animal: {...nextProps.animal}})
+            let newAnimal = nextProps.animal;
+
+            if (newAnimal.dateOfBirth) newAnimal.dateOfBirth = new Date(newAnimal.dateOfBirth);
+            if (newAnimal.health) if (newAnimal.health.sterilizedDate) newAnimal.health.sterilizedDate = new Date(newAnimal.health.sterilizedDate);
+            if (newAnimal.adoptionDate) newAnimal.adoptionDate = new Date(newAnimal.adoptionDate);
+            if (newAnimal.fosteringDate) newAnimal.fosteringDate = new Date(newAnimal.fosteringDate);
+            if (newAnimal.entryDate) newAnimal.entryDate = new Date(newAnimal.entryDate);
+            if (newAnimal.leaveDate) newAnimal.leaveDate = new Date(newAnimal.leaveDate);
+            if (newAnimal.joinDate) newAnimal.joinDate = new Date(newAnimal.joinDate);
+
+            if (newAnimal.health) {
+                if (newAnimal.health.careValues) {
+                    newAnimal.health.careValues = newAnimal.health.careValues.map(item => {
+                        if (item.date) {
+                            return ({
+                                ...item,
+                                date: new Date(item.date)
+                            })
+                        } else {
+                            return (item)
+                        }
+                    })
+                }
+            }
+
+
+            this.setState({
+                animal: {...nextProps.animal},
+                value: 0,
+                uploadAnimalAvatar: false,
+                uploadOwnerAvatar: false,
+
+            })
         } else {
-            this.setState({animal: {...animalFields}})
+            this.setState({
+                animal: {...animalFields},
+                value: 0,
+                uploadAnimalAvatar: false,
+                uploadOwnerAvatar: false,
+
+            })
         }
     }
 
@@ -446,8 +523,10 @@ class AnimalWindow extends Component {
                 gender,
                 dateOfBirth,
                 age,
+                personalityDescription,
+                fosteringDate,
                 imageId,
-
+                adoptionDate,
                 chipProducer,
                 species,
                 comments,
@@ -470,7 +549,7 @@ class AnimalWindow extends Component {
                 forFoster,
                 tagId,
                 history,
-                avatar,
+                image,
                 entryDate,
                 catsFriendly,
                 shelteringBackground,
@@ -496,7 +575,7 @@ class AnimalWindow extends Component {
                 comment,
                 profileImageBase,
                 profileIdImageBase
-            } = this.state.animal.owners[0],
+            } = this.state.animal.owners[0] ? this.state.animal.owners[0] : {},
 
             {
                 value,
@@ -621,7 +700,7 @@ class AnimalWindow extends Component {
                             <div className='flex flex-row justify-between flex-wrap'>
                                 <div className='drop-block width-20'>
                                     <Avatar className="w-96 h-96" alt="contact avatar"
-                                            src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+                                            src={image ? `data:image/jpeg;base64,${image}` : 'assets/images/avatars/avatar.svg'}/>
 
                                     <ImageUploader
                                         withIcon={true}
@@ -865,7 +944,7 @@ class AnimalWindow extends Component {
                                 <div className='flex justify-between width-100'>
                                     <div className='drop-block'>
                                         <Avatar className="w-96 h-96" alt="contact avatar"
-                                                src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+                                                src={image ? `data:image/jpeg;base64,${image}` : 'assets/images/avatars/avatar.svg'}/>
 
                                         <span className='mt-6'>{name || 'Name'}</span>
                                     </div>
@@ -1018,8 +1097,8 @@ class AnimalWindow extends Component {
                                             rows={3}
                                             multiline={true}
                                             fullWidth
-                                            value={describe_health}
-                                            onChange={this.handleChangeInput('describe_health')}
+                                            value={personalityDescription}
+                                            onChange={this.handleChangeInput('personalityDescription')}
                                         />
                                     </div>
                                 </div>
@@ -1047,7 +1126,7 @@ class AnimalWindow extends Component {
                                 <div className='flex justify-between width-100'>
                                     <div className='drop-block'>
                                         <Avatar className="w-96 h-96" alt="contact avatar"
-                                                src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+                                                src={image ? `data:image/jpeg;base64,${image}` : 'assets/images/avatars/avatar.svg'}/>
 
                                         <span className='mt-6'>{name || 'Name'}</span>
                                     </div>
@@ -1095,15 +1174,15 @@ class AnimalWindow extends Component {
                                                     onChange={this.handleChangeInput('firstCoatColor', 'appearance')}
                                                 >
                                                     <option value=""/>
-                                                    <option value='black'>Black</option>
-                                                    <option value='grey'>Grey</option>
-                                                    <option value='white'>White</option>
-                                                    <option value='brown'>Brown</option>
-                                                    <option value='red'>Red</option>
-                                                    <option value='orange'>Orange</option>
-                                                    <option value='yellow'>Yellow</option>
-                                                    <option value='cream'>Cream</option>
-                                                    <option value='fawn'>Fawn</option>
+                                                    <option value='Black'>Black</option>
+                                                    <option value='Grey'>Grey</option>
+                                                    <option value='White'>White</option>
+                                                    <option value='Brown'>Brown</option>
+                                                    <option value='Red'>Red</option>
+                                                    <option value='Orange'>Orange</option>
+                                                    <option value='Yellow'>Yellow</option>
+                                                    <option value='Cream'>Cream</option>
+                                                    <option value='Fawn'>Fawn</option>
                                                 </Select>
                                             </div>
 
@@ -1115,15 +1194,15 @@ class AnimalWindow extends Component {
                                                     onChange={this.handleChangeInput('secondCoatColor', 'appearance')}
                                                 >
                                                     <option value=""/>
-                                                    <option value='black'>Black</option>
-                                                    <option value='grey'>Grey</option>
-                                                    <option value='white'>White</option>
-                                                    <option value='brown'>Brown</option>
-                                                    <option value='red'>Red</option>
-                                                    <option value='orange'>Orange</option>
-                                                    <option value='yellow'>Yellow</option>
-                                                    <option value='cream'>Cream</option>
-                                                    <option value='fawn'>Fawn</option>
+                                                    <option value='Black'>Black</option>
+                                                    <option value='Grey'>Grey</option>
+                                                    <option value='White'>White</option>
+                                                    <option value='Brown'>Brown</option>
+                                                    <option value='Red'>Red</option>
+                                                    <option value='Orange'>Orange</option>
+                                                    <option value='Yellow'>Yellow</option>
+                                                    <option value='Cream'>Cream</option>
+                                                    <option value='Fawn'>Fawn</option>
                                                 </Select>
                                             </div>
 
@@ -1135,15 +1214,15 @@ class AnimalWindow extends Component {
                                                     onChange={this.handleChangeInput('thirdCoatColor', 'appearance')}
                                                 >
                                                     <option value=""/>
-                                                    <option value='black'>Black</option>
-                                                    <option value='grey'>Grey</option>
-                                                    <option value='white'>White</option>
-                                                    <option value='brown'>Brown</option>
-                                                    <option value='red'>Red</option>
-                                                    <option value='orange'>Orange</option>
-                                                    <option value='yellow'>Yellow</option>
-                                                    <option value='cream'>Cream</option>
-                                                    <option value='fawn'>Fawn</option>
+                                                    <option value='Black'>Black</option>
+                                                    <option value='Grey'>Grey</option>
+                                                    <option value='White'>White</option>
+                                                    <option value='Brown'>Brown</option>
+                                                    <option value='Red'>Red</option>
+                                                    <option value='Orange'>Orange</option>
+                                                    <option value='Yellow'>Yellow</option>
+                                                    <option value='Cream'>Cream</option>
+                                                    <option value='Fawn'>Fawn</option>
                                                 </Select>
                                             </div>
                                         </div>
@@ -1258,7 +1337,7 @@ class AnimalWindow extends Component {
                             <div className='flex justify-between width-100'>
                                 <div className='drop-block'>
                                     <Avatar className="w-96 h-96" alt="contact avatar"
-                                            src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+                                            src={image ? `data:image/jpeg;base64,${image}` : 'assets/images/avatars/avatar.svg'}/>
 
                                     <span className='mt-6'>{name || 'Name'}</span>
                                 </div>
@@ -1364,7 +1443,7 @@ class AnimalWindow extends Component {
                             <div className='flex justify-between width-100'>
                                 <div className='drop-block' style={{margin: '0 4.4rem 0 0'}}>
                                     <Avatar className="w-96 h-96" alt="contact avatar"
-                                            src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+                                            src={image ? `data:image/jpeg;base64,${image}` : 'assets/images/avatars/avatar.svg'}/>
 
                                     <span className='mt-6'>{name || 'Name'}</span>
                                 </div>
@@ -1423,6 +1502,7 @@ class AnimalWindow extends Component {
                                         <label className="switch">
                                             <input
                                                 type="checkbox"
+                                                checked={cryptorchid}
                                                 value={cryptorchid}
                                                 onChange={this.handleChangeCheckboxBool('cryptorchid', 'health')}
                                             />
@@ -1464,6 +1544,7 @@ class AnimalWindow extends Component {
                                                     <input
                                                         type="checkbox"
                                                         value={pregnant}
+                                                        checked={pregnant}
                                                         onChange={this.handleChangeCheckboxBool('pregnant')}
                                                     />
                                                     <span className="slider round"></span>
@@ -1475,6 +1556,7 @@ class AnimalWindow extends Component {
                                                 <label className="switch">
                                                     <input
                                                         type="checkbox"
+                                                        checked={disabled}
                                                         value={disabled}
                                                         onChange={this.handleChangeCheckboxBool('disabled', 'health')}
                                                     />
@@ -1504,6 +1586,7 @@ class AnimalWindow extends Component {
                                                 <label className="switch">
                                                     <input
                                                         type="checkbox"
+                                                        checked={injured}
                                                         value={injured}
                                                         onChange={this.handleChangeCheckboxBool('injured', 'health')}
                                                     />
@@ -1637,8 +1720,7 @@ class AnimalWindow extends Component {
                             <div className='flex justify-between width-100'>
                                 <div className='drop-block'>
                                     <Avatar className="w-96 h-96" alt="contact avatar"
-                                            src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
-
+                                            src={image ? `data:image/jpeg;base64,${image}` : 'assets/images/avatars/avatar.svg'}/>
                                     <span className='mt-6'>{name || 'Name'}</span>
                                 </div>
 
@@ -1653,11 +1735,11 @@ class AnimalWindow extends Component {
                                                     onChange={this.handleChangeInputCare('careType', index)}
                                                 >
                                                     <option value=""/>
-                                                    <option value='baby'>Vaccination</option>
-                                                    <option value='young'>Medicine</option>
-                                                    <option value='adult'>Grooming</option>
-                                                    <option value='senior'>Boarding</option>
-                                                    <option value='senior'>Other</option>
+                                                    <option value='vaccination'>Vaccination</option>
+                                                    <option value='medicine'>Medicine</option>
+                                                    <option value='grooming'>Grooming</option>
+                                                    <option value='boarding'>Boarding</option>
+                                                    <option value='other'>Other</option>
                                                 </Select>
                                             </div>
 
@@ -1707,7 +1789,7 @@ class AnimalWindow extends Component {
                             <div className='flex justify-between width-100'>
                                 <div className='drop-block'>
                                     <Avatar className="w-96 h-96" alt="contact avatar"
-                                            src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+                                            src={image ? `data:image/jpeg;base64,${image}` : 'assets/images/avatars/avatar.svg'}/>
 
                                     <span className='mt-6'>{name || 'Name'}</span>
                                 </div>
@@ -1752,8 +1834,8 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Adoption Date</InputLabel>
                                                 <DatePicker
-                                                    selected={dateOfBirth}
-                                                    onChange={this.handleChangeDatePicker('dateOfBirth')}
+                                                    selected={adoptionDate}
+                                                    onChange={this.handleChangeDatePicker('adoptionDate')}
                                                     className="date-filter"
                                                     dateFormat="dd-MM-yyyy"
                                                 />
@@ -1780,8 +1862,8 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Fostering Date</InputLabel>
                                                 <DatePicker
-                                                    selected={dateOfBirth}
-                                                    onChange={this.handleChangeDatePicker('dateOfBirth')}
+                                                    selected={fosteringDate}
+                                                    onChange={this.handleChangeDatePicker('fosteringDate')}
                                                     className="date-filter"
                                                     dateFormat="dd-MM-yyyy"
                                                 />
@@ -1890,7 +1972,7 @@ class AnimalWindow extends Component {
                                 <div className='flex justify-between width-100'>
                                     <div className='drop-block width-20'>
                                         <Avatar className="w-96 h-96" alt="contact avatar"
-                                                src={profileImageBase ? profileImageBase : 'assets/images/avatars/avatar.svg'}/>
+                                                src={profileImageBase ? `data:image/jpeg;base64,${profileImageBase}` : 'assets/images/avatars/avatar.svg'}/>
 
                                         <ImageUploader
                                             withIcon={true}
@@ -1999,7 +2081,7 @@ class AnimalWindow extends Component {
                                                 <Select
                                                     value={this.state.animal.owners[0] ? this.state.animal.owners[0].originCountry : ''}
                                                     native
-                                                    onChange={this.handleChangeInput('country', 'owners')}
+                                                    onChange={this.handleChangeInput('originCountry', 'owners')}
                                                 >
                                                     <option value=""/>
                                                     {countryList.map(item => (
@@ -2047,8 +2129,8 @@ class AnimalWindow extends Component {
                                             fullWidth={true}
                                             multiline={true}
                                             rows={5}
-                                            value={comments}
-                                            onChange={this.handleChangeInput('comments', 'owners')}
+                                            value={comment}
+                                            onChange={this.handleChangeInput('comment', 'owners')}
                                         />
                                     </div>
                                 </div>
@@ -2075,7 +2157,7 @@ class AnimalWindow extends Component {
                             <div className='flex justify-between width-100'>
                                 <div className='drop-block'>
                                     <Avatar className="w-96 h-96" alt="contact avatar"
-                                            src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+                                            src={image ? `data:image/jpeg;base64,${image}` : 'assets/images/avatars/avatar.svg'}/>
 
                                     <span className='mt-6'>{name || 'Name'}</span>
                                 </div>
@@ -2094,7 +2176,7 @@ class AnimalWindow extends Component {
                                                 singleImage={true}
                                             />
 
-                                            <img src={profileIdImageBase ? profileIdImageBase : ''} alt=""
+                                            <img src={profileIdImageBase ? `data:image/jpeg;base64,${profileIdImageBase}` : ''} alt=""
                                                  className='id-photo'/>
                                         </div>
 
@@ -2107,7 +2189,7 @@ class AnimalWindow extends Component {
                                                 maxFileSize={5242880}
                                                 singleImage={true}
                                             />
-                                            <img src={imageId} alt="" className='id-photo'/>
+                                            <img src={imageId ? `data:image/jpeg;base64,${imageId}`: ''} alt="" className='id-photo'/>
                                         </div>
                                     </div>
                                 </div>

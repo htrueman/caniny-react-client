@@ -17,6 +17,9 @@ import {FuseAnimate} from '@fuse';
 
 import animalsService from 'app/services/animalsService';
 import AnimalWindow from './AnimalWindow';
+import {withRouter} from "react-router-dom";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
 
 const styles = theme => ({
     layoutRoot: {},
@@ -42,10 +45,11 @@ const styles = theme => ({
 });
 
 const animalParams = {
+    id: 'id',
     name: 'name',
     gender: 'gender',
     species: 'species',
-    breed: 'breed__name',
+    breed: 'breed',
     human_friendly: 'humans_friendly',
     animals_friendly: 'animals_friendly',
     age: 'age',
@@ -98,14 +102,10 @@ class Animals extends Component {
         ];
 
         await filters.forEach(filter => {
-            if (filter.type === 'date') {
-                if (filter.filterType) {
-                    urlParams.push(`&${animalParams[filter.column]}__${filter.filterType}=${filter.filterValue}`)
-                } else {
-                    urlParams.push(`&${animalParams[filter.column]}=${filter.filterValue}`)
-                }
+            if (filter.column === 'age') {
+                urlParams.push(`&${filter.column}__${filter.filterType}=${filter.filterValue}`)
             } else {
-                urlParams.push(`&${animalParams[filter.column]}__i${filter.filterType}=${filter.filterValue}`)
+                urlParams.push(`&${filter.column}__i${filter.filterType}=${filter.filterValue ? filter.filterValue : ''}`)
             }
         });
 
@@ -178,9 +178,9 @@ class Animals extends Component {
             sorted: newSorted[0]
         }, () => this.getAnimals());
     };
+
     handleFilterUser = (filter) => {
         const filtersArr = filter.map(item => {
-
             if (item.value.type === 'date') {
                 return {
                     type: item.value.type,
@@ -191,7 +191,7 @@ class Animals extends Component {
             } else {
                 return {
                     type: item.value.type,
-                    column: item.id,
+                    column: item.id === 'breed' ? 'breed__name' : item.id,
                     filterType: item.value.filterType,
                     filterValue: item.value.filterValue
                 }
@@ -322,6 +322,8 @@ class Animals extends Component {
                                 pageSize={pageSize}
                                 count={count}
 
+                                userRole={this.props.user.userType}
+
                                 onEdit={this.handleEditAnimal}
                                 onRemove={this.handleOpenRemoveWindow}
                                 onChangePagination={this.handleChangePagination}
@@ -368,4 +370,16 @@ class Animals extends Component {
     }
 }
 
-export default withStyles(styles, {withTheme: true})(Animals);
+
+function mapStateToProps({auth}) {
+    return {
+        user: auth.user
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({}, dispatch);
+};
+
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(Animals)));
+

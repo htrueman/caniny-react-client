@@ -18,6 +18,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import animalsService from 'app/services/animalsService';
+import {countryList} from './countryList';
 
 function arrowGenerator(color) {
     return {
@@ -132,7 +133,9 @@ const filterParams = {
     contains: 'Contains',
     startswith: 'Starts with',
     endswith: 'Ends with',
-    exact: 'Matches'
+    exact: 'Matches',
+    gte: 'Grater than',
+    lte: 'Less than',
 };
 
 const paramsAllColumns = {
@@ -168,10 +171,10 @@ const paramsAllColumns = {
 };
 
 const allColumns = [
-    {
-        id: 'id',
-        title: 'ID'
-    },
+    // {
+    //     id: 'id',
+    //     title: 'ID'
+    // },
     {
         id: 'name',
         title: 'Name'
@@ -293,18 +296,8 @@ class ContactsList extends PureComponent {
         anchorEl: null,
         selectedAnimalsIds: [],
         selectedColumns: [],
-
-        filterType2: 'contains',
-        filterValue2: '',
-        filterType1: 'contains',
-        filterValue1: '',
-        filterType3: 'contains',
-        filterValue3: '',
-        filterType4: 'contains',
-        filterValue4: '',
-        filterType5: 'contains',
-        filterValue5: '',
-
+        dogBreeds: [],
+        catBreeds: [],
         focus: ''
     };
 
@@ -316,6 +309,16 @@ class ContactsList extends PureComponent {
 
         return FuseUtils.filterArrayByString(arr, searchText);
     };
+
+    getAnimalsList = async () => {
+        const [dogBreeds, catBreeds] = await Promise.all([animalsService.getBreeds('dog'), animalsService.getBreeds('cat')]);
+
+        this.setState({
+            dogBreeds: dogBreeds,
+            catBreeds: catBreeds
+        })
+    };
+
 
     getMyColuns = async () => {
         const res = await animalsService.getColums();
@@ -374,28 +377,31 @@ class ContactsList extends PureComponent {
 
     componentDidMount() {
         this.getMyColuns();
+        this.getAnimalsList();
     }
 
 
-    customFilter1 = (filter, onChangeFilter) => {
-        const {filterType1, filterValue1, focus} = this.state;
+    customFilter = (filter, onChangeFilter, field) => {
+        const {focus} = this.state;
+
         const changeFilterType = (value) => {
             this.setState({
-                filterType1: value,
+                [`filterType&${field}`]: value,
             }, () => {
                 onChangeFilter({
-                    filterValue: filterValue1,
+                    filterValue: this.state[`filterValue&${field}`],
                     filterType: value
                 });
             });
         };
+
         const changeFilterValue = ({target: {value}}) => {
             this.setState({
-                filterValue1: value,
-                focus: 'filterValue1'
+                [`filterValue&${field}`]: value,
+                focus: `filterValue&${field}`
             }, () => onChangeFilter({
                 filterValue: value,
-                filterType: filterType1
+                filterType: this.state[`filterType&${field}`] ? this.state[`filterType&${field}`] : 'contains'
             }));
         };
 
@@ -411,15 +417,65 @@ class ContactsList extends PureComponent {
                             float: 'left',
                             fontSize: '12px'
                         }}
-                        value={filterValue1}
-                        autoFocus={focus === 'filterValue1'}
+                        value={this.state[`filterValue&${field}`]}
+                        autoFocus={focus === `filterValue&${field}`}
                     />
 
-                    {filterParams[filterType1]}
+                    {filterParams[this.state[`filterType&${field}`]] || 'Matches'}
                 </div>
 
-
                 <RenderMenu
+                    changeFilterType={changeFilterType}
+                />
+
+            </div>
+        )
+    };
+
+    customAgeFilter = (filter, onChangeFilter, field) => {
+        const {focus} = this.state;
+
+        const changeFilterType = (value) => {
+            this.setState({
+                [`filterType&${field}`]: value,
+            }, () => {
+                onChangeFilter({
+                    filterValue: this.state[`filterValue&${field}`],
+                    filterType: value
+                });
+            });
+        };
+
+        const changeFilterValue = ({target: {value}}) => {
+            this.setState({
+                [`filterValue&${field}`]: value,
+                focus: `filterValue&${field}`
+            }, () => onChangeFilter({
+                filterValue: value,
+                filterType: this.state[`filterType&${field}`] ? this.state[`filterType&${field}`] : 'gte'
+            }));
+        };
+
+        return (
+            <div className="filter-block">
+                <div className='filter-input' key='1'>
+                    <TextField
+                        onChange={changeFilterValue}
+                        placeholder="Filter"
+                        style={{
+                            width: '100%',
+                            height: '40px',
+                            float: 'left',
+                            fontSize: '12px'
+                        }}
+                        value={this.state[`filterValue&${field}`]}
+                        autoFocus={focus === `filterValue&${field}`}
+                    />
+
+                    {filterParams[`filterType&${field}`] || 'Grater than'}
+                </div>
+
+                <RenderAgeMenu
                     changeFilterType={changeFilterType}
                 />
 
@@ -443,13 +499,15 @@ class ContactsList extends PureComponent {
                 onChangePageSize,
                 onFilterUser,
                 onEdit,
-                userProfile = 'helper'
+                userRole = 'helper'
             } = this.props,
 
             {
                 selectedAnimalsIds,
                 anchorEl,
-                selectedColumns
+                selectedColumns,
+                dogBreeds,
+                catBreeds,
             } = this.state,
 
             userTypes = {
@@ -459,50 +517,109 @@ class ContactsList extends PureComponent {
                 django_admin: 'Django admin'
             };
 
-
         const data = this.getFilteredArray(animals, searchText);
 
 
-        let dynamicColumns = selectedColumns.map(item => ({
-            Header: paramsAllColumns[item],
-            accessor: item,
-            filterable: true,
-            className: "font-bold",
-        }));
+        let dynamicColumns = selectedColumns.map(item => {
+            if (item === 'breed') {
+                return ({
+                    Header: paramsAllColumns[item],
+                    accessor: item,
+                    filterable: true,
+                    className: "font-bold",
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    ),
+                    Cell: row => {
+                        const currentBreed = [...dogBreeds, ...catBreeds].find(i => i.id === row.value);
+                        return (
+                            <span>{currentBreed ? currentBreed.name : ''}</span>
+                        )
+                    }
+                })
+            } else if (item === 'origin_country') {
+                return ({
+                    Header: paramsAllColumns[item],
+                    accessor: 'originCountry',
+                    filterable: true,
+                    className: "font-bold",
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    ),
+                    Cell: row => {
+                        const currentCountry = countryList.find(i => i.id === row.value);
+                        return (
+                            <span>{currentCountry ? currentCountry.title : ''}</span>
+                        )
+                    }
+                })
+            } else if (item === 'age') {
+                return ({
+                    Header: paramsAllColumns[item],
+                    accessor: item,
+                    filterable: true,
+                    className: "font-bold",
+                    Filter: ({filter, onChange}) => (
+                        this.customAgeFilter(filter, onChange, item)
+                    )
+                })
+            } else if (item === 'life_stage') {
+                return ({
+                    Header: paramsAllColumns[item],
+                    accessor: 'lifeStage',
+                    filterable: true,
+                    className: "font-bold",
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    )
+                })
+            } else {
+                return ({
+                    Header: paramsAllColumns[item],
+                    accessor: item,
+                    filterable: true,
+                    className: "font-bold",
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    )
+                })
+            }
+
+        });
 
 
         let columns = [
-            // userProfile.userType === 'super_admin' ?
-            {
-                Header: () => (
-                    <Checkbox
-                        onClick={(event) => {
-                            event.stopPropagation();
-                        }}
-                        onChange={(event) => {
-                            event.target.checked ? this.selectAllContacts() : this.deSelectAllContacts();
-                        }}
-                        checked={selectedAnimalsIds.length === Object.keys(animals).length && selectedAnimalsIds.length > 0}
-                        indeterminate={selectedAnimalsIds.length !== Object.keys(animals).length && selectedAnimalsIds.length > 0}
-                    />
-                ),
-                accessor: "",
-                Cell: row => {
-                    return (<Checkbox
+            (userRole === 'super_admin' || userRole === 'admin') ?
+                {
+                    Header: () => (
+                        <Checkbox
                             onClick={(event) => {
                                 event.stopPropagation();
                             }}
                             onChange={(event) => {
-                                event.target.checked ? this.selectAnimal(row.value.id) : this.deSelectAnimal(row.value.id);
+                                event.target.checked ? this.selectAllContacts() : this.deSelectAllContacts();
                             }}
-                            checked={selectedAnimalsIds.includes(row.value.id)}
+                            checked={selectedAnimalsIds.length === Object.keys(animals).length && selectedAnimalsIds.length > 0}
+                            indeterminate={selectedAnimalsIds.length !== Object.keys(animals).length && selectedAnimalsIds.length > 0}
                         />
-                    )
-                },
-                className: "justify-center",
-                sortable: false,
-                width: 64
-            },
+                    ),
+                    accessor: "",
+                    Cell: row => {
+                        return (<Checkbox
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                }}
+                                onChange={(event) => {
+                                    event.target.checked ? this.selectAnimal(row.value.id) : this.deSelectAnimal(row.value.id);
+                                }}
+                                checked={selectedAnimalsIds.includes(row.value.id)}
+                            />
+                        )
+                    },
+                    className: "justify-center",
+                    sortable: false,
+                    width: 64
+                } : {},
             {
                 Header: () => (
                     selectedAnimalsIds.length > 0 ? (
@@ -524,7 +641,7 @@ class ContactsList extends PureComponent {
                 accessor: "image",
                 Cell: row => (
                     <Avatar className="mr-8" alt={row.original.name}
-                            src={row.value || 'assets/images/avatars/avatar.svg'}/>
+                            src={`data:image/jpeg;base64,${row.value}` || 'assets/images/avatars/avatar.svg'}/>
                 ),
                 className: "justify-center",
                 width: 64,
@@ -533,47 +650,44 @@ class ContactsList extends PureComponent {
 
             ...dynamicColumns,
 
-            // userProfile.userType === 'super_admin' ?
-            {
-                Header: () => (
-                    <Tooltip title="Add user" className={classes.toolTip}>
-                        <Fab color="secondary" aria-label="Edit" className={classes.fab}
-                             onClick={onAddUser}>
-                            <span style={{fontSize: '25px', margin: '0 5px 0 0'}}>+</span>
+            (userRole === 'super_admin' || userRole === 'admin') ?
+                {
+                    Header: () => (
+                        <Tooltip title="Add user" className={classes.toolTip}>
+                            <Fab color="secondary" aria-label="Edit" className={classes.fab}
+                                 onClick={onAddUser}>
+                                <span style={{fontSize: '25px', margin: '0 5px 0 0'}}>+</span>
 
-                            <FontAwesomeIcon icon={faPaw}/>
-                        </Fab>
-                    </Tooltip>
-                ),
-                width: 128,
-                filterable: false,
-                sortable: false,
-                Cell: row => (
-                    <div className="flex items-center">
-                        <IconButton
-                            onClick={(ev) => {
-                                ev.stopPropagation();
-                                onEdit(row.original)
-                            }}
-                        >
-                            <Icon>edit</Icon>
-                        </IconButton>
+                                <FontAwesomeIcon icon={faPaw}/>
+                            </Fab>
+                        </Tooltip>
+                    ),
+                    width: 128,
+                    filterable: false,
+                    sortable: false,
+                    Cell: row => (
+                        <div className="flex items-center">
+                            <IconButton
+                                onClick={(ev) => {
+                                    ev.stopPropagation();
+                                    onEdit(row.original)
+                                }}
+                            >
+                                <Icon>edit</Icon>
+                            </IconButton>
 
-                        <IconButton
-                            onClick={(ev) => {
-                                ev.stopPropagation();
-                                onRemove(row.original.id);
-                            }}
-                        >
-                            <Icon>delete</Icon>
-                        </IconButton>
-                    </div>
-                )
-            }
+                            <IconButton
+                                onClick={(ev) => {
+                                    ev.stopPropagation();
+                                    onRemove(row.original.id);
+                                }}
+                            >
+                                <Icon>delete</Icon>
+                            </IconButton>
+                        </div>
+                    )
+                } : {}
         ];
-
-        // columns.splice(2, 0, ...dynamicColumns);
-
 
         return (
             <FuseAnimate animation="transition.slideUpIn" delay={300}>
@@ -613,9 +727,7 @@ export default withStyles(styles)(ContactsList);
 class RenderMenu extends Component {
     state = {anchorEl: null};
 
-
     handleClick = event => {
-        console.log(event);
         this.setState({anchorEl: event.currentTarget});
     };
 
@@ -665,7 +777,54 @@ class RenderMenu extends Component {
                 </Menu>
             </Fragment>
         )
+    }
+}
 
+class RenderAgeMenu extends Component {
+    state = {anchorEl: null};
+
+    handleClick = event => {
+        this.setState({anchorEl: event.currentTarget});
+    };
+
+    handleClose = () => {
+        this.setState({anchorEl: null});
+    };
+
+    render() {
+        const {anchorEl} = this.state;
+        return (
+            <Fragment>
+                <button
+                    aria-owns={'simple-menu'}
+                    aria-haspopup="true"
+                    className="filter-button"
+                    onClick={this.handleClick}
+                >
+                    <Icon>filter_list</Icon>
+                </button>
+
+                <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={this.handleClose}
+
+                    getContentAnchorEl={null}
+                    anchorOrigin={{vertical: "bottom", horizontal: "center"}}
+                    transformOrigin={{vertical: "top", horizontal: "center"}}
+                >
+                    <MenuItem onClick={() => {
+                        this.handleClose();
+                        this.props.changeFilterType('gte')
+                    }}>Grater than</MenuItem>
+                    <MenuItem onClick={() => {
+                        this.handleClose();
+                        this.props.changeFilterType('lte')
+                    }}>Less than</MenuItem>
+                </Menu>
+            </Fragment>
+        )
     }
 }
 
@@ -724,13 +883,11 @@ class RenderColumsMenu extends Component {
         let newColumns = {};
 
         this.props.columns.forEach(item => {
-            console.log(item);
             newColumns[item] = true
         });
 
         this.setState({
             columns: newColumns
-
         })
     }
 
@@ -744,7 +901,6 @@ class RenderColumsMenu extends Component {
                         [this.state.selectedItems[7]]: false
                     }
                 }, () => {
-                    console.log(this.state.columns)
                     let newColumns = this.state.selectedItems;
 
                     for (let key in this.state.columns) {
@@ -805,7 +961,6 @@ class RenderColumsMenu extends Component {
             } = this.state,
 
             {
-                id,
                 name,
                 age,
                 life_stage,

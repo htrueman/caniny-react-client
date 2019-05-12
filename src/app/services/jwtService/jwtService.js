@@ -21,7 +21,7 @@ class jwtService extends FuseUtils.EventEmitter {
     }
 
     handleError = ({response}) => {
-        if(response) {
+        if (response) {
             if (typeof response.data === 'object') {
                 for (let key in response.data) {
                     if (typeof response.data[key] === 'string') {
@@ -217,22 +217,26 @@ class jwtService extends FuseUtils.EventEmitter {
                 .then(response => {
                     if (response.data) {
                         resolve(response.data);
-                    } else {
-                        reject(response.data);
                     }
+                })
+                .catch(error => {
+                    this.handleError(error);
+                    reject(error.response.data);
                 });
         });
     };
 
     resetPassword = (pass) => {
         return new Promise((resolve, reject) => {
-            axios.post(`${baseUrl}profile/`, pass)
+            axios.patch(`${baseUrl}profile/change_password/`, pass)
                 .then(response => {
                     if (response.data) {
                         resolve(response.data);
-                    } else {
-                        reject(response.data);
                     }
+                })
+                .catch(error => {
+                    this.handleError(error);
+                    reject(error.response.data);
                 });
         });
     };
