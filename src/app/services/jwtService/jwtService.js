@@ -21,7 +21,7 @@ class jwtService extends FuseUtils.EventEmitter {
     }
 
     handleError = ({response}) => {
-        if(response) {
+        if (response) {
             if (typeof response.data === 'object') {
                 for (let key in response.data) {
                     if (typeof response.data[key] === 'string') {
@@ -134,8 +134,6 @@ class jwtService extends FuseUtils.EventEmitter {
         return new Promise((resolve, reject) => {
             axios.post(`${baseUrl}login/`, user)
                 .then(response => {
-                    console.log(response);
-
                     this.setSession(response.data.access);
                     resolve(response);
                 })
@@ -209,6 +207,36 @@ class jwtService extends FuseUtils.EventEmitter {
                     } else {
                         reject(response.data);
                     }
+                });
+        });
+    };
+
+    updateUserProfile = (user) => {
+        return new Promise((resolve, reject) => {
+            axios.patch(`${baseUrl}profile/`, user)
+                .then(response => {
+                    if (response.data) {
+                        resolve(response.data);
+                    }
+                })
+                .catch(error => {
+                    this.handleError(error);
+                    reject(error.response.data);
+                });
+        });
+    };
+
+    resetPassword = (pass) => {
+        return new Promise((resolve, reject) => {
+            axios.patch(`${baseUrl}profile/change_password/`, pass)
+                .then(response => {
+                    if (response.data) {
+                        resolve(response.data);
+                    }
+                })
+                .catch(error => {
+                    this.handleError(error);
+                    reject(error.response.data);
                 });
         });
     };

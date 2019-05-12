@@ -19,6 +19,15 @@
     margin: 0;
 }
 
+.columns-list {
+    margin: 0;
+    padding: 0;
+}
+.columns-list li {
+    /*opacity: 1 !important;*/
+    /*visibility: visible !important;*/
+}
+
 .animal-window .drop-block {
     width: 20%;
     margin: 0;

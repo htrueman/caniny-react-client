@@ -17,6 +17,9 @@ import {FuseAnimate} from '@fuse';
 
 import animalsService from 'app/services/animalsService';
 import AnimalWindow from './AnimalWindow';
+import {withRouter} from "react-router-dom";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
 
 const styles = theme => ({
     layoutRoot: {},
@@ -42,12 +45,15 @@ const styles = theme => ({
 });
 
 const animalParams = {
-    firstName: 'first_name',
-    lastName: 'last_name',
-    phoneNumber: 'phone_number',
-    email: 'email',
-    userType: 'user_type',
-    joinDate: 'join_date'
+    id: 'id',
+    name: 'name',
+    gender: 'gender',
+    species: 'species',
+    breed: 'breed',
+    human_friendly: 'humans_friendly',
+    animals_friendly: 'animals_friendly',
+    age: 'age',
+    date: 'entry_date',
 };
 
 class Animals extends Component {
@@ -59,6 +65,7 @@ class Animals extends Component {
         search: '',
         removeAnimalId: '',
         filters: [],
+        selectedColums: [],
 
         count: 0,
         page: 0,
@@ -95,14 +102,10 @@ class Animals extends Component {
         ];
 
         await filters.forEach(filter => {
-            if (filter.type === 'date') {
-                if (filter.filterType) {
-                    urlParams.push(`&${animalParams[filter.column]}__${filter.filterType}=${filter.filterValue}`)
-                } else {
-                    urlParams.push(`&${animalParams[filter.column]}=${filter.filterValue}`)
-                }
+            if (filter.column === 'age') {
+                urlParams.push(`&${filter.column}__${filter.filterType}=${filter.filterValue}`)
             } else {
-                urlParams.push(`&${animalParams[filter.column]}__i${filter.filterType}=${filter.filterValue}`)
+                urlParams.push(`&${filter.column}__i${filter.filterType}=${filter.filterValue ? filter.filterValue : ''}`)
             }
         });
 
@@ -132,10 +135,15 @@ class Animals extends Component {
         })
     };
 
-    handleEditAnimal = animal => {
+    handleEditAnimal = async (animal) => {
+        const res = await animalsService.getAnimalById(animal.id);
+
         this.setState({
-            selectedAnimal: animal,
-            open: true,
+            selectedAnimal: res,
+        }, () => {
+            this.setState({
+                open: true,
+            })
         })
     };
 
@@ -143,6 +151,14 @@ class Animals extends Component {
         this.setState({
             openRemove: true,
             removeAnimalId: id
+        })
+    };
+
+    getAllColums = async () => {
+        const res = await animalsService.getColums();
+
+        this.setState({
+            selectedColums: res
         })
     };
 
@@ -162,9 +178,9 @@ class Animals extends Component {
             sorted: newSorted[0]
         }, () => this.getAnimals());
     };
+
     handleFilterUser = (filter) => {
         const filtersArr = filter.map(item => {
-
             if (item.value.type === 'date') {
                 return {
                     type: item.value.type,
@@ -175,9 +191,9 @@ class Animals extends Component {
             } else {
                 return {
                     type: item.value.type,
-                    column: item.id,
+                    column: item.id === 'breed' ? 'breed__name' : item.id,
                     filterType: item.value.filterType,
-                    filterValue: window.btoa(item.value.filterValue)
+                    filterValue: item.value.filterValue
                 }
             }
         });
@@ -206,6 +222,7 @@ class Animals extends Component {
         const token = sessionStorage.getItem('token');
         if (!token) this.props.history.push('/');
         this.getAnimals();
+        this.getAllColums();
     }
 
     render() {
@@ -230,7 +247,7 @@ class Animals extends Component {
                     }}
                     header={
                         <div className="p-24 size-container header-users-page">
-                            <h4><FontAwesomeIcon icon={faPaw}/>Animals </h4>
+                            <h4><FontAwesomeIcon icon={faPaw}/>Animals</h4>
 
                             <div className='search-block'>
                                 <Icon>search</Icon>
@@ -305,6 +322,8 @@ class Animals extends Component {
                                 pageSize={pageSize}
                                 count={count}
 
+                                userRole={this.props.user.userType}
+
                                 onEdit={this.handleEditAnimal}
                                 onRemove={this.handleOpenRemoveWindow}
                                 onChangePagination={this.handleChangePagination}
@@ -351,4 +370,16 @@ class Animals extends Component {
     }
 }
 
-export default withStyles(styles, {withTheme: true})(Animals);
+
+function mapStateToProps({auth}) {
+    return {
+        user: auth.user
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({}, dispatch);
+};
+
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(Animals)));
+

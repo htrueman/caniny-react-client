@@ -6,20 +6,20 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
 import {withStyles} from "@material-ui/core/styles/index";
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import {Input} from '@material-ui/core';
 import animalsService from 'app/services/animalsService';
-import DatePicker, {CalendarContainer} from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 import Select from '@material-ui/core/Select';
 import {Avatar} from "@material-ui/core";
 import ImageUploader from 'react-images-upload';
 import moment from 'moment';
 import {countryList} from './countryList';
+import DatePicker from 'react-datepicker'
+import "react-datepicker/dist/react-datepicker.css";
+
 
 const styles = theme => ({
     layoutRoot: {},
@@ -93,20 +93,28 @@ const styles = theme => ({
 
 const animalFields = {
     name: '',
-    gender: 'male',
-    species: 'dog',
-    joinDate: moment(new Date()).format('YYYY-MM-DD'),
+    gender: '',
+    species: '',
+    joinDate: new Date(),
+
+    appearance: {},
+    training: {},
+    owners: [{}],
+    health: {}
 };
 
 class AnimalWindow extends Component {
     state = {
         animal: {
-            ...animalFields
+            ...animalFields,
         },
 
         dogBreeds: [],
         catBreeds: [],
         value: 0,
+
+        uploadAnimalAvatar: false,
+        uploadOwnerAvatar: false,
     };
 
     handleSaveAnimal = async (e) => {
@@ -121,12 +129,68 @@ class AnimalWindow extends Component {
                     newAnimal[key] = animal[key]
                 }
             }
-            newAnimal.image = animal.avatar;
+
+            if (animal.health) {
+                if (animal.health.careValues) {
+                    newAnimal.health.careValues = animal.health.careValues.map(item => {
+                        if (item.date) {
+                            return ({
+                                ...item,
+                                date: moment(item.date).format('YYYY-MM-DD')
+                            })
+                        } else {
+                            return (item)
+                        }
+                    })
+                }
+            }
+
+            if (animal.dateOfBirth) delete newAnimal.age;
+
+            if (animal.dateOfBirth) newAnimal.dateOfBirth = moment(animal.dateOfBirth).format('YYYY-MM-DD');
+            if (animal.health.sterilizedDate) newAnimal.health.sterilizedDate = moment(animal.health.sterilizedDate).format('YYYY-MM-DD');
+            if (animal.adoptionDate) newAnimal.adoptionDate = moment(animal.adoptionDate).format('YYYY-MM-DD');
+            if (animal.fosteringDate) newAnimal.fosteringDate = moment(animal.fosteringDate).format('YYYY-MM-DD');
+            if (animal.entryDate) newAnimal.entryDate = moment(animal.entryDate).format('YYYY-MM-DD');
+            if (animal.leaveDate) newAnimal.leaveDate = moment(animal.leaveDate).format('YYYY-MM-DD');
+            if (animal.joinDate) newAnimal.joinDate = moment(animal.joinDate).format('YYYY-MM-DD');
 
             await animalsService.updateAnimal(newAnimal, animal.id)
         } else {
+            let newAnimal = {};
+
+            for (let key in animal) {
+                if (animal[key] && key !== 'id') {
+                    newAnimal[key] = animal[key]
+                }
+            }
+
+            if (animal.health) {
+                if (animal.health.careValues) {
+                    newAnimal.health.careValues = animal.health.careValues.map(item => {
+                        if (item.date) {
+                            return ({
+                                ...item,
+                                date: moment(item.date).format('YYYY-MM-DD')
+                            })
+                        } else {
+                            return (item)
+                        }
+                    })
+                }
+            }
+
+            if (animal.dateOfBirth) delete newAnimal.age;
+            if (animal.dateOfBirth) newAnimal.dateOfBirth = moment(animal.dateOfBirth).format('YYYY-MM-DD');
+            if (animal.health.sterilizedDate) newAnimal.health.sterilizedDate = moment(animal.health.sterilizedDate).format('YYYY-MM-DD');
+            if (animal.adoptionDate) newAnimal.adoptionDate = moment(animal.adoptionDate).format('YYYY-MM-DD');
+            if (animal.fosteringDate) newAnimal.fosteringDate = moment(animal.fosteringDate).format('YYYY-MM-DD');
+            if (animal.entryDate) newAnimal.entryDate = moment(animal.entryDate).format('YYYY-MM-DD');
+            if (animal.leaveDate) newAnimal.leaveDate = moment(animal.leaveDate).format('YYYY-MM-DD');
+            newAnimal.joinDate = animal.joinDate ? moment(animal.joinDate).format('YYYY-MM-DD') : '';
+
             await animalsService.createNewAnimal(
-                this.state.animal
+                newAnimal
             );
         }
 
@@ -149,38 +213,57 @@ class AnimalWindow extends Component {
     };
 
     handleChange = (event, value) => {
-        this.setState({value}, () => console.log(this.state));
+        this.setState({value});
     };
 
     onDrop = (file) => {
-        this.getBase64(file[0], (result) => {
+        this.getBase64(file[file.length - 1], (result) => {
             this.setState({
                 animal: {
                     ...this.state.animal,
-                    avatar: result,
+                    image: result,
                 },
-                uploadImg: true
+                uploadAnimalAvatar: true
             })
         });
     };
-    onDropUserId = (file) => {
-        this.getBase64(file[0], (result) => {
+
+    onDropOwnerAvatar = (file) => {
+        this.getBase64(file[file.length - 1], (result) => {
             this.setState({
                 animal: {
                     ...this.state.animal,
-                    userId: result,
+                    owners: [{
+                        ...this.state.animal.owners[0],
+                        profileImageBase: result,
+                    }]
+                },
+                uploadOwnerAvatar: true
+            })
+        });
+    };
+
+    onDropImageId = (file) => {
+        this.getBase64(file[file.length - 1], (result) => {
+            this.setState({
+                animal: {
+                    ...this.state.animal,
+                    imageId: result,
                 },
                 uploadImg: true
             })
         });
     };
 
-    onDropAnimalId = (file) => {
-        this.getBase64(file[0], (result) => {
+    onDropUserId = (file) => {
+        this.getBase64(file[file.length - 1], (result) => {
             this.setState({
                 animal: {
                     ...this.state.animal,
-                    animalId: result,
+                    owners: [{
+                        ...this.state.animal.owners[0],
+                        profileIdImageBase: result,
+                    }]
                 },
                 uploadImg: true
             })
@@ -188,26 +271,58 @@ class AnimalWindow extends Component {
     };
 
     getBase64(file, cb) {
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-            cb(reader.result)
-        };
-        reader.onerror = function (error) {
-            console.log('Error: ', error);
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.animal.id) {
-            this.setState({animal: {...nextProps.animal}})
+        if (file) {
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+                cb(reader.result.split('base64,')[1])
+            };
+            reader.onerror = function (error) {
+                console.log('Error: ', error);
+            };
         } else {
-            this.setState({animal: {...animalFields}})
+            cb(null)
         }
+
     }
 
+    handleChangeDatePicker = (name, object) => (value) => {
+        if (name === 'dateOfBirth') {
+            const age = moment().diff(new Date(value), 'years');
 
-    handleChangeInput = name => ({target: value}) => {
+            this.setState({
+                animal: {
+                    ...this.state.animal,
+                    dateOfBirth: value,
+                    age
+                }
+            })
+        } else {
+            if (object) {
+                this.setState({
+                    animal: {
+                        ...this.state.animal,
+                        [object]: {
+                            ...this.state.animal[object],
+                            [name]: value
+                        }
+                    }
+                })
+            } else {
+                this.setState({
+                    animal: {
+                        ...this.state.animal,
+                        [name]: value,
+                    }
+                })
+            }
+        }
+    };
+
+    handleChangeInput = (name, object) => (e) => {
+        const value = e.target.value;
+
+
         if (name === 'dateOfBirth') {
             const age = moment().diff(new Date(value), 'years');
             this.setState({
@@ -225,23 +340,177 @@ class AnimalWindow extends Component {
                 }
             });
         } else {
-            this.setState({
-                animal: {
-                    ...this.state.animal,
-                    [name]: value
+            if (object) {
+                if (object === 'owners') {
+                    let ownership = [];
+                    ownership[0] = {
+                        ...this.state.animal.owners[0],
+                        [name]: value
+                    };
+
+                    this.setState({
+                        animal: {
+                            ...this.state.animal,
+                            owners: ownership
+                        }
+                    })
+                } else {
+
+                    this.setState({
+                        animal: {
+                            ...this.state.animal,
+                            [object]: {
+                                ...this.state.animal[object],
+                                [name]: value
+                            }
+                        }
+                    })
                 }
-            });
+            } else {
+                this.setState({
+                    animal: {
+                        ...this.state.animal,
+                        [name]: value
+                    }
+                });
+            }
         }
     };
 
-    handleChangeCheckbox = name => ({target: {checked}}) => {
+    handleChangeInputCare = (name, index) => (e) => {
+        let newCareValues = [];
+
+        if (this.state.animal.health) {
+            newCareValues = this.state.animal.health.careValues ? this.state.animal.health.careValues : [];
+            newCareValues[index] = {
+                ...(this.state.animal.health.careValues ? this.state.animal.health.careValues[index] : {}),
+                [name]: e.target.value
+            };
+        } else {
+            newCareValues[index] = {
+                [name]: e.target.value
+            };
+        }
+
+
         this.setState({
             animal: {
                 ...this.state.animal,
-                [name]: checked
+                health: {
+                    ...this.state.animal.health,
+                    careValues: newCareValues
+                }
             }
         })
     };
+
+    handleChangeDatePickerCare = (name, index) => (value) => {
+        let newCareValues = this.state.animal.health.careValues ? this.state.animal.health.careValues : [];
+        newCareValues[index] = {
+            ...(this.state.animal.health.careValues ? this.state.animal.health.careValues[index] : {}),
+            [name]: value
+        };
+
+        this.setState({
+            animal: {
+                ...this.state.animal,
+                health: {
+                    ...this.state.animal.health,
+                    careValues: newCareValues
+                }
+            }
+        })
+    };
+
+    handleChangeCheckbox = (name, object) => (e) => {
+        const checked = e.target.checked;
+        if (object) {
+            this.setState({
+                animal: {
+                    ...this.state.animal,
+                    [object]: {
+                        ...this.state.animal[object],
+                        [name]: checked ? 'yes' : 'no'
+                    }
+                }
+            })
+        } else {
+            this.setState({
+                animal: {
+                    ...this.state.animal,
+                    [name]: checked ? 'yes' : 'no'
+                }
+            })
+        }
+    };
+
+    handleChangeCheckboxBool = (name, object) => (e) => {
+        const checked = e.target.checked;
+        if (object) {
+            this.setState({
+                animal: {
+                    ...this.state.animal,
+                    [object]: {
+                        ...this.state.animal[object],
+                        [name]: checked
+                    }
+                }
+            })
+        } else {
+            this.setState({
+                animal: {
+                    ...this.state.animal,
+                    [name]: checked
+                }
+            })
+        }
+    };
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.animal.id) {
+            let newAnimal = nextProps.animal;
+
+            if (newAnimal.dateOfBirth) newAnimal.dateOfBirth = new Date(newAnimal.dateOfBirth);
+            if (newAnimal.health) if (newAnimal.health.sterilizedDate) newAnimal.health.sterilizedDate = new Date(newAnimal.health.sterilizedDate);
+            if (newAnimal.adoptionDate) newAnimal.adoptionDate = new Date(newAnimal.adoptionDate);
+            if (newAnimal.fosteringDate) newAnimal.fosteringDate = new Date(newAnimal.fosteringDate);
+            if (newAnimal.entryDate) newAnimal.entryDate = new Date(newAnimal.entryDate);
+            if (newAnimal.leaveDate) newAnimal.leaveDate = new Date(newAnimal.leaveDate);
+            if (newAnimal.joinDate) newAnimal.joinDate = new Date(newAnimal.joinDate);
+
+            if (newAnimal.health) {
+                if (newAnimal.health.careValues) {
+                    newAnimal.health.careValues = newAnimal.health.careValues.map(item => {
+                        if (item.date) {
+                            return ({
+                                ...item,
+                                date: new Date(item.date)
+                            })
+                        } else {
+                            return (item)
+                        }
+                    })
+                }
+            }
+
+
+            this.setState({
+                animal: {...nextProps.animal},
+                value: 0,
+                uploadAnimalAvatar: false,
+                uploadOwnerAvatar: false,
+
+            })
+        } else {
+            this.setState({
+                animal: {...animalFields},
+                value: 0,
+                uploadAnimalAvatar: false,
+                uploadOwnerAvatar: false,
+
+            })
+        }
+    }
 
     componentDidMount() {
         this.getAnimalsList()
@@ -249,17 +518,22 @@ class AnimalWindow extends Component {
 
     render() {
         const {
+                //1
                 name,
+                gender,
+                dateOfBirth,
+                age,
+                personalityDescription,
+                fosteringDate,
+                imageId,
+                adoptionDate,
                 chipProducer,
                 species,
                 comments,
                 breed,
-                age,
                 joinDate,
                 accommodation,
-                dateOfBirth,
                 lifeStage,
-                gender,
                 speciesDetails,
                 pregnant,
                 personality,
@@ -267,66 +541,41 @@ class AnimalWindow extends Component {
                 kidsFriendly,
                 dogsFriendly,
                 animalsFriendly,
-                coatType,
                 humansFriendly,
                 chipId,
                 bites,
-                adoptionChoices,
-                fosterChoices,
+                leaveDate,
+                forAdoption,
+                forFoster,
                 tagId,
                 history,
-                avatar,
-                height,
-                length,
-                weight,
-                shelteringBackground,
-                weightCondition,
-                disabled,
-                state,
-                injured,
-                cryptorchid,
-                sterilizedChoices,
-                sterilizedDate,
-                eyesSight,
-                blindChoices,
-                deafChoices,
-                teethChoices,
-                gums,
-                describe_health,
-                describeHealth,
-                size,
-                joinedReason,
-                stCoatColor,
-                ndCoatColor,
-                rdCoatColor,
-                city,
-                stEyeСolor,
-                ndEyeColor,
-                ears,
-                zipCode,
-                tail,
-                describe_appearance,
-                //4
-                obedienceChoices,
-                houseTrained,
-                crateTrained,
-                fenceNeeded,
+                image,
                 entryDate,
-                describe_training,
-                //5
-                ownerChoices,
-                owner_name,
-                owner_last_name,
-                email,
+                catsFriendly,
+                shelteringBackground,
+                describe_health,
                 leaveReason,
-                phone,
-                country,
-                address,
-                //9
+                joinedReason,
+                //5
                 userId,
                 animalId,
 
             } = this.state.animal,
+
+            {
+                ownerStatus,
+                firstName,
+                lastName,
+                email,
+                phoneNumber,
+                city,
+                state,
+                zipCode,
+                address,
+                comment,
+                profileImageBase,
+                profileIdImageBase
+            } = this.state.animal.owners[0] ? this.state.animal.owners[0] : {},
 
             {
                 value,
@@ -339,6 +588,46 @@ class AnimalWindow extends Component {
                 onClose,
                 open
             } = this.props;
+
+        const {
+            coatType,
+            size,
+            firstCoatColor,
+            secondCoatColor,
+            thirdCoatColor,
+            firstEyeColor,
+            secondEyeColor,
+            ears,
+            tail,
+            describeAppearance
+        } = this.state.animal.appearance ? this.state.animal.appearance : {};
+
+        const {
+            obedience,
+            houseTrained,
+            crateTrained,
+            fenceRequired,
+            describeTraining
+        } = this.state.animal.training ? this.state.animal.training : {};
+
+        const {
+            height,
+            length,
+            weight,
+            weightCondition,
+            disabled,
+            injured,
+            cryptorchid,
+            sterilized,
+            sterilizedDate,
+            eyesSight,
+            blind,
+            deaf,
+            teeth,
+            gums,
+            describeHealth,
+            careValues
+        } = this.state.animal.health ? this.state.animal.health : {};
 
 
         return (
@@ -411,7 +700,7 @@ class AnimalWindow extends Component {
                             <div className='flex flex-row justify-between flex-wrap'>
                                 <div className='drop-block width-20'>
                                     <Avatar className="w-96 h-96" alt="contact avatar"
-                                            src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+                                            src={image ? `data:image/jpeg;base64,${image}` : 'assets/images/avatars/avatar.svg'}/>
 
                                     <ImageUploader
                                         withIcon={true}
@@ -446,6 +735,7 @@ class AnimalWindow extends Component {
                                                     input={<Input id="name"/>}
                                                     onChange={this.handleChangeInput('gender')}
                                                 >
+                                                    <option value=''></option>
                                                     <option value='male'>Male</option>
                                                     <option value='female'>Female</option>
                                                 </Select>
@@ -457,11 +747,11 @@ class AnimalWindow extends Component {
                                         <div className='flex justify-between width-100'>
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Birthday</InputLabel>
-                                                <TextField
-                                                    id="date"
-                                                    onChange={this.handleChangeInput('dateOfBirth')}
-                                                    value={dateOfBirth}
-                                                    type="date"
+                                                <DatePicker
+                                                    selected={dateOfBirth}
+                                                    onChange={this.handleChangeDatePicker('dateOfBirth')}
+                                                    className="date-filter"
+                                                    dateFormat="dd-MM-yyyy"
                                                 />
                                             </div>
 
@@ -509,6 +799,7 @@ class AnimalWindow extends Component {
                                                     native
                                                     onChange={this.handleChangeInput('species')}
                                                 >
+                                                    <option value=''></option>
                                                     <option value='dog'>Dogs</option>
                                                     <option value='cat'>Cats</option>
                                                     <option value='other'>Other</option>
@@ -524,6 +815,8 @@ class AnimalWindow extends Component {
                                                     disabled={species === 'other'}
                                                     onChange={this.handleChangeInput('breed')}
                                                 >
+                                                    <option value=''></option>
+
                                                     {species === 'dog' && dogBreeds.map(item => (
                                                         <option value={item.id}>{item.name}</option>
                                                     ))}
@@ -553,22 +846,23 @@ class AnimalWindow extends Component {
                                     <div className='flex justify-between width-100 shadow-section'>
                                         <div className={classes.formControl}>
                                             <InputLabel htmlFor="age-simple">Join Date</InputLabel>
-                                            <TextField
-                                                id="Age"
-                                                type="date"
-                                                value={joinDate}
+                                            <DatePicker
+                                                selected={joinDate}
+                                                className="date-filter"
+                                                dateFormat="dd-MM-yyyy"
                                                 disabled
                                             />
+
                                         </div>
 
                                         <div className={classes.formControl}>
                                             <InputLabel htmlFor="age-simple">Origin Country</InputLabel>
                                             <Select
-                                                // value={origin_country}
-                                                required={true}
+                                                value={this.state.animal.originCountry}
                                                 native
                                                 onChange={this.handleChangeInput('originCountry')}
                                             >
+                                                <option value=''></option>
                                                 {countryList.map(item => (
                                                     <option value={item.id}>{item.title}</option>
                                                 ))}
@@ -650,7 +944,7 @@ class AnimalWindow extends Component {
                                 <div className='flex justify-between width-100'>
                                     <div className='drop-block'>
                                         <Avatar className="w-96 h-96" alt="contact avatar"
-                                                src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+                                                src={image ? `data:image/jpeg;base64,${image}` : 'assets/images/avatars/avatar.svg'}/>
 
                                         <span className='mt-6'>{name || 'Name'}</span>
                                     </div>
@@ -678,7 +972,9 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Bites</InputLabel>
                                                 <label className="switch">
-                                                    <input type="checkbox" value={bites}
+                                                    <input type="checkbox"
+                                                           value={bites}
+                                                           checked={bites === 'yes' && true}
                                                            onChange={this.handleChangeCheckbox('bites')}/>
                                                     <span className="slider round"></span>
                                                 </label>
@@ -775,9 +1071,9 @@ class AnimalWindow extends Component {
                                                 <div className={classes.formControl}>
                                                     <InputLabel htmlFor="age-simple">Cats Friendly</InputLabel>
                                                     <Select
-                                                        value={kidsFriendly}
+                                                        value={catsFriendly}
                                                         native
-                                                        onChange={this.handleChangeInput('cats_friendly')}
+                                                        onChange={this.handleChangeInput('catsFriendly')}
                                                     >
                                                         <option value=""/>
                                                         <option value='yes'>Yes</option>
@@ -801,8 +1097,8 @@ class AnimalWindow extends Component {
                                             rows={3}
                                             multiline={true}
                                             fullWidth
-                                            value={describe_health}
-                                            onChange={this.handleChangeInput('describe_health')}
+                                            value={personalityDescription}
+                                            onChange={this.handleChangeInput('personalityDescription')}
                                         />
                                     </div>
                                 </div>
@@ -827,11 +1123,10 @@ class AnimalWindow extends Component {
                     {value === 2 && <div className='tab3'>
                         <form className={classes.root} autoComplete="off" onSubmit={this.handleSaveAnimal}>
                             <div className='flex flex-row justify-between flex-wrap'>
-
                                 <div className='flex justify-between width-100'>
                                     <div className='drop-block'>
                                         <Avatar className="w-96 h-96" alt="contact avatar"
-                                                src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+                                                src={image ? `data:image/jpeg;base64,${image}` : 'assets/images/avatars/avatar.svg'}/>
 
                                         <span className='mt-6'>{name || 'Name'}</span>
                                     </div>
@@ -841,9 +1136,9 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Coat Type</InputLabel>
                                                 <Select
-                                                    value={coatType}
+                                                    value={coatType ? coatType : ''}
                                                     native
-                                                    onChange={this.handleChangeInput('coatType')}
+                                                    onChange={this.handleChangeInput('coatType', 'appearance')}
                                                 >
                                                     <option value=""/>
                                                     <option value='short'>Short</option>
@@ -858,7 +1153,7 @@ class AnimalWindow extends Component {
                                                 <Select
                                                     value={size}
                                                     native
-                                                    onChange={this.handleChangeInput('size')}
+                                                    onChange={this.handleChangeInput('size', 'appearance')}
                                                 >
                                                     <option value=""/>
                                                     <option value='extra_small'>Extra small</option>
@@ -874,60 +1169,60 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">1st Coat Color</InputLabel>
                                                 <Select
-                                                    value={stCoatColor}
+                                                    value={firstCoatColor}
                                                     native
-                                                    onChange={this.handleChangeInput('stCoatColor')}
+                                                    onChange={this.handleChangeInput('firstCoatColor', 'appearance')}
                                                 >
                                                     <option value=""/>
-                                                    <option value='black'>Black</option>
-                                                    <option value='grey'>Grey</option>
-                                                    <option value='white'>White</option>
-                                                    <option value='brown'>Brown</option>
-                                                    <option value='red'>Red</option>
-                                                    <option value='orange'>Orange</option>
-                                                    <option value='yellow'>Yellow</option>
-                                                    <option value='cream'>Cream</option>
-                                                    <option value='fawn'>Fawn</option>
+                                                    <option value='Black'>Black</option>
+                                                    <option value='Grey'>Grey</option>
+                                                    <option value='White'>White</option>
+                                                    <option value='Brown'>Brown</option>
+                                                    <option value='Red'>Red</option>
+                                                    <option value='Orange'>Orange</option>
+                                                    <option value='Yellow'>Yellow</option>
+                                                    <option value='Cream'>Cream</option>
+                                                    <option value='Fawn'>Fawn</option>
                                                 </Select>
                                             </div>
 
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">2nd Coat Color</InputLabel>
                                                 <Select
-                                                    value={ndCoatColor}
+                                                    value={secondCoatColor}
                                                     native
-                                                    onChange={this.handleChangeInput('ndCoatColor')}
+                                                    onChange={this.handleChangeInput('secondCoatColor', 'appearance')}
                                                 >
                                                     <option value=""/>
-                                                    <option value='black'>Black</option>
-                                                    <option value='grey'>Grey</option>
-                                                    <option value='white'>White</option>
-                                                    <option value='brown'>Brown</option>
-                                                    <option value='red'>Red</option>
-                                                    <option value='orange'>Orange</option>
-                                                    <option value='yellow'>Yellow</option>
-                                                    <option value='cream'>Cream</option>
-                                                    <option value='fawn'>Fawn</option>
+                                                    <option value='Black'>Black</option>
+                                                    <option value='Grey'>Grey</option>
+                                                    <option value='White'>White</option>
+                                                    <option value='Brown'>Brown</option>
+                                                    <option value='Red'>Red</option>
+                                                    <option value='Orange'>Orange</option>
+                                                    <option value='Yellow'>Yellow</option>
+                                                    <option value='Cream'>Cream</option>
+                                                    <option value='Fawn'>Fawn</option>
                                                 </Select>
                                             </div>
 
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">3rd Coat Color</InputLabel>
                                                 <Select
-                                                    value={rdCoatColor}
+                                                    value={thirdCoatColor}
                                                     native
-                                                    onChange={this.handleChangeInput('rdCoatColor')}
+                                                    onChange={this.handleChangeInput('thirdCoatColor', 'appearance')}
                                                 >
                                                     <option value=""/>
-                                                    <option value='black'>Black</option>
-                                                    <option value='grey'>Grey</option>
-                                                    <option value='white'>White</option>
-                                                    <option value='brown'>Brown</option>
-                                                    <option value='red'>Red</option>
-                                                    <option value='orange'>Orange</option>
-                                                    <option value='yellow'>Yellow</option>
-                                                    <option value='cream'>Cream</option>
-                                                    <option value='fawn'>Fawn</option>
+                                                    <option value='Black'>Black</option>
+                                                    <option value='Grey'>Grey</option>
+                                                    <option value='White'>White</option>
+                                                    <option value='Brown'>Brown</option>
+                                                    <option value='Red'>Red</option>
+                                                    <option value='Orange'>Orange</option>
+                                                    <option value='Yellow'>Yellow</option>
+                                                    <option value='Cream'>Cream</option>
+                                                    <option value='Fawn'>Fawn</option>
                                                 </Select>
                                             </div>
                                         </div>
@@ -940,9 +1235,9 @@ class AnimalWindow extends Component {
                                             <div className={classes.formHistoryControl}>
                                                 <InputLabel htmlFor="age-simple">1st Eye Color</InputLabel>
                                                 <Select
-                                                    value={stEyeСolor}
+                                                    value={firstEyeColor}
                                                     native
-                                                    onChange={this.handleChangeInput('stEyeСolor')}
+                                                    onChange={this.handleChangeInput('firstEyeColor', 'appearance')}
                                                 >
                                                     <option value=""/>
                                                     <option value='black'>Black</option>
@@ -957,9 +1252,9 @@ class AnimalWindow extends Component {
                                             <div className={classes.formHistoryControl}>
                                                 <InputLabel htmlFor="age-simple">2nd Eye Color</InputLabel>
                                                 <Select
-                                                    value={ndEyeColor}
+                                                    value={secondEyeColor}
                                                     native
-                                                    onChange={this.handleChangeInput('ndEyeColor')}
+                                                    onChange={this.handleChangeInput('secondEyeColor', 'appearance')}
                                                 >
                                                     <option value=""/>
                                                     <option value='black'>Black</option>
@@ -978,7 +1273,7 @@ class AnimalWindow extends Component {
                                                 <Select
                                                     value={ears}
                                                     native
-                                                    onChange={this.handleChangeInput('ears')}
+                                                    onChange={this.handleChangeInput('ears', 'appearance')}
                                                 >
                                                     <option value=""/>
                                                     <option value='pointing'>Pointing</option>
@@ -993,7 +1288,7 @@ class AnimalWindow extends Component {
                                                 <Select
                                                     value={tail}
                                                     native
-                                                    onChange={this.handleChangeInput('tail')}
+                                                    onChange={this.handleChangeInput('tail', 'appearance')}
                                                 >
                                                     <option value=""/>
                                                     <option value='short'>Short</option>
@@ -1013,8 +1308,8 @@ class AnimalWindow extends Component {
                                                 rows={3}
                                                 multiline={true}
                                                 fullWidth={true}
-                                                value={describe_appearance}
-                                                onChange={this.handleChangeInput('describe_appearance')}
+                                                value={describeAppearance}
+                                                onChange={this.handleChangeInput('describeAppearance', 'appearance')}
                                             />
                                         </div>
                                     </div>
@@ -1042,7 +1337,7 @@ class AnimalWindow extends Component {
                             <div className='flex justify-between width-100'>
                                 <div className='drop-block'>
                                     <Avatar className="w-96 h-96" alt="contact avatar"
-                                            src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+                                            src={image ? `data:image/jpeg;base64,${image}` : 'assets/images/avatars/avatar.svg'}/>
 
                                     <span className='mt-6'>{name || 'Name'}</span>
                                 </div>
@@ -1052,9 +1347,9 @@ class AnimalWindow extends Component {
                                         <div className={classes.formControl}>
                                             <InputLabel htmlFor="age-simple">Obedience</InputLabel>
                                             <Select
-                                                value={obedienceChoices}
+                                                value={obedience}
                                                 native
-                                                onChange={this.handleChangeInput('obedienceChoices')}
+                                                onChange={this.handleChangeInput('obedience', 'training')}
                                             >
                                                 <option value=""/>
                                                 <option value='none'>None</option>
@@ -1070,7 +1365,8 @@ class AnimalWindow extends Component {
                                                 <input
                                                     type="checkbox"
                                                     value={houseTrained}
-                                                    onChange={this.handleChangeCheckbox('houseTrained')}
+                                                    checked={houseTrained}
+                                                    onChange={this.handleChangeCheckboxBool('houseTrained', 'training')}
                                                 />
                                                 <span className="slider round"></span>
                                             </label>
@@ -1084,7 +1380,8 @@ class AnimalWindow extends Component {
                                                 <input
                                                     type="checkbox"
                                                     value={crateTrained}
-                                                    onChange={this.handleChangeCheckbox('crateTrained')}
+                                                    checked={crateTrained}
+                                                    onChange={this.handleChangeCheckboxBool('crateTrained', 'training')}
                                                 />
                                                 <span className="slider round"></span>
                                             </label>
@@ -1095,8 +1392,9 @@ class AnimalWindow extends Component {
                                             <label className="switch">
                                                 <input
                                                     type="checkbox"
-                                                    value={fenceNeeded}
-                                                    onChange={this.handleChangeCheckbox('fenceNeeded')}
+                                                    value={fenceRequired}
+                                                    checked={fenceRequired}
+                                                    onChange={this.handleChangeCheckboxBool('fenceRequired', 'training')}
                                                 />
                                                 <span className="slider round"></span>
                                             </label>
@@ -1116,8 +1414,8 @@ class AnimalWindow extends Component {
                                             fullWidth={true}
                                             multiline={true}
                                             rows={3}
-                                            value={describe_training}
-                                            onChange={this.handleChangeInput('describe_training')}
+                                            value={describeTraining}
+                                            onChange={this.handleChangeInput('describeTraining', 'training')}
                                         />
                                     </div>
                                 </div>
@@ -1145,7 +1443,7 @@ class AnimalWindow extends Component {
                             <div className='flex justify-between width-100'>
                                 <div className='drop-block' style={{margin: '0 4.4rem 0 0'}}>
                                     <Avatar className="w-96 h-96" alt="contact avatar"
-                                            src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+                                            src={image ? `data:image/jpeg;base64,${image}` : 'assets/images/avatars/avatar.svg'}/>
 
                                     <span className='mt-6'>{name || 'Name'}</span>
                                 </div>
@@ -1162,7 +1460,7 @@ class AnimalWindow extends Component {
                                                     pattern: '[0-9]{0,5}'
                                                 }}
                                                 value={height}
-                                                onChange={this.handleChangeInput('height')}
+                                                onChange={this.handleChangeInput('height', 'health')}
                                             />
                                         </div>
 
@@ -1176,7 +1474,7 @@ class AnimalWindow extends Component {
                                                     pattern: '[0-9]{0,5}'
                                                 }}
                                                 value={length}
-                                                onChange={this.handleChangeInput('length')}
+                                                onChange={this.handleChangeInput('length', 'health')}
                                             />
                                         </div>
 
@@ -1190,7 +1488,7 @@ class AnimalWindow extends Component {
                                                     pattern: '[0-9]{0,5}'
                                                 }}
                                                 value={weight}
-                                                onChange={this.handleChangeInput('weight')}
+                                                onChange={this.handleChangeInput('weight', 'health')}
                                             />
                                         </div>
                                     </div>
@@ -1204,8 +1502,9 @@ class AnimalWindow extends Component {
                                         <label className="switch">
                                             <input
                                                 type="checkbox"
+                                                checked={cryptorchid}
                                                 value={cryptorchid}
-                                                onChange={this.handleChangeCheckbox('cryptorchid')}
+                                                onChange={this.handleChangeCheckboxBool('cryptorchid', 'health')}
                                             />
                                             <span className="slider round"></span>
                                         </label>
@@ -1214,9 +1513,9 @@ class AnimalWindow extends Component {
                                     <div className={classes.formHistoryControl}>
                                         <InputLabel htmlFor="age-simple">Sterilized</InputLabel>
                                         <Select
-                                            value={sterilizedChoices}
+                                            value={sterilized}
                                             native
-                                            onChange={this.handleChangeInput('sterilizedChoices')}
+                                            onChange={this.handleChangeInput('sterilized', 'health')}
                                         >
                                             <option value=""/>
                                             <option value='spayed'>Spayed</option>
@@ -1226,12 +1525,13 @@ class AnimalWindow extends Component {
 
                                     <div className={classes.formHistoryControl}>
                                         <InputLabel htmlFor="age-simple">Sterilization Date</InputLabel>
-                                        <TextField
-                                            id="date"
-                                            onChange={this.handleChangeInput('sterilizedDate')}
-                                            value={sterilizedDate}
-                                            type="date"
+                                        <DatePicker
+                                            selected={sterilizedDate}
+                                            onChange={this.handleChangeDatePicker('sterilizedDate', 'health')}
+                                            className="date-filter"
+                                            dateFormat="dd-MM-yyyy"
                                         />
+
                                     </div>
                                 </div>
 
@@ -1244,7 +1544,8 @@ class AnimalWindow extends Component {
                                                     <input
                                                         type="checkbox"
                                                         value={pregnant}
-                                                        onChange={this.handleChangeCheckbox('pregnant')}
+                                                        checked={pregnant}
+                                                        onChange={this.handleChangeCheckboxBool('pregnant')}
                                                     />
                                                     <span className="slider round"></span>
                                                 </label>
@@ -1255,8 +1556,9 @@ class AnimalWindow extends Component {
                                                 <label className="switch">
                                                     <input
                                                         type="checkbox"
+                                                        checked={disabled}
                                                         value={disabled}
-                                                        onChange={this.handleChangeCheckbox('disabled')}
+                                                        onChange={this.handleChangeCheckboxBool('disabled', 'health')}
                                                     />
                                                     <span className="slider round"></span>
                                                 </label>
@@ -1269,7 +1571,7 @@ class AnimalWindow extends Component {
                                                 <Select
                                                     value={weightCondition}
                                                     native
-                                                    onChange={this.handleChangeInput('weightCondition')}
+                                                    onChange={this.handleChangeInput('weightCondition', 'health')}
                                                 >
                                                     <option value=""/>
                                                     <option value='normal'>Normal</option>
@@ -1284,8 +1586,9 @@ class AnimalWindow extends Component {
                                                 <label className="switch">
                                                     <input
                                                         type="checkbox"
+                                                        checked={injured}
                                                         value={injured}
-                                                        onChange={this.handleChangeCheckbox('injured')}
+                                                        onChange={this.handleChangeCheckboxBool('injured', 'health')}
                                                     />
                                                     <span className="slider round"></span>
                                                 </label>
@@ -1299,22 +1602,22 @@ class AnimalWindow extends Component {
                                             <Select
                                                 value={eyesSight}
                                                 native
-                                                onChange={this.handleChangeInput('eyesSight')}
+                                                onChange={this.handleChangeInput('eyesSight', 'health')}
                                             >
                                                 <option value=""/>
                                                 <option value='clear'>Clear</option>
                                                 <option value='discharge'>Discharge</option>
                                                 <option value='cloudy'>Cloudy</option>
-                                                <option value='injuired'>Injuired</option>
+                                                <option value='injured'>Injured</option>
                                             </Select>
                                         </div>
 
                                         <div className={classes.formControl}>
                                             <InputLabel htmlFor="age-simple">Blind</InputLabel>
                                             <Select
-                                                value={blindChoices}
+                                                value={blind}
                                                 native
-                                                onChange={this.handleChangeInput('blindChoices')}
+                                                onChange={this.handleChangeInput('blind', 'health')}
                                             >
                                                 <option value=""/>
                                                 <option value='yes'>Yes</option>
@@ -1326,9 +1629,9 @@ class AnimalWindow extends Component {
                                         <div className={classes.formControl}>
                                             <InputLabel htmlFor="age-simple">Deaf</InputLabel>
                                             <Select
-                                                value={deafChoices}
+                                                value={deaf}
                                                 native
-                                                onChange={this.handleChangeInput('deafChoices')}
+                                                onChange={this.handleChangeInput('deaf', 'health')}
                                             >
                                                 <option value=""/>
                                                 <option value='yes'>Yes</option>
@@ -1345,9 +1648,9 @@ class AnimalWindow extends Component {
                                     <div className={classes.formHistoryControl}>
                                         <InputLabel htmlFor="age-simple">Teeth</InputLabel>
                                         <Select
-                                            value={teethChoices}
+                                            value={teeth}
                                             native
-                                            onChange={this.handleChangeInput('teethChoices')}
+                                            onChange={this.handleChangeInput('teeth', 'health')}
                                         >
                                             <option value=""/>
                                             <option value='clean'>Clean</option>
@@ -1366,13 +1669,13 @@ class AnimalWindow extends Component {
                                         <Select
                                             value={gums}
                                             native
-                                            onChange={this.handleChangeInput('gums')}
+                                            onChange={this.handleChangeInput('gums', 'health')}
                                         >
                                             <option value=""/>
                                             <option value='pink'>Pink</option>
                                             <option value='red'>Red</option>
                                             <option value='white'>White</option>
-                                            <option value='abscess_sores'>Abscess/Sores</option>
+                                            <option value='abscess_or_sores'>Abscess/Sores</option>
                                         </Select>
                                     </div>
                                 </div>
@@ -1389,7 +1692,7 @@ class AnimalWindow extends Component {
                                                 multiline={true}
                                                 fullWidth
                                                 value={describeHealth}
-                                                onChange={this.handleChangeInput('describeHealth')}
+                                                onChange={this.handleChangeInput('describeHealth', 'health')}
                                             />
                                         </div>
                                     </div>
@@ -1417,8 +1720,7 @@ class AnimalWindow extends Component {
                             <div className='flex justify-between width-100'>
                                 <div className='drop-block'>
                                     <Avatar className="w-96 h-96" alt="contact avatar"
-                                            src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
-
+                                            src={image ? `data:image/jpeg;base64,${image}` : 'assets/images/avatars/avatar.svg'}/>
                                     <span className='mt-6'>{name || 'Name'}</span>
                                 </div>
 
@@ -1428,16 +1730,16 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Care Type</InputLabel>
                                                 <Select
-                                                    // value={lifeStage[index]}
+                                                    value={careValues ? (careValues[index] ? careValues[index].careType : '') : ''}
                                                     native
-                                                    onChange={this.handleChangeInput('lifeStage')}
+                                                    onChange={this.handleChangeInputCare('careType', index)}
                                                 >
                                                     <option value=""/>
-                                                    <option value='baby'>Vaccination</option>
-                                                    <option value='young'>Medicine</option>
-                                                    <option value='adult'>Grooming</option>
-                                                    <option value='senior'>Boarding</option>
-                                                    <option value='senior'>Other</option>
+                                                    <option value='vaccination'>Vaccination</option>
+                                                    <option value='medicine'>Medicine</option>
+                                                    <option value='grooming'>Grooming</option>
+                                                    <option value='boarding'>Boarding</option>
+                                                    <option value='other'>Other</option>
                                                 </Select>
                                             </div>
 
@@ -1446,18 +1748,18 @@ class AnimalWindow extends Component {
                                                 <TextField
                                                     id="name"
                                                     type="text"
-                                                    // value={describe_health[index]}
-                                                    onChange={this.handleChangeInput('describe_health')}
+                                                    value={careValues ? (careValues[index] ? careValues[index].note : '') : ''}
+                                                    onChange={this.handleChangeInputCare('note', index)}
                                                 />
                                             </div>
 
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Care Date</InputLabel>
-                                                <TextField
-                                                    id="date"
-                                                    onChange={this.handleChangeInput('dateOfBirth')}
-                                                    // value={dateOfBirth[index]}
-                                                    type="date"
+                                                <DatePicker
+                                                    selected={careValues ? (careValues[index] ? careValues[index].date : '') : ''}
+                                                    onChange={this.handleChangeDatePickerCare('date', index)}
+                                                    className="date-filter"
+                                                    dateFormat="dd-MM-yyyy"
                                                 />
                                             </div>
                                         </div>
@@ -1487,7 +1789,7 @@ class AnimalWindow extends Component {
                             <div className='flex justify-between width-100'>
                                 <div className='drop-block'>
                                     <Avatar className="w-96 h-96" alt="contact avatar"
-                                            src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+                                            src={image ? `data:image/jpeg;base64,${image}` : 'assets/images/avatars/avatar.svg'}/>
 
                                     <span className='mt-6'>{name || 'Name'}</span>
                                 </div>
@@ -1517,9 +1819,9 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Adopted</InputLabel>
                                                 <Select
-                                                    value={adoptionChoices}
+                                                    value={forAdoption}
                                                     native
-                                                    onChange={this.handleChangeInput('adoptionChoices')}
+                                                    onChange={this.handleChangeInput('forAdoption')}
                                                 >
                                                     <option value=""/>
                                                     <option value='yes'>Yes</option>
@@ -1531,12 +1833,13 @@ class AnimalWindow extends Component {
 
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Adoption Date</InputLabel>
-                                                <TextField
-                                                    id="date"
-                                                    onChange={this.handleChangeInput('dateOfBirth')}
-                                                    value={dateOfBirth}
-                                                    type="date"
+                                                <DatePicker
+                                                    selected={adoptionDate}
+                                                    onChange={this.handleChangeDatePicker('adoptionDate')}
+                                                    className="date-filter"
+                                                    dateFormat="dd-MM-yyyy"
                                                 />
+
                                             </div>
                                         </div>
 
@@ -1544,9 +1847,9 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Fostered</InputLabel>
                                                 <Select
-                                                    value={fosterChoices}
+                                                    value={forFoster}
                                                     native
-                                                    onChange={this.handleChangeInput('fosterChoices')}
+                                                    onChange={this.handleChangeInput('forFoster')}
                                                 >
                                                     <option value=""/>
                                                     <option value='yes'>Yes</option>
@@ -1558,12 +1861,13 @@ class AnimalWindow extends Component {
 
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Fostering Date</InputLabel>
-                                                <TextField
-                                                    id="date"
-                                                    onChange={this.handleChangeInput('dateOfBirth')}
-                                                    value={dateOfBirth}
-                                                    type="date"
+                                                <DatePicker
+                                                    selected={fosteringDate}
+                                                    onChange={this.handleChangeDatePicker('fosteringDate')}
+                                                    className="date-filter"
+                                                    dateFormat="dd-MM-yyyy"
                                                 />
+
                                             </div>
                                         </div>
                                     </div>
@@ -1591,12 +1895,13 @@ class AnimalWindow extends Component {
 
                                 <div className={`${classes.formControl} mr-36`}>
                                     <InputLabel htmlFor="age-simple">Entry Date</InputLabel>
-                                    <TextField
-                                        id="date"
-                                        onChange={this.handleChangeInput('entryDate')}
-                                        value={entryDate}
-                                        type="date"
+                                    <DatePicker
+                                        selected={entryDate}
+                                        onChange={this.handleChangeDatePicker('entryDate')}
+                                        className="date-filter"
+                                        dateFormat="dd-MM-yyyy"
                                     />
+
                                 </div>
 
                                 <div className={`${classes.formControl} mr-36`}>
@@ -1619,12 +1924,13 @@ class AnimalWindow extends Component {
 
                                 <div className={classes.formControl}>
                                     <InputLabel htmlFor="age-simple">Leave Date</InputLabel>
-                                    <TextField
-                                        id="date"
-                                        onChange={this.handleChangeInput('dateOfBirth')}
-                                        value={dateOfBirth}
-                                        type="date"
+                                    <DatePicker
+                                        selected={leaveDate}
+                                        onChange={this.handleChangeDatePicker('leaveDate')}
+                                        className="date-filter"
+                                        dateFormat="dd-MM-yyyy"
                                     />
+
                                 </div>
                             </div>
 
@@ -1666,12 +1972,12 @@ class AnimalWindow extends Component {
                                 <div className='flex justify-between width-100'>
                                     <div className='drop-block width-20'>
                                         <Avatar className="w-96 h-96" alt="contact avatar"
-                                                src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+                                                src={profileImageBase ? `data:image/jpeg;base64,${profileImageBase}` : 'assets/images/avatars/avatar.svg'}/>
 
                                         <ImageUploader
                                             withIcon={true}
                                             buttonText='Choose images'
-                                            onChange={this.onDrop}
+                                            onChange={this.onDropOwnerAvatar}
                                             imgExtension={['.jpg', '.gif', '.png']}
                                             maxFileSize={5242880}
                                             singleImage={true}
@@ -1683,9 +1989,9 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Group</InputLabel>
                                                 <Select
-                                                    value={ownerChoices}
+                                                    value={ownerStatus}
                                                     native
-                                                    onChange={this.handleChangeInput('ownerChoices')}
+                                                    onChange={this.handleChangeInput('ownerStatus', 'owners')}
                                                 >
                                                     <option value=""/>
                                                     <option value='existing_owner'>Existing Owner</option>
@@ -1697,12 +2003,12 @@ class AnimalWindow extends Component {
                                                 </Select>
                                             </div>
                                             <div className={classes.formControl}>
-                                                <InputLabel htmlFor="name">First Name</InputLabel>
+                                                <InputLabel htmlFor="name">First Name </InputLabel>
                                                 <TextField
                                                     id="name"
                                                     type="text"
-                                                    value={owner_name}
-                                                    onChange={this.handleChangeInput('owner_name')}
+                                                    value={firstName}
+                                                    onChange={this.handleChangeInput('firstName', 'owners')}
                                                 />
                                             </div>
                                             <div className={classes.formControl}>
@@ -1710,8 +2016,8 @@ class AnimalWindow extends Component {
                                                 <TextField
                                                     id="name"
                                                     type="text"
-                                                    value={owner_last_name}
-                                                    onChange={this.handleChangeInput('owner_last_name')}
+                                                    value={lastName}
+                                                    onChange={this.handleChangeInput('lastName', 'owners')}
                                                 />
                                             </div>
                                         </div>
@@ -1723,7 +2029,7 @@ class AnimalWindow extends Component {
                                                     id="name"
                                                     type="text"
                                                     value={email}
-                                                    onChange={this.handleChangeInput('email')}
+                                                    onChange={this.handleChangeInput('email', 'owners')}
                                                 />
                                             </div>
 
@@ -1732,8 +2038,8 @@ class AnimalWindow extends Component {
                                                 <TextField
                                                     id="name"
                                                     type="text"
-                                                    value={phone}
-                                                    onChange={this.handleChangeInput('phone')}
+                                                    value={phoneNumber}
+                                                    onChange={this.handleChangeInput('phoneNumber', 'owners')}
                                                 />
                                             </div>
 
@@ -1744,7 +2050,7 @@ class AnimalWindow extends Component {
                                                     id="name"
                                                     type="text"
                                                     value={city}
-                                                    onChange={this.handleChangeInput('city')}
+                                                    onChange={this.handleChangeInput('city', 'owners')}
                                                 />
                                             </div>
                                         </div>
@@ -1756,7 +2062,7 @@ class AnimalWindow extends Component {
                                                     id="name"
                                                     type="text"
                                                     value={state}
-                                                    onChange={this.handleChangeInput('state')}
+                                                    onChange={this.handleChangeInput('state', 'owners')}
                                                 />
                                             </div>
 
@@ -1766,17 +2072,16 @@ class AnimalWindow extends Component {
                                                     id="name"
                                                     type="text"
                                                     value={zipCode}
-                                                    onChange={this.handleChangeInput('zipCode')}
+                                                    onChange={this.handleChangeInput('zipCode', 'owners')}
                                                 />
                                             </div>
 
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Country</InputLabel>
                                                 <Select
-                                                    value={country}
-                                                    required={true}
+                                                    value={this.state.animal.owners[0] ? this.state.animal.owners[0].originCountry : ''}
                                                     native
-                                                    onChange={this.handleChangeInput('country')}
+                                                    onChange={this.handleChangeInput('originCountry', 'owners')}
                                                 >
                                                     <option value=""/>
                                                     {countryList.map(item => (
@@ -1794,7 +2099,7 @@ class AnimalWindow extends Component {
                                                         id="name"
                                                         type="text"
                                                         value={address}
-                                                        onChange={this.handleChangeInput('address')}
+                                                        onChange={this.handleChangeInput('address', 'owners')}
                                                     />
                                                 </div>
                                             </div>
@@ -1802,12 +2107,13 @@ class AnimalWindow extends Component {
                                             <div style={{width: '25%'}}>
                                                 <div className={classes.formHistoryControl}>
                                                     <InputLabel htmlFor="age-simple">Registration Date</InputLabel>
-                                                    <TextField
-                                                        id="date"
-                                                        onChange={this.handleChangeInput('dateOfBirth')}
-                                                        value={dateOfBirth}
-                                                        type="date"
+                                                    <DatePicker
+                                                        selected={dateOfBirth}
+                                                        onChange={this.handleChangeDatePicker('dateOfBirth', 'owners')}
+                                                        className="date-filter"
+                                                        dateFormat="dd-MM-yyyy"
                                                     />
+
                                                 </div>
                                             </div>
                                         </div>
@@ -1823,8 +2129,8 @@ class AnimalWindow extends Component {
                                             fullWidth={true}
                                             multiline={true}
                                             rows={5}
-                                            value={comments}
-                                            onChange={this.handleChangeInput('comments')}
+                                            value={comment}
+                                            onChange={this.handleChangeInput('comment', 'owners')}
                                         />
                                     </div>
                                 </div>
@@ -1851,7 +2157,7 @@ class AnimalWindow extends Component {
                             <div className='flex justify-between width-100'>
                                 <div className='drop-block'>
                                     <Avatar className="w-96 h-96" alt="contact avatar"
-                                            src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+                                            src={image ? `data:image/jpeg;base64,${image}` : 'assets/images/avatars/avatar.svg'}/>
 
                                     <span className='mt-6'>{name || 'Name'}</span>
                                 </div>
@@ -1870,20 +2176,20 @@ class AnimalWindow extends Component {
                                                 singleImage={true}
                                             />
 
-                                            <img src={userId} alt="" className='id-photo'/>
+                                            <img src={profileIdImageBase ? `data:image/jpeg;base64,${profileIdImageBase}` : ''} alt=""
+                                                 className='id-photo'/>
                                         </div>
 
                                         <div className='drop-block flex flex-col'>
                                             <ImageUploader
                                                 withIcon={true}
                                                 buttonText='Animal ID'
-                                                onChange={this.onDropAnimalId}
+                                                onChange={this.onDropImageId}
                                                 imgExtension={['.jpg', '.gif', '.png']}
                                                 maxFileSize={5242880}
                                                 singleImage={true}
                                             />
-
-                                            <img src={animalId} alt="" className='id-photo'/>
+                                            <img src={imageId ? `data:image/jpeg;base64,${imageId}`: ''} alt="" className='id-photo'/>
                                         </div>
                                     </div>
                                 </div>

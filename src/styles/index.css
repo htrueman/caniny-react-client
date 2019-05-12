@@ -8,6 +8,7 @@
 @import 'landing.css';
 @import 'users.css';
 @import 'animals.css';
+@import 'profile.css';
 
 * {
     outline: none !important;
@@ -171,6 +172,11 @@ a[role=button] {
     cursor: pointer;
 }
 
+.ReactTable .rt-thead.-filters input {
+    border: 0 !important;
+    background: none !important;
+}
+
 /* Medium Devices, Desktops Only */
 @media only screen and (min-width: 992px) {
     ::-webkit-scrollbar {
@@ -321,6 +327,12 @@ form button[disabled] {
 /*background: none !important;*/
 /*}*/
 
+.react-datepicker-popper {
+    z-index: 10000 !important;
+}
+.date-filter {
+    border-radius: 0;
+}
 .filter-block {
     display: flex;
 }

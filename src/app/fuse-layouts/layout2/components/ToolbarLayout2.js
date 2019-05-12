@@ -7,8 +7,10 @@ import {withRouter} from 'react-router-dom';
 import UserMenu from 'app/fuse-layouts/shared-components/UserMenu';
 import CompanyMenu from 'app/fuse-layouts/shared-components/CompanyMenu';
 import logo from '../../../../img/Caniny_Logo.png';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faPaw } from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faUser, faPaw} from '@fortawesome/free-solid-svg-icons'
+import * as Actions from 'app/auth/store/actions';
+import {bindActionCreators} from "redux";
 
 import {Link, DirectLink, Events, scrollSpy, scroller} from 'react-scroll'
 
@@ -22,8 +24,12 @@ const styles = theme => ({
 });
 
 class ToolbarLayout2 extends Component {
+    state = {
+        name: '',
+        role: ''
+    };
 
-    componentDidMount() {
+    async componentDidMount() {
         Events.scrollEvent.register('begin', function (to, element) {
             console.log("begin", arguments);
         });
@@ -33,6 +39,11 @@ class ToolbarLayout2 extends Component {
         });
 
         scrollSpy.update();
+        this.getUser();
+    };
+
+    getUser = async () => {
+        await this.props.getUserInfo();
     };
 
     handleSetActive = (e) => {
@@ -61,6 +72,7 @@ class ToolbarLayout2 extends Component {
         })
 
     };
+
     handleRedirectToHome = () => {
         this.props.history.push('/');
         document.querySelector('.login-link').classList.add("active");
@@ -82,6 +94,7 @@ class ToolbarLayout2 extends Component {
             if (token) return true;
         };
 
+
         return (
             <MuiThemeProvider theme={toolbarTheme}>
                 <AppBar id="fuse-toolbar" className="flex relative z-10" color="default">
@@ -92,13 +105,11 @@ class ToolbarLayout2 extends Component {
 
                                 <div className="left-navigation">
                                     <Tooltip title="Users" className={classes.toolTip}>
-                                        <NavLink to='/users'><FontAwesomeIcon icon={faUser} /></NavLink>
+                                        <NavLink to='/users'><FontAwesomeIcon icon={faUser}/></NavLink>
                                     </Tooltip>
                                     <Tooltip title="Animals" className={classes.toolTip}>
-                                        <NavLink to='/animals'><FontAwesomeIcon icon={faPaw} /></NavLink>
+                                        <NavLink to='/animals'><FontAwesomeIcon icon={faPaw}/></NavLink>
                                     </Tooltip>
-
-
                                 </div>
                             </div>
 
@@ -181,8 +192,18 @@ function mapStateToProps({fuse, auth}) {
     return {
         settings: fuse.settings.current,
         toolbarTheme: fuse.settings.toolbarTheme,
-        login: auth.login.success
+        login: auth.login.success,
+        user: auth.user
     }
 }
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps)(ToolbarLayout2)));
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        getUserInfo: Actions.setUserData,
+        defaultLogin: Actions.defaultLogin,
+
+    }, dispatch);
+};
+
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(ToolbarLayout2)));

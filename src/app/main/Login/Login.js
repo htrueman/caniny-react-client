@@ -32,6 +32,7 @@ import facebookIcon2 from "../../../img/facebook2.svg";
 import instagramIcon2 from "../../../img/instagram2.svg";
 import jwtService from 'app/services/jwtService';
 import TextField from "../Users/UserWindow";
+import {setUserData} from "../../auth/store/actions/user.actions";
 
 const styles = theme => ({
     root: {
@@ -66,16 +67,15 @@ class Login extends Component {
     onSubmit = async (model) => {
         await this.props.defaultLogin(model)
             .then(res => {
-                console.log(res);
                 if (res.type === "LOGIN_ERROR") {
                     this.props.showMessage({
                         message: res.payload.data.detail,
                         variant: 'error'
                     })
                 } else {
+                    this.props.getUser();
                     this.props.history.push('/users')
                 }
-                console.log(res);
             })
 
     };
@@ -87,6 +87,7 @@ class Login extends Component {
 
         this.props.googleLogin(user)
             .then(() => {
+                this.props.getUser();
                 this.props.history.push('/users')
             })
     };
@@ -101,6 +102,7 @@ class Login extends Component {
 
             this.props.facebookLogin(user)
                 .then(() => {
+                    this.props.getUser();
                     this.props.history.push('/users')
                 })
         }
@@ -331,6 +333,7 @@ const mapStateToProps = () => {
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
+        getUser: Actions.setUserData,
         defaultLogin: authActions.defaultLogin,
         googleLogin: authActions.googleLogin,
         facebookLogin: authActions.facebookLogin,

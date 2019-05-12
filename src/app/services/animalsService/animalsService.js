@@ -20,6 +20,8 @@ class animalsService extends FuseUtils.EventEmitter {
                 for (let key in response.data) {
                     if (typeof response.data[key] === 'string') {
                         NotificationManager.error(response.data[key], 'Error');
+                    } else if (typeof response.data[key][0] === 'object') {
+                        console.log(response.data[key][0])
                     } else {
                         NotificationManager.error(response.data[key][0], 'Error');
                     }
@@ -31,6 +33,19 @@ class animalsService extends FuseUtils.EventEmitter {
     getAnimals = (search) => {
         return new Promise((resolve, reject) => {
             axios.get(`${baseUrl}animals/${search}`)
+                .then(response => {
+                    if (response.data) {
+                        resolve(response.data);
+                    } else {
+                        reject(response.data);
+                    }
+                });
+        });
+    };
+
+    getAnimalById = (id) => {
+        return new Promise((resolve, reject) => {
+            axios.get(`${baseUrl}animals/${id}/`)
                 .then(response => {
                     if (response.data) {
                         resolve(response.data);
@@ -104,6 +119,38 @@ class animalsService extends FuseUtils.EventEmitter {
     removeAnimals = (animalsId) => {
         return new Promise((resolve, reject) => {
             axios.post(`${baseUrl}animals/bulk_delete/`, animalsId)
+                .then(response => {
+                    if (response.data) {
+                        resolve(response.data);
+                    }
+                })
+                .catch(error => {
+                    this.handleError(error);
+                    reject(error.response.data);
+                });
+        });
+    };
+
+    getColums = () => {
+        return new Promise((resolve, reject) => {
+            axios.get(`${baseUrl}table_metadata/`)
+                .then(response => {
+                    if (response.data) {
+                        resolve(response.data);
+                    }
+                })
+                .catch(error => {
+                    if (error.response) {
+                        this.handleError(error);
+                        reject(error.response.data);
+                    }
+                });
+        });
+    };
+
+    updateColums = (columns) => {
+        return new Promise((resolve, reject) => {
+            axios.put(`${baseUrl}table_metadata/`, columns)
                 .then(response => {
                     if (response.data) {
                         resolve(response.data);

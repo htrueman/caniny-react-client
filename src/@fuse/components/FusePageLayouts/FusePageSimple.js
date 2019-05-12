@@ -22,7 +22,7 @@ const propTypes = {
 const defaultProps = {};
 
 const drawerWidth = 240;
-const headerHeight = 120;
+const headerHeight = 'max-content';
 const toolbarHeight = 64;
 
 const styles = theme => ({
