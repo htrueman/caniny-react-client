@@ -638,7 +638,7 @@ class AnimalWindow extends Component {
                 aria-labelledby="form-dialog-title"
                 className="new-user-window animal-window"
             >
-                <DialogTitle id="form-dialog-title">New animal</DialogTitle>
+                <DialogTitle id="form-dialog-title">Animal Profile</DialogTitle>
 
                 <DialogContent className={classes.dialogContent}>
                     <div className={classes.root}>
@@ -845,7 +845,7 @@ class AnimalWindow extends Component {
 
                                     <div className='flex justify-between width-100 shadow-section'>
                                         <div className={classes.formControl}>
-                                            <InputLabel htmlFor="age-simple">Join Date</InputLabel>
+                                            <InputLabel htmlFor="age-simple">Animal Registration</InputLabel>
                                             <DatePicker
                                                 selected={joinDate}
                                                 className="date-filter"
@@ -1520,6 +1520,7 @@ class AnimalWindow extends Component {
                                             <option value=""/>
                                             <option value='spayed'>Spayed</option>
                                             <option value='neutered'>Neutered</option>
+                                            <option value='no'>No</option>
                                         </Select>
                                     </div>
 
@@ -2106,7 +2107,7 @@ class AnimalWindow extends Component {
 
                                             <div style={{width: '25%'}}>
                                                 <div className={classes.formHistoryControl}>
-                                                    <InputLabel htmlFor="age-simple">Registration Date</InputLabel>
+                                                    <InputLabel htmlFor="age-simple">Ownership Registration</InputLabel>
                                                     <DatePicker
                                                         selected={dateOfBirth}
                                                         onChange={this.handleChangeDatePicker('dateOfBirth', 'owners')}
@@ -2176,8 +2177,10 @@ class AnimalWindow extends Component {
                                                 singleImage={true}
                                             />
 
-                                            <img src={profileIdImageBase ? `data:image/jpeg;base64,${profileIdImageBase}` : ''} alt=""
-                                                 className='id-photo'/>
+                                            <img
+                                                src={profileIdImageBase ? `data:image/jpeg;base64,${profileIdImageBase}` : ''}
+                                                alt=""
+                                                className='id-photo'/>
                                         </div>
 
                                         <div className='drop-block flex flex-col'>
@@ -2189,7 +2192,8 @@ class AnimalWindow extends Component {
                                                 maxFileSize={5242880}
                                                 singleImage={true}
                                             />
-                                            <img src={imageId ? `data:image/jpeg;base64,${imageId}`: ''} alt="" className='id-photo'/>
+                                            <img src={imageId ? `data:image/jpeg;base64,${imageId}` : ''} alt=""
+                                                 className='id-photo'/>
                                         </div>
                                     </div>
                                 </div>

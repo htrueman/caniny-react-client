@@ -311,7 +311,7 @@ class Users extends Component {
                                             onClick={() => this.handleChangeTab('helper')}
 
                                         >
-                                            <ListItemText className="truncate pr-0" primary="Assistance"
+                                            <ListItemText className="truncate pr-0" primary="Assistant"
                                                           disableTypography={true}/>
                                         </ListItem>
                                     </List>

@@ -166,7 +166,7 @@ class UserWindow extends Component {
                 aria-labelledby="form-dialog-title"
                 className="new-user-window"
             >
-                <DialogTitle id="form-dialog-title">{this.state.id ? 'Edit' : 'New user'}</DialogTitle>
+                <DialogTitle id="form-dialog-title">{this.state.id ? 'User Profile' : 'User Profile'}</DialogTitle>
 
                 <DialogContent>
                     <form className={classes.root} autoComplete="off">
@@ -260,7 +260,7 @@ class UserWindow extends Component {
                             onChange={this.handleChangeInput('userType')}
                             fullWidth
                         >
-                            <option value='helper'>Assistance</option>
+                            <option value='helper'>Assistant</option>
                             <option value='admin'>Staff</option>
                             <option value='super_admin'>Admin</option>
                         </Select>

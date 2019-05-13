@@ -184,10 +184,6 @@ const allColumns = [
         title: 'Age'
     },
     {
-        id: 'life_stage',
-        title: 'Life Stage'
-    },
-    {
         id: 'gender',
         title: 'Gender'
     },
@@ -198,6 +194,10 @@ const allColumns = [
     {
         id: 'breed',
         title: 'Breed'
+    },
+    {
+        id: 'life_stage',
+        title: 'Life Stage'
     },
     {
         id: 'species_details',
@@ -653,7 +653,7 @@ class ContactsList extends PureComponent {
             (userRole === 'super_admin' || userRole === 'admin') ?
                 {
                     Header: () => (
-                        <Tooltip title="Add user" className={classes.toolTip}>
+                        <Tooltip title="Add animal" className={classes.toolTip}>
                             <Fab color="secondary" aria-label="Edit" className={classes.fab}
                                  onClick={onAddUser}>
                                 <span style={{fontSize: '25px', margin: '0 5px 0 0'}}>+</span>
