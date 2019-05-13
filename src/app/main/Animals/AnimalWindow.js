@@ -148,7 +148,7 @@ class AnimalWindow extends Component {
             if (animal.dateOfBirth) delete newAnimal.age;
 
             if (animal.dateOfBirth) newAnimal.dateOfBirth = moment(animal.dateOfBirth).format('YYYY-MM-DD');
-            if (animal.health.sterilizedDate) newAnimal.health.sterilizedDate = moment(animal.health.sterilizedDate).format('YYYY-MM-DD');
+            if (animal.health) if (animal.health.sterilizedDate) newAnimal.health.sterilizedDate = moment(animal.health.sterilizedDate).format('YYYY-MM-DD');
             if (animal.adoptionDate) newAnimal.adoptionDate = moment(animal.adoptionDate).format('YYYY-MM-DD');
             if (animal.fosteringDate) newAnimal.fosteringDate = moment(animal.fosteringDate).format('YYYY-MM-DD');
             if (animal.entryDate) newAnimal.entryDate = moment(animal.entryDate).format('YYYY-MM-DD');
@@ -182,7 +182,7 @@ class AnimalWindow extends Component {
 
             if (animal.dateOfBirth) delete newAnimal.age;
             if (animal.dateOfBirth) newAnimal.dateOfBirth = moment(animal.dateOfBirth).format('YYYY-MM-DD');
-            if (animal.health.sterilizedDate) newAnimal.health.sterilizedDate = moment(animal.health.sterilizedDate).format('YYYY-MM-DD');
+            if (animal.health) if (animal.health.sterilizedDate) newAnimal.health.sterilizedDate = moment(animal.health.sterilizedDate).format('YYYY-MM-DD');
             if (animal.adoptionDate) newAnimal.adoptionDate = moment(animal.adoptionDate).format('YYYY-MM-DD');
             if (animal.fosteringDate) newAnimal.fosteringDate = moment(animal.fosteringDate).format('YYYY-MM-DD');
             if (animal.entryDate) newAnimal.entryDate = moment(animal.entryDate).format('YYYY-MM-DD');
