@@ -156,7 +156,8 @@ class UserWindow extends Component {
 
             {
                 classes,
-                open
+                open,
+                openHelper
             } = this.props;
 
         return (
@@ -175,14 +176,15 @@ class UserWindow extends Component {
                                 <Avatar className="w-96 h-96" alt="contact avatar"
                                         src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
 
-                                <ImageUploader
-                                    withIcon={true}
-                                    buttonText='Choose images'
-                                    onChange={this.onDrop}
-                                    imgExtension={['.jpg', '.gif', '.png']}
-                                    maxFileSize={5242880}
-                                    singleImage={true}
-                                />
+                                {!openHelper ? <ImageUploader
+                                        withIcon={true}
+                                        buttonText='Choose images'
+                                        onChange={this.onDrop}
+                                        imgExtension={['.jpg', '.gif', '.png']}
+                                        maxFileSize={5242880}
+                                        singleImage={true}
+                                    />
+                                    : ''}
                             </div>
 
                             <div className='flex flex-col justify-around'>
@@ -195,6 +197,7 @@ class UserWindow extends Component {
                                         value={firstName}
                                         onChange={this.handleChangeInput('firstName')}
                                         fullWidth
+                                        disabled={openHelper}
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
@@ -208,6 +211,7 @@ class UserWindow extends Component {
                                         id="lastName"
                                         type="text"
                                         value={lastName}
+                                        disabled={openHelper}
                                         onChange={this.handleChangeInput('lastName')}
                                         fullWidth
                                         InputLabelProps={{
@@ -224,6 +228,7 @@ class UserWindow extends Component {
                             id="email"
                             type="email"
                             value={email}
+                            disabled={openHelper}
                             onChange={this.handleChangeInput('email')}
                             fullWidth
                             InputLabelProps={{
@@ -236,6 +241,7 @@ class UserWindow extends Component {
                         <PhoneInput
                             placeholder=""
                             value={phoneNumber}
+                            disabled={openHelper}
                             onChange={(phoneNumber, e) => {
                                 this.setState({phoneNumber: formatPhoneNumberIntl(phoneNumber)})
                             }}/>
@@ -257,6 +263,7 @@ class UserWindow extends Component {
                         <Select
                             value={userType}
                             native
+                            disabled={openHelper}
                             onChange={this.handleChangeInput('userType')}
                             fullWidth
                         >
@@ -287,14 +294,16 @@ class UserWindow extends Component {
                     </form>
                 </DialogContent>
 
-                <DialogActions>
-                    <Button onClick={this.handleCloseWindow} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={this.handleSaveUser} color="primary">
-                        Save
-                    </Button>
-                </DialogActions>
+                {!openHelper ? <DialogActions>
+                        <Button onClick={this.handleCloseWindow} color="primary">
+                            Cancel
+                        </Button>
+                        <Button onClick={this.handleSaveUser} color="primary">
+                            Save
+                        </Button>
+                    </DialogActions>
+                    : ''}
+
             </Dialog>
 
         )

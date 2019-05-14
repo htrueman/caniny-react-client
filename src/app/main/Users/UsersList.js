@@ -484,8 +484,7 @@ class ContactsList extends PureComponent {
 
 
         const
-            columns = [
-                userProfile.userType === 'super_admin' ?
+            columns = userProfile.userType === 'super_admin' ? [
                     {
                         Header: () => (
                             <Checkbox
@@ -516,130 +515,129 @@ class ContactsList extends PureComponent {
                         className: "justify-center",
                         sortable: false,
                         width: 64
-                    } : {},
-                {
-                    Header: () => (
-                        selectedUsersIds.length > 0 && (
-                            <Tooltip title="Delete" className={classes.toolTip}>
-                                <IconButton
-                                    onClick={(ev) => {
-                                        ev.stopPropagation();
-                                        onRemove(selectedUsersIds);
-                                    }}
-                                >
-                                    <Icon>delete</Icon>
-                                </IconButton>
-                            </Tooltip>
-                        )
-                    ),
-                    accessor: "avatar",
-                    Cell: row => (
-                        <Avatar className="mr-8" alt={row.original.name}
-                                src={row.value || 'assets/images/avatars/avatar.svg'}/>
-                    ),
-                    className: "justify-center",
-                    width: 64,
-                    sortable: false
-                },
-                {
-                    Header: "First Name",
-                    accessor: "firstName",
-                    filterable: true,
-                    className: "font-bold",
-                    Filter: ({filter, onChange}) => (
-                        this.customFilter1(filter, onChange)
-                    ),
-                },
-                {
-                    Header: "Last Name",
-                    accessor: "lastName",
-                    filterable: true,
-                    className: "font-bold",
-                    Filter: ({filter, onChange}) => (
-                        this.customFilter2(filter, onChange)
-                    ),
-                },
-                {
-                    Header: "Email",
-                    accessor: "email",
-                    filterable: true,
-                    Filter: ({filter, onChange}) => (
-                        this.customFilter3(filter, onChange)
-                    ),
-                },
-                {
-                    Header: "Phone",
-                    accessor: "phoneNumber",
-                    filterable: true,
-                    Filter: ({filter, onChange}) => (
-                        this.customFilter4(filter, onChange)
-                    ),
-                },
-                {
-                    Header: "Join Date",
-                    accessor: "joinDate",
-                    filterable: true,
-                    Filter: ({filter, onChange}) => (
-                        this.customFilter5(filter, onChange)
-                    ),
-                    Cell: row => (
-                        <span>
+                    },
+                    {
+                        Header: () => (
+                            selectedUsersIds.length > 0 && (
+                                <Tooltip title="Delete" className={classes.toolTip}>
+                                    <IconButton
+                                        onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            onRemove(selectedUsersIds);
+                                        }}
+                                    >
+                                        <Icon>delete</Icon>
+                                    </IconButton>
+                                </Tooltip>
+                            )
+                        ),
+                        accessor: "avatar",
+                        Cell: row => (
+                            <Avatar className="mr-8" alt={row.original.name}
+                                    src={row.value || 'assets/images/avatars/avatar.svg'}/>
+                        ),
+                        className: "justify-center",
+                        width: 64,
+                        sortable: false
+                    },
+                    {
+                        Header: "First Name",
+                        accessor: "firstName",
+                        filterable: true,
+                        className: "font-bold",
+                        Filter: ({filter, onChange}) => (
+                            this.customFilter1(filter, onChange)
+                        ),
+                    },
+                    {
+                        Header: "Last Name",
+                        accessor: "lastName",
+                        filterable: true,
+                        className: "font-bold",
+                        Filter: ({filter, onChange}) => (
+                            this.customFilter2(filter, onChange)
+                        ),
+                    },
+                    {
+                        Header: "Email",
+                        accessor: "email",
+                        filterable: true,
+                        Filter: ({filter, onChange}) => (
+                            this.customFilter3(filter, onChange)
+                        ),
+                    },
+                    {
+                        Header: "Phone",
+                        accessor: "phoneNumber",
+                        filterable: true,
+                        Filter: ({filter, onChange}) => (
+                            this.customFilter4(filter, onChange)
+                        ),
+                    },
+                    {
+                        Header: "Join Date",
+                        accessor: "joinDate",
+                        filterable: true,
+                        Filter: ({filter, onChange}) => (
+                            this.customFilter5(filter, onChange)
+                        ),
+                        Cell: row => (
+                            <span>
                                     {row.value ? moment(row.value, 'YYYY-MM-DD').format('DD-MM-YYYY') : ''}
                                 </span>
-                    )
-                },
-                {
-                    Header: () => (
-                        <div className={classes.groupBlock}>
-                            Group
-                            <Tooltip
-                                classes={{
-                                    popper: classes.htmlPopper,
-                                    tooltip: classes.htmlTooltip,
-                                }}
-                                PopperProps={{
-                                    popperOptions: {
-                                        modifiers: {
-                                            arrow: {
-                                                enabled: Boolean(this.state.arrowRef),
-                                                element: this.state.arrowRef,
+                        )
+                    },
+                    {
+                        Header: () => (
+                            <div className={classes.groupBlock}>
+                                Group
+                                <Tooltip
+                                    classes={{
+                                        popper: classes.htmlPopper,
+                                        tooltip: classes.htmlTooltip,
+                                    }}
+                                    PopperProps={{
+                                        popperOptions: {
+                                            modifiers: {
+                                                arrow: {
+                                                    enabled: Boolean(this.state.arrowRef),
+                                                    element: this.state.arrowRef,
+                                                },
                                             },
                                         },
-                                    },
-                                }}
-                                title={
-                                    <React.Fragment>
-                                        <Typography color="inherit">
-                                            <b>Admin</b>: Full
-                                            permissions</Typography>
-                                        <Typography color="inherit"><b>Staff</b>:
-                                            Edit
-                                            permissions</Typography>
-                                        <Typography color="inherit"><b>Assistant</b>:
-                                            View
-                                            permissions</Typography>
-                                        {/*<em>{"And here's"}</em> <b>{'some'}</b>*/}
-                                        {/*<u>{'amazing content'}</u>.{' '}*/}
-                                        {/*{"It's very engaging. Right?"}*/}
-                                        <span
-                                            className={classes.arrow}
-                                            ref={this.handleArrowRef}/>
-                                    </React.Fragment>
-                                }
-                            >
-                                <Icon className='exclamation-icon'>priority_high</Icon>
-                            </Tooltip>
-                        </div>
-                    ),
-                    accessor: "userType",
-                    filterable: false,
-                    Cell: row => (
-                        <span>
+                                    }}
+                                    title={
+                                        <React.Fragment>
+                                            <Typography color="inherit">
+                                                <b>Admin</b>: Full
+                                                permissions</Typography>
+                                            <Typography color="inherit"><b>Staff</b>:
+                                                Edit
+                                                permissions</Typography>
+                                            <Typography color="inherit"><b>Assistant</b>:
+                                                View
+                                                permissions</Typography>
+                                            {/*<em>{"And here's"}</em> <b>{'some'}</b>*/}
+                                            {/*<u>{'amazing content'}</u>.{' '}*/}
+                                            {/*{"It's very engaging. Right?"}*/}
+                                            <span
+                                                className={classes.arrow}
+                                                ref={this.handleArrowRef}/>
+                                        </React.Fragment>
+                                    }
+                                >
+                                    <Icon className='exclamation-icon'>priority_high</Icon>
+                                </Tooltip>
+                            </div>
+                        ),
+                        accessor: "userType",
+                        filterable: false,
+                        Cell: row => (
+                            <span>
                                     {userTypes[row.value]}
                                 </span>
-                    )
-                },
-                userProfile.userType === 'super_admin' ?
+                        )
+                    },
                     {
                         Header: () => (
                             <Tooltip title="Add user" className={classes.toolTip}>
@@ -677,8 +675,140 @@ class ContactsList extends PureComponent {
                                 </Tooltip>
                             </div>
                         )
-                    } : {}
-            ];
+                    }
+                ]
+                :
+                [
+                    {
+                        Header: () => (<span></span>),
+                        accessor: "avatar",
+                        Cell: row => (
+                            <Avatar className="mr-8" alt={row.original.name}
+                                    src={row.value || 'assets/images/avatars/avatar.svg'}/>
+                        ),
+                        className: "justify-center",
+                        width: 64,
+                        sortable: false
+                    },
+                    {
+                        Header: "First Name",
+                        accessor: "firstName",
+                        filterable: true,
+                        className: "font-bold",
+                        Filter: ({filter, onChange}) => (
+                            this.customFilter1(filter, onChange)
+                        ),
+                    },
+                    {
+                        Header: "Last Name",
+                        accessor: "lastName",
+                        filterable: true,
+                        className: "font-bold",
+                        Filter: ({filter, onChange}) => (
+                            this.customFilter2(filter, onChange)
+                        ),
+                    },
+                    {
+                        Header: "Email",
+                        accessor: "email",
+                        filterable: true,
+                        Filter: ({filter, onChange}) => (
+                            this.customFilter3(filter, onChange)
+                        ),
+                    },
+                    {
+                        Header: "Phone",
+                        accessor: "phoneNumber",
+                        filterable: true,
+                        Filter: ({filter, onChange}) => (
+                            this.customFilter4(filter, onChange)
+                        ),
+                    },
+                    {
+                        Header: "Join Date",
+                        accessor: "joinDate",
+                        filterable: true,
+                        Filter: ({filter, onChange}) => (
+                            this.customFilter5(filter, onChange)
+                        ),
+                        Cell: row => (
+                            <span>
+                                    {row.value ? moment(row.value, 'YYYY-MM-DD').format('DD-MM-YYYY') : ''}
+                                </span>
+                        )
+                    },
+                    {
+                        Header: () => (
+                            <div className={classes.groupBlock}>
+                                Group
+                                <Tooltip
+                                    classes={{
+                                        popper: classes.htmlPopper,
+                                        tooltip: classes.htmlTooltip,
+                                    }}
+                                    PopperProps={{
+                                        popperOptions: {
+                                            modifiers: {
+                                                arrow: {
+                                                    enabled: Boolean(this.state.arrowRef),
+                                                    element: this.state.arrowRef,
+                                                },
+                                            },
+                                        },
+                                    }}
+                                    title={
+                                        <React.Fragment>
+                                            <Typography color="inherit">
+                                                <b>Admin</b>: Full
+                                                permissions</Typography>
+                                            <Typography color="inherit"><b>Staff</b>:
+                                                Edit
+                                                permissions</Typography>
+                                            <Typography color="inherit"><b>Assistant</b>:
+                                                View
+                                                permissions</Typography>
+                                            {/*<em>{"And here's"}</em> <b>{'some'}</b>*/}
+                                            {/*<u>{'amazing content'}</u>.{' '}*/}
+                                            {/*{"It's very engaging. Right?"}*/}
+                                            <span
+                                                className={classes.arrow}
+                                                ref={this.handleArrowRef}/>
+                                        </React.Fragment>
+                                    }
+                                >
+                                    <Icon className='exclamation-icon'>priority_high</Icon>
+                                </Tooltip>
+                            </div>
+                        ),
+                        accessor: "userType",
+                        filterable: false,
+                        Cell: row => (
+                            <span>
+                                    {userTypes[row.value]}
+                                </span>
+                        )
+                    },
+                    {
+                        Header: () => (<span></span>),
+                        width: 70,
+                        filterable: false,
+                        sortable: false,
+                        Cell: row => (
+                            <div className="flex items-center">
+                                <Tooltip title="View" className={classes.toolTip}>
+                                    <IconButton
+                                        onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            onEdit(row.original, true)
+                                        }}
+                                    >
+                                        <Icon>visibility</Icon>
+                                    </IconButton>
+                                </Tooltip>
+                            </div>
+                        )
+                    }
+                ];
 
         return (
 

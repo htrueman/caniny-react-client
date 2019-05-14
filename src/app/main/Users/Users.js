@@ -71,6 +71,7 @@ class Users extends Component {
         users: [],
         selectedUser: {},
         open: false,
+        openHelper: false,
         openRemove: false,
         removeUserId: '',
         search: '',
@@ -89,6 +90,7 @@ class Users extends Component {
     handleClose = () => {
         this.setState({
             open: false,
+            openHelper: false,
             selectedUser: {}
         });
         this.getUsers();
@@ -155,10 +157,11 @@ class Users extends Component {
     };
 
 
-    handleEditUser = user => {
+    handleEditUser = (user, openHelper) => {
         this.setState({
             selectedUser: user,
             open: true,
+            openHelper
         })
     };
 
@@ -238,6 +241,7 @@ class Users extends Component {
                 pageSize,
                 openRemove,
                 tab,
+                openHelper,
                 userProfile
             } = this.state,
 
@@ -343,6 +347,7 @@ class Users extends Component {
 
                 <UserWindow
                     open={open}
+                    openHelper={openHelper}
                     onClose={this.handleClose}
                     user={selectedUser}
                 />
