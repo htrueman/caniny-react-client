@@ -506,6 +506,30 @@ class AnimalWindow extends Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.animal.id) {
             let newAnimal = nextProps.animal;
+
+            if(newAnimal.dateOfBirth) {
+                let mdate = moment(newAnimal.dateOfBirth).format('YYYY-MM-DD').toString();
+                let yearThen = parseInt(mdate.substring(0, 4), 10);
+                let monthThen = parseInt(mdate.substring(5, 7), 10);
+                let dayThen = parseInt(mdate.substring(8, 10), 10);
+
+                let today = new Date();
+                let birthday = new Date(yearThen, monthThen - 1, dayThen);
+
+                let differenceInMilisecond = today.valueOf() - birthday.valueOf();
+
+                let year_age = Math.floor(differenceInMilisecond / 31536000000);
+                let day_age = Math.floor((differenceInMilisecond % 31536000000) / 86400000);
+
+
+                let month_age = Math.floor(day_age / 30);
+
+                day_age = day_age % 30;
+
+                newAnimal.age = `${year_age}y ${month_age}m ${day_age}d`;
+            }
+
+
             if (newAnimal.dateOfBirth) newAnimal.dateOfBirth = new Date(newAnimal.dateOfBirth);
             if (newAnimal.health) if (newAnimal.health.sterilizedDate) newAnimal.health.sterilizedDate = new Date(newAnimal.health.sterilizedDate);
             if (newAnimal.owners[0]) if (newAnimal.owners[0].registrationDate) newAnimal.owners[0].registrationDate = new Date(newAnimal.owners[0].registrationDate);
@@ -790,7 +814,7 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Birthday</InputLabel>
                                                 <DatePicker
-                                                    selected={dateOfBirth}
+                                                    selected={dateOfBirth ? new Date(dateOfBirth) : ''}
                                                     onChange={this.handleChangeDatePicker('dateOfBirth')}
                                                     disabled={openHelperAnimal}
                                                     maxDate={new Date()}
@@ -911,7 +935,7 @@ class AnimalWindow extends Component {
                                         <div className={classes.formControl}>
                                             <InputLabel htmlFor="age-simple">Animal Registration</InputLabel>
                                             <DatePicker
-                                                selected={joinDate}
+                                                selected={joinDate ? new Date(joinDate) : ''}
                                                 className="date-filter"
                                                 dateFormat="dd-MM-yyyy"
                                                 disabled
@@ -1627,7 +1651,7 @@ class AnimalWindow extends Component {
                                     <div className={classes.formHistoryControl}>
                                         <InputLabel htmlFor="age-simple">Sterilization Date</InputLabel>
                                         <DatePicker
-                                            selected={sterilizedDate}
+                                            selected={sterilizedDate ? new Date(sterilizedDate) : ''}
                                             disabled={openHelperAnimal}
                                             onChange={this.handleChangeDatePicker('sterilizedDate', 'health')}
                                             className="date-filter"
@@ -1953,7 +1977,7 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Adoption Date</InputLabel>
                                                 <DatePicker
-                                                    selected={adoptionDate}
+                                                    selected={adoptionDate ? new Date(adoptionDate) : ''}
                                                     disabled={openHelperAnimal}
                                                     onChange={this.handleChangeDatePicker('adoptionDate')}
                                                     className="date-filter"
@@ -1983,7 +2007,7 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Fostering Date</InputLabel>
                                                 <DatePicker
-                                                    selected={fosteringDate}
+                                                    selected={fosteringDate ? new Date(fosteringDate) : ''}
                                                     disabled={openHelperAnimal}
                                                     onChange={this.handleChangeDatePicker('fosteringDate')}
                                                     className="date-filter"
@@ -2019,7 +2043,7 @@ class AnimalWindow extends Component {
                                 <div className={`${classes.formControl} mr-36`}>
                                     <InputLabel htmlFor="age-simple">Entry Date</InputLabel>
                                     <DatePicker
-                                        selected={entryDate}
+                                        selected={entryDate ? new Date(entryDate) : ''}
                                         disabled={openHelperAnimal}
                                         onChange={this.handleChangeDatePicker('entryDate')}
                                         className="date-filter"
@@ -2050,7 +2074,7 @@ class AnimalWindow extends Component {
                                 <div className={classes.formControl}>
                                     <InputLabel htmlFor="age-simple">Leave Date</InputLabel>
                                     <DatePicker
-                                        selected={leaveDate}
+                                        selected={leaveDate ? new Date(leaveDate) : ''}
                                         disabled={openHelperAnimal}
                                         onChange={this.handleChangeDatePicker('leaveDate')}
                                         className="date-filter"
@@ -2246,7 +2270,7 @@ class AnimalWindow extends Component {
                                                 <div className={classes.formHistoryControl}>
                                                     <InputLabel htmlFor="age-simple">Owner Registration</InputLabel>
                                                     <DatePicker
-                                                        selected={registrationDate}
+                                                        selected={registrationDate ? new Date(registrationDate) : ''}
                                                         onChange={this.handleChangeDatePicker('registrationDate', 'owners')}
                                                         className="date-filter"
                                                         disabled={openHelperAnimal}
