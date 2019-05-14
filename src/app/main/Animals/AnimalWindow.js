@@ -775,6 +775,7 @@ class AnimalWindow extends Component {
                                                     selected={dateOfBirth}
                                                     onChange={this.handleChangeDatePicker('dateOfBirth')}
                                                     disabled={openHelperAnimal}
+                                                    maxDate={new Date()}
                                                     className="date-filter"
                                                     dateFormat="dd-MM-yyyy"
                                                 />
