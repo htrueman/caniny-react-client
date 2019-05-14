@@ -290,6 +290,49 @@ const allColumns = [
     // },
 ];
 
+const humansFriendlyParams = {
+    'yes': 'Yes',
+    'no': 'No',
+    'only_females': 'Only females',
+    'only_males': 'Only males',
+    'unknown': 'Unknown'
+};
+
+const catsFriendlyParams = {
+    'yes': 'Yes',
+    'no': 'No',
+    'only_females': 'Only females',
+    'only_males': 'Only males',
+    'unknown': 'Unknown'
+};
+
+const animalsFriendlyParams = {
+    'yes': 'Yes',
+    'no': 'No',
+    'only_small_animals': 'Only Small Animals',
+    'only_big_animals': 'Only Big Animals',
+    'unknown': 'Unknown'
+};
+const kidsFriendlyParams = {
+    'yes': 'Yes',
+    'no': 'No',
+    'only_females': 'Only females',
+    'only_males': 'Only males',
+    'only_young_kids': 'Only young kids',
+    'only_old_kids': 'Only older kids',
+    'both_young_and_old': 'Both young & old',
+    'unknown': 'Unknown'
+};
+
+const energyLevelParams = {
+    'lazy': 'Lazy',
+    'chill': 'Chill',
+    'active': 'Active',
+    'energetic': 'Energetic',
+    'hyper': 'Hyper'
+};
+
+
 class ContactsList extends PureComponent {
 
     state = {
@@ -552,6 +595,209 @@ class ContactsList extends PureComponent {
                         )
                     }
                 })
+            } else if (item === 'human_friendly') {
+                return ({
+                    Header: 'Humans Friendly',
+                    accessor: 'humansFriendly',
+                    filterable: true,
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    ),
+                    Cell: row => {
+                        return (
+                            <span>{humansFriendlyParams[row.original.humansFriendly]}</span>
+                        )
+                    }
+                })
+            } else if (item === 'cats_friendly') {
+                return ({
+                    Header: 'Cats Friendly',
+                    accessor: 'catsFriendly',
+                    filterable: true,
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    ),
+                    Cell: row => {
+                        return (
+                            <span>{catsFriendlyParams[row.original.catsFriendly]}</span>
+                        )
+                    }
+                })
+            } else if (item === 'dogs_friendly') {
+                return ({
+                    Header: 'Dogs Friendly',
+                    accessor: 'dogsFriendly',
+                    filterable: true,
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    ),
+                    Cell: row => {
+                        return (
+                            <span>{catsFriendlyParams[row.original.dogsFriendly]}</span>
+                        )
+                    }
+                })
+            } else if (item === 'kids_friendly') {
+                return ({
+                    Header: 'Kids Friendly',
+                    accessor: 'kidsFriendly',
+                    filterable: true,
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    ),
+                    Cell: row => {
+                        return (
+                            <span>{kidsFriendlyParams[row.original.dogsFriendly]}</span>
+                        )
+                    }
+                })
+            } else if (item === 'for_adoption') {
+                return ({
+                    Header: 'Adoption',
+                    accessor: 'adoptionDate',
+                    filterable: true,
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    ),
+                    Cell: row => {
+                        return (
+                            <span>{row.original.adoptionDate ? moment(row.original.adoptionDate).format('DD-MM-YYYY') : ''}</span>
+                        )
+                    }
+                })
+            } else if (item === 'for_foster') {
+                return ({
+                    Header: 'Foster',
+                    accessor: 'forFoster',
+                    filterable: true,
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    ),
+                })
+            } else if (item === 'tag_id') {
+                return ({
+                    Header: 'Tag',
+                    accessor: 'tagId',
+                    filterable: true,
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    ),
+                })
+            } else if (item === 'chip_producer') {
+                return ({
+                    Header: 'Chip Producer',
+                    accessor: 'chipProducer',
+                    filterable: true,
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    ),
+                })
+            } else if (item === 'joined_reason') {
+                return ({
+                    Header: 'Entry Reason',
+                    accessor: 'joinedReason',
+                    filterable: true,
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    ),
+                })
+            } else if (item === 'entry_date') {
+                return ({
+                    Header: 'Entry Date',
+                    accessor: 'entryDate',
+                    filterable: true,
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    ),
+                    Cell: row => {
+                        return (
+                            <span>{row.original.entryDate ? moment(row.original.entryDate).format('DD-MM-YYYY') : ''}</span>
+                        )
+                    }
+                })
+            }else if (item === 'leave_date') {
+                return ({
+                    Header: 'Leave Date',
+                    accessor: 'leaveDate',
+                    filterable: true,
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    ),
+                    Cell: row => {
+                        return (
+                            <span>{row.original.leaveDate ? moment(row.original.leaveDate).format('DD-MM-YYYY') : ''}</span>
+                        )
+                    }
+                })
+            } else if (item === 'leave_reason') {
+                return ({
+                    Header: 'Leave Reason',
+                    accessor: 'leaveReason',
+                    filterable: true,
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    ),
+                })
+            } else if (item === 'chip_id') {
+                return ({
+                    Header: 'Chip ID',
+                    accessor: 'chipId',
+                    filterable: true,
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    ),
+                })
+            } else if (item === 'species_details') {
+                return ({
+                    Header: 'Species Details',
+                    accessor: 'speciesDetails',
+                    filterable: true,
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    ),
+                })
+            } else if (item === 'energy_level') {
+                return ({
+                    Header: 'Energy Level',
+                    accessor: 'energyLevel',
+                    filterable: true,
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    ),
+                    Cell: row => {
+                        return (
+                            <span>{energyLevelParams[row.original.energyLevel]}</span>
+                        )
+                    }
+                })
+            } else if (item === 'pregnant') {
+                return ({
+                    Header: 'Pregnant',
+                    accessor: 'pregnant',
+                    filterable: true,
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    ),
+                    Cell: row => {
+                        return (
+                            <span>{row.original.pregnant ? 'Yes' : 'No'}</span>
+                        )
+                    }
+                })
+            } else if (item === 'animals_friendly') {
+                return ({
+                    Header: 'Animals Friendly',
+                    accessor: 'animalsFriendly',
+                    filterable: true,
+                    Filter: ({filter, onChange}) => (
+                        this.customFilter(filter, onChange, item)
+                    ),
+                    Cell: row => {
+                        return (
+                            <span>{animalsFriendlyParams[row.original.animalsFriendly]}</span>
+                        )
+                    }
+                })
             } else if (item === 'age') {
                 return ({
                     Header: paramsAllColumns[item],
@@ -612,8 +858,7 @@ class ContactsList extends PureComponent {
         });
 
 
-        let columns = [
-            (userRole === 'super_admin' || userRole === 'admin') ?
+        let columns = (userRole === 'super_admin' || userRole === 'admin') ? [
                 {
                     Header: () => (
                         <Checkbox
@@ -643,40 +888,39 @@ class ContactsList extends PureComponent {
                     className: "justify-center",
                     sortable: false,
                     width: 64
-                } : {},
-            {
-                Header: () => (
-                    selectedAnimalsIds.length > 0 ? (
-                        <Tooltip title="Delete" className={classes.toolTip}>
-                            <IconButton
-                                onClick={(ev) => {
-                                    ev.stopPropagation();
-                                    onRemove(selectedAnimalsIds);
-                                }}
-                            >
-                                <Icon>delete</Icon>
-                            </IconButton>
-                        </Tooltip>
-                    ) : (
-                        <RenderColumsMenu
-                            columns={selectedColumns}
-                            onUpdateColumns={this.updateColumns}
-                        />
-                    )
-                ),
-                accessor: "image",
-                Cell: row => (
-                    <Avatar className="mr-8" alt={row.original.name}
-                            src={row.value ? `data:image/jpeg;base64,${row.value}` : 'assets/images/avatars/avatar.svg'}/>
-                ),
-                className: "justify-center",
-                width: 64,
-                sortable: false
-            },
+                },
+                {
+                    Header: () => (
+                        selectedAnimalsIds.length > 0 ? (
+                            <Tooltip title="Delete" className={classes.toolTip}>
+                                <IconButton
+                                    onClick={(ev) => {
+                                        ev.stopPropagation();
+                                        onRemove(selectedAnimalsIds);
+                                    }}
+                                >
+                                    <Icon>delete</Icon>
+                                </IconButton>
+                            </Tooltip>
+                        ) : (
+                            <RenderColumsMenu
+                                columns={selectedColumns}
+                                onUpdateColumns={this.updateColumns}
+                            />
+                        )
+                    ),
+                    accessor: "image",
+                    Cell: row => (
+                        <Avatar className="mr-8" alt={row.original.name}
+                                src={row.value ? `data:image/jpeg;base64,${row.value}` : 'assets/images/avatars/avatar.svg'}/>
+                    ),
+                    className: "justify-center",
+                    width: 64,
+                    sortable: false
+                },
 
-            ...dynamicColumns,
+                ...dynamicColumns,
 
-            (userRole === 'super_admin' || userRole === 'admin') ?
                 {
                     Header: () => (
                         <Tooltip title="Add animal" className={classes.toolTip}>
@@ -691,58 +935,118 @@ class ContactsList extends PureComponent {
                     width: 128,
                     filterable: false,
                     sortable: false,
-                    Cell: row => (
-                        <div className="flex items-center">
-                            <Tooltip title="Edit" className={classes.toolTip}>
-                                <IconButton
-                                    onClick={(ev) => {
-                                        ev.stopPropagation();
-                                        onEdit(row.original)
-                                    }}
-                                >
-                                    <Icon>edit</Icon>
-                                </IconButton>
-                            </Tooltip>
+                    Cell: row => {
+                        if (userRole === 'helper') {
+                            return (
+                                <div className="flex items-center">
+                                    <Tooltip title="View" className={classes.toolTip}>
+                                        <IconButton
+                                            onClick={(ev) => {
+                                                ev.stopPropagation();
+                                                onEdit(row.original, true)
+                                            }}
+                                        >
+                                            <Icon>visibility</Icon>
+                                        </IconButton>
+                                    </Tooltip>
+                                </div>
 
+                            )
+                        } else {
+                            return (
+                                <div className="flex items-center">
+                                    <Tooltip title="Edit" className={classes.toolTip}>
+                                        <IconButton
+                                            onClick={(ev) => {
+                                                ev.stopPropagation();
+                                                onEdit(row.original)
+                                            }}
+                                        >
+                                            <Icon>edit</Icon>
+                                        </IconButton>
+                                    </Tooltip>
+
+                                    <Tooltip title="Delete" className={classes.toolTip}>
+                                        <IconButton
+                                            onClick={(ev) => {
+                                                ev.stopPropagation();
+                                                onRemove(row.original.id);
+                                            }}
+                                        >
+                                            <Icon>delete</Icon>
+                                        </IconButton>
+                                    </Tooltip>
+                                </div>
+                            )
+                        }
+                    }
+                }
+            ]
+            :
+            [
+                {
+                    Header: () => (
+                        selectedAnimalsIds.length > 0 ? (
                             <Tooltip title="Delete" className={classes.toolTip}>
                                 <IconButton
                                     onClick={(ev) => {
                                         ev.stopPropagation();
-                                        onRemove(row.original.id);
+                                        onRemove(selectedAnimalsIds);
                                     }}
                                 >
                                     <Icon>delete</Icon>
                                 </IconButton>
                             </Tooltip>
-                        </div>
-                    )
-                } : {},
-            (userRole === 'helper') ?
-                {
-                    Header: () => (
-                        <span></span>
+                        ) : (
+                            <RenderColumsMenu
+                                columns={selectedColumns}
+                                onUpdateColumns={this.updateColumns}
+                            />
+                        )
                     ),
-                    width: 128,
+                    accessor:
+                        "image",
+                    Cell:
+                        row => (
+                            <Avatar className="mr-8" alt={row.original.name}
+                                    src={row.value ? `data:image/jpeg;base64,${row.value}` : 'assets/images/avatars/avatar.svg'}/>
+                        ),
+                    className:
+                        "justify-center",
+                    width:
+                        64,
+                    sortable:
+                        false
+                }
+                ,
+
+                ...dynamicColumns,
+
+                {
+                    Header: () => (<span></span>),
+                    width: 70,
                     filterable: false,
                     sortable: false,
-                    Cell: row => (
-                        <div className="flex items-center">
-                            <Tooltip title="View" className={classes.toolTip}>
-                                <IconButton
-                                    onClick={(ev) => {
-                                        ev.stopPropagation();
-                                        onEdit(row.original, true)
-                                    }}
-                                >
-                                    <Icon>visibility</Icon>
-                                </IconButton>
-                            </Tooltip>
-                        </div>
-                    )
-                } : {
-                    width: 50,
-                },
-        ];
+                    Cell: row => {
+                        return (
+                            <div className="flex items-center">
+                                <Tooltip title="View" className={classes.toolTip}>
+                                    <IconButton
+                                        onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            onEdit(row.original, true)
+                                        }}
+                                    >
+                                        <Icon>visibility</Icon>
+                                    </IconButton>
+                                </Tooltip>
+                            </div>
+
+                        )
+                    }
+                }
+            ]
+        ;
 
         return (
             <FuseAnimate animation="transition.slideUpIn" delay={300}>
