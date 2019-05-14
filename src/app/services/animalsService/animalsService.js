@@ -47,11 +47,11 @@ class animalsService extends FuseUtils.EventEmitter {
         return new Promise((resolve, reject) => {
             axios.get(`${baseUrl}animals/${id}/`)
                 .then(response => {
-                    if (response.data) {
-                        resolve(response.data);
-                    } else {
-                        reject(response.data);
-                    }
+                    resolve(response.data);
+                })
+                .catch(error => {
+                    this.handleError(error);
+                    reject(error.response.data);
                 });
         });
     };
@@ -60,9 +60,7 @@ class animalsService extends FuseUtils.EventEmitter {
         return new Promise((resolve, reject) => {
             axios.post(`${baseUrl}animals/`, animal)
                 .then(response => {
-                    if (response.data) {
-                        resolve(response.data);
-                    }
+                    resolve(response.data);
                 })
                 .catch(error => {
                     this.handleError(error);
