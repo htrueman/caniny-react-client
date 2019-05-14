@@ -120,6 +120,7 @@ class AnimalWindow extends Component {
     handleSaveAnimal = async (e) => {
         e.preventDefault();
         const {animal} = this.state;
+        console.log(this.state);
 
         if (animal.id) {
             let newAnimal = {};
@@ -132,7 +133,7 @@ class AnimalWindow extends Component {
 
             if (animal.health) {
                 if (animal.health.careValues) {
-                    newAnimal.health.careValues = animal.health.careValues.map(item => {
+                    newAnimal.health.careValues = await newAnimal.health.careValues.map(item => {
                         if (item.date) {
                             return ({
                                 ...item,
@@ -141,7 +142,9 @@ class AnimalWindow extends Component {
                         } else {
                             return (item)
                         }
-                    })
+                    });
+
+                    newAnimal.health.careValues = newAnimal.health.careValues.filter(e => e !== null)
                 }
             }
 
@@ -154,7 +157,7 @@ class AnimalWindow extends Component {
             if (animal.entryDate) newAnimal.entryDate = moment(animal.entryDate).format('YYYY-MM-DD');
             if (animal.leaveDate) newAnimal.leaveDate = moment(animal.leaveDate).format('YYYY-MM-DD');
             if (animal.joinDate) newAnimal.joinDate = moment(animal.joinDate).format('YYYY-MM-DD');
-            if (animal.owners) if (animal.owners.registrationDate) newAnimal.owners.registrationDate = moment(animal.owners.registrationDate).format('YYYY-MM-DD');
+            if (animal.owners[0]) if (animal.owners[0].registrationDate) newAnimal.owners[0].registrationDate = moment(animal.owners[0].registrationDate).format('YYYY-MM-DD');
 
             await animalsService.updateAnimal(newAnimal, animal.id)
         } else {
@@ -168,7 +171,7 @@ class AnimalWindow extends Component {
 
             if (animal.health) {
                 if (animal.health.careValues) {
-                    newAnimal.health.careValues = animal.health.careValues.map(item => {
+                    newAnimal.health.careValues = await newAnimal.health.careValues.map(item => {
                         if (item.date) {
                             return ({
                                 ...item,
@@ -177,7 +180,9 @@ class AnimalWindow extends Component {
                         } else {
                             return (item)
                         }
-                    })
+                    });
+
+                    newAnimal.health.careValues = newAnimal.health.careValues.filter(e => e !== null)
                 }
             }
 
@@ -189,8 +194,7 @@ class AnimalWindow extends Component {
             if (animal.entryDate) newAnimal.entryDate = moment(animal.entryDate).format('YYYY-MM-DD');
             if (animal.leaveDate) newAnimal.leaveDate = moment(animal.leaveDate).format('YYYY-MM-DD');
             newAnimal.joinDate = animal.joinDate ? moment(animal.joinDate).format('YYYY-MM-DD') : '';
-            if (animal.owners) if (animal.owners.registrationDate) newAnimal.owners.registrationDate = moment(animal.owners.registrationDate).format('YYYY-MM-DD');
-
+            if (animal.owners[0]) if (animal.owners[0].registrationDate) newAnimal.owners[0].registrationDate = moment(animal.owners[0].registrationDate).format('YYYY-MM-DD');
 
             await animalsService.createNewAnimal(
                 newAnimal
@@ -318,15 +322,28 @@ class AnimalWindow extends Component {
             })
         } else {
             if (object) {
-                this.setState({
-                    animal: {
-                        ...this.state.animal,
-                        [object]: {
-                            ...this.state.animal[object],
-                            [name]: value
+                if (object === 'owners') {
+                    this.setState({
+                        animal: {
+                            ...this.state.animal,
+                            owners: [{
+                                ...this.state.animal.owners,
+                                [name]: value
+                            }]
                         }
-                    }
-                })
+                    })
+
+                } else {
+                    this.setState({
+                        animal: {
+                            ...this.state.animal,
+                            [object]: {
+                                ...this.state.animal[object],
+                                [name]: value
+                            }
+                        }
+                    })
+                }
             } else {
                 this.setState({
                     animal: {
@@ -424,10 +441,11 @@ class AnimalWindow extends Component {
     };
 
     handleChangeDatePickerCare = (name, index) => (value) => {
+        console.log(value);
         let newCareValues = this.state.animal.health.careValues ? this.state.animal.health.careValues : [];
         newCareValues[index] = {
             ...(this.state.animal.health.careValues ? this.state.animal.health.careValues[index] : {}),
-            [name]: value
+            [name]: new Date(value)
         };
 
         this.setState({
@@ -438,7 +456,7 @@ class AnimalWindow extends Component {
                     careValues: newCareValues
                 }
             }
-        })
+        }, () => console.log(this.state))
     };
 
     handleChangeCheckbox = (name, object) => (e) => {
@@ -490,7 +508,7 @@ class AnimalWindow extends Component {
             let newAnimal = nextProps.animal;
             if (newAnimal.dateOfBirth) newAnimal.dateOfBirth = new Date(newAnimal.dateOfBirth);
             if (newAnimal.health) if (newAnimal.health.sterilizedDate) newAnimal.health.sterilizedDate = new Date(newAnimal.health.sterilizedDate);
-            if (newAnimal.owners) if (newAnimal.owners.registrationDate) newAnimal.owners.registrationDate = new Date(newAnimal.owners.registrationDate);
+            if (newAnimal.owners[0]) if (newAnimal.owners[0].registrationDate) newAnimal.owners[0].registrationDate = new Date(newAnimal.owners[0].registrationDate);
             if (newAnimal.adoptionDate) newAnimal.adoptionDate = new Date(newAnimal.adoptionDate);
             if (newAnimal.fosteringDate) newAnimal.fosteringDate = new Date(newAnimal.fosteringDate);
             if (newAnimal.entryDate) newAnimal.entryDate = new Date(newAnimal.entryDate);
@@ -1852,8 +1870,9 @@ class AnimalWindow extends Component {
 
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Care Date</InputLabel>
+
                                                 <DatePicker
-                                                    selected={careValues ? (careValues[index] ? careValues[index].date : '') : ''}
+                                                    selected={careValues ? (careValues[index] ? (careValues[index].date ? new Date(careValues[index].date) : '') : '') : ''}
                                                     onChange={this.handleChangeDatePickerCare('date', index)}
                                                     className="date-filter"
                                                     disabled={openHelperAnimal}

@@ -739,7 +739,9 @@ class ContactsList extends PureComponent {
                             </Tooltip>
                         </div>
                     )
-                } : {},
+                } : {
+                    width: 50,
+                },
         ];
 
         return (
