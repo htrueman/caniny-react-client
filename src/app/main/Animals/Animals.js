@@ -61,6 +61,7 @@ class Animals extends Component {
         animals: [],
         selectedAnimal: {},
         open: false,
+        openHelperAnimal: false,
         openRemove: false,
         search: '',
         removeAnimalId: '',
@@ -80,7 +81,8 @@ class Animals extends Component {
     handleClose = () => {
         this.setState({
             open: false,
-            selectedAnimal: {}
+            selectedAnimal: {},
+            openHelperAnimal: false
         });
     };
 
@@ -135,11 +137,12 @@ class Animals extends Component {
         })
     };
 
-    handleEditAnimal = async (animal) => {
+    handleEditAnimal = async (animal, helper) => {
         const res = await animalsService.getAnimalById(animal.id);
 
         this.setState({
             selectedAnimal: res,
+            openHelperAnimal: helper
         }, () => {
             this.setState({
                 open: true,
@@ -235,7 +238,8 @@ class Animals extends Component {
                 search,
                 tab,
                 openRemove,
-                pageSize
+                pageSize,
+                openHelperAnimal
             } = this.state,
             {classes} = this.props;
 
@@ -338,6 +342,7 @@ class Animals extends Component {
 
                 <AnimalWindow
                     open={open}
+                    openHelperAnimal={openHelperAnimal}
                     onClose={this.handleClose}
                     onUpdate={this.updateWindow}
                     animal={selectedAnimal}

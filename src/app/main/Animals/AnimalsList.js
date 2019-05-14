@@ -19,6 +19,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import animalsService from 'app/services/animalsService';
 import {countryList} from './countryList';
+import moment from "moment/moment";
 
 function arrowGenerator(color) {
     return {
@@ -526,7 +527,6 @@ class ContactsList extends PureComponent {
                     Header: paramsAllColumns[item],
                     accessor: item,
                     filterable: true,
-                    className: "font-bold",
                     Filter: ({filter, onChange}) => (
                         this.customFilter(filter, onChange, item)
                     ),
@@ -542,7 +542,6 @@ class ContactsList extends PureComponent {
                     Header: paramsAllColumns[item],
                     accessor: 'originCountry',
                     filterable: true,
-                    className: "font-bold",
                     Filter: ({filter, onChange}) => (
                         this.customFilter(filter, onChange, item)
                     ),
@@ -556,19 +555,45 @@ class ContactsList extends PureComponent {
             } else if (item === 'age') {
                 return ({
                     Header: paramsAllColumns[item],
-                    accessor: item,
                     filterable: true,
-                    className: "font-bold",
                     Filter: ({filter, onChange}) => (
                         this.customAgeFilter(filter, onChange, item)
-                    )
+                    ),
+                    Cell: row => {
+                        console.log(row);
+                        if (row.original.dateOfBirth) {
+                            let mdate = moment(row.original.dateOfBirth).format('YYYY-MM-DD').toString();
+                            let yearThen = parseInt(mdate.substring(0, 4), 10);
+                            let monthThen = parseInt(mdate.substring(5, 7), 10);
+                            let dayThen = parseInt(mdate.substring(8, 10), 10);
+
+                            let today = new Date();
+                            let birthday = new Date(yearThen, monthThen - 1, dayThen);
+
+                            let differenceInMilisecond = today.valueOf() - birthday.valueOf();
+
+                            let year_age = Math.floor(differenceInMilisecond / 31536000000);
+                            let day_age = Math.floor((differenceInMilisecond % 31536000000) / 86400000);
+
+
+                            let month_age = Math.floor(day_age / 30);
+
+                            day_age = day_age % 30;
+                            return (
+                                <span>{`${year_age}y ${month_age}m ${day_age}d`}</span>
+                            )
+                        } else {
+                            return (
+                                <span>{`${row.original.age}y`}</span>
+                            )
+                        }
+                    }
                 })
             } else if (item === 'life_stage') {
                 return ({
                     Header: paramsAllColumns[item],
                     accessor: 'lifeStage',
                     filterable: true,
-                    className: "font-bold",
                     Filter: ({filter, onChange}) => (
                         this.customFilter(filter, onChange, item)
                     )
@@ -578,7 +603,6 @@ class ContactsList extends PureComponent {
                     Header: paramsAllColumns[item],
                     accessor: item,
                     filterable: true,
-                    className: "font-bold",
                     Filter: ({filter, onChange}) => (
                         this.customFilter(filter, onChange, item)
                     )
@@ -623,14 +647,16 @@ class ContactsList extends PureComponent {
             {
                 Header: () => (
                     selectedAnimalsIds.length > 0 ? (
-                        <IconButton
-                            onClick={(ev) => {
-                                ev.stopPropagation();
-                                onRemove(selectedAnimalsIds);
-                            }}
-                        >
-                            <Icon>delete</Icon>
-                        </IconButton>
+                        <Tooltip title="Delete" className={classes.toolTip}>
+                            <IconButton
+                                onClick={(ev) => {
+                                    ev.stopPropagation();
+                                    onRemove(selectedAnimalsIds);
+                                }}
+                            >
+                                <Icon>delete</Icon>
+                            </IconButton>
+                        </Tooltip>
                     ) : (
                         <RenderColumsMenu
                             columns={selectedColumns}
@@ -667,26 +693,53 @@ class ContactsList extends PureComponent {
                     sortable: false,
                     Cell: row => (
                         <div className="flex items-center">
-                            <IconButton
-                                onClick={(ev) => {
-                                    ev.stopPropagation();
-                                    onEdit(row.original)
-                                }}
-                            >
-                                <Icon>edit</Icon>
-                            </IconButton>
+                            <Tooltip title="Edit" className={classes.toolTip}>
+                                <IconButton
+                                    onClick={(ev) => {
+                                        ev.stopPropagation();
+                                        onEdit(row.original)
+                                    }}
+                                >
+                                    <Icon>edit</Icon>
+                                </IconButton>
+                            </Tooltip>
 
-                            <IconButton
-                                onClick={(ev) => {
-                                    ev.stopPropagation();
-                                    onRemove(row.original.id);
-                                }}
-                            >
-                                <Icon>delete</Icon>
-                            </IconButton>
+                            <Tooltip title="Delete" className={classes.toolTip}>
+                                <IconButton
+                                    onClick={(ev) => {
+                                        ev.stopPropagation();
+                                        onRemove(row.original.id);
+                                    }}
+                                >
+                                    <Icon>delete</Icon>
+                                </IconButton>
+                            </Tooltip>
                         </div>
                     )
-                } : {}
+                } : {},
+            (userRole === 'helper') ?
+                {
+                    Header: () => (
+                        <span></span>
+                    ),
+                    width: 128,
+                    filterable: false,
+                    sortable: false,
+                    Cell: row => (
+                        <div className="flex items-center">
+                            <Tooltip title="View" className={classes.toolTip}>
+                                <IconButton
+                                    onClick={(ev) => {
+                                        ev.stopPropagation();
+                                        onEdit(row.original, true)
+                                    }}
+                                >
+                                    <Icon>visibility</Icon>
+                                </IconButton>
+                            </Tooltip>
+                        </div>
+                    )
+                } : {},
         ];
 
         return (
@@ -898,7 +951,7 @@ class RenderColumsMenu extends Component {
                     columns: {
                         ...this.state.columns,
                         [name]: event.target.checked,
-                        [this.state.selectedItems[7]]: false
+                        [this.state.selectedItems[7]]: undefined
                     }
                 }, () => {
                     let newColumns = this.state.selectedItems;
@@ -954,6 +1007,7 @@ class RenderColumsMenu extends Component {
         }
     };
 
+
     render() {
         const {
                 anchorEl,
@@ -989,18 +1043,21 @@ class RenderColumsMenu extends Component {
                 leave_reason,
                 leave_date,
                 history,
-            } = this.state.columns;
+            } = this.state.columns,
+
+            {classes} = this.props;
 
         return (
             <Fragment>
-                <Button
-                    aria-owns={anchorEl ? 'simple-menu' : undefined}
-                    aria-haspopup="true"
-                    onClick={this.handleClick}
-                >
-                    <FontAwesomeIcon icon={faPlusSquare}/>
-                </Button>
-
+                <Tooltip title="Rows Selection">
+                    <Button
+                        aria-owns={anchorEl ? 'simple-menu' : undefined}
+                        aria-haspopup="true"
+                        onClick={this.handleClick}
+                    >
+                        <FontAwesomeIcon icon={faPlusSquare}/>
+                    </Button>
+                </Tooltip>
 
                 <Menu
                     id="simple-menu"
@@ -1009,17 +1066,19 @@ class RenderColumsMenu extends Component {
                     onClose={this.handleClose}
                 >
                     {
-                        allColumns.map(col => (
-                            <MenuItem key={col.id}>
-                                {(selectedItems.indexOf(col.id) + 1) === 0 ? '' : selectedItems.indexOf(col.id) + 1}
-                                <Checkbox
-                                    checked={this.state.columns[col.id]}
-                                    onChange={this.handleChangeCheckbox(col.id)}
-                                    value={col.id}
-                                />
-                                {col.title}
-                            </MenuItem>
-                        ))
+                        allColumns.map(col => {
+                            return (
+                                <MenuItem key={col.id}>
+                                    {(selectedItems.indexOf(col.id) + 1) === 0 ? '' : selectedItems.indexOf(col.id) + 1}
+                                    <Checkbox
+                                        checked={this.state.columns[col.id] ? true : false}
+                                        onChange={this.handleChangeCheckbox(col.id)}
+                                        value={col.id}
+                                    />
+                                    {col.title}
+                                </MenuItem>
+                            )
+                        })
                     }
                 </Menu>
             </Fragment>

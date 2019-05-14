@@ -206,8 +206,6 @@ class ContactsList extends PureComponent {
     };
 
 
-
-
     customFilter1 = (filter, onChangeFilter) => {
         const {filterType1, filterValue1, focus} = this.state;
         const changeFilterType = (value) => {
@@ -522,14 +520,16 @@ class ContactsList extends PureComponent {
                 {
                     Header: () => (
                         selectedUsersIds.length > 0 && (
-                            <IconButton
-                                onClick={(ev) => {
-                                    ev.stopPropagation();
-                                    onRemove(selectedUsersIds);
-                                }}
-                            >
-                                <Icon>delete</Icon>
-                            </IconButton>
+                            <Tooltip title="Delete" className={classes.toolTip}>
+                                <IconButton
+                                    onClick={(ev) => {
+                                        ev.stopPropagation();
+                                        onRemove(selectedUsersIds);
+                                    }}
+                                >
+                                    <Icon>delete</Icon>
+                                </IconButton>
+                            </Tooltip>
                         )
                     ),
                     accessor: "avatar",
@@ -654,23 +654,27 @@ class ContactsList extends PureComponent {
                         sortable: false,
                         Cell: row => (
                             <div className="flex items-center">
-                                <IconButton
-                                    onClick={(ev) => {
-                                        ev.stopPropagation();
-                                        onEdit(row.original)
-                                    }}
-                                >
-                                    <Icon>edit</Icon>
-                                </IconButton>
+                                <Tooltip title="Edit" className={classes.toolTip}>
+                                    <IconButton
+                                        onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            onEdit(row.original)
+                                        }}
+                                    >
+                                        <Icon>edit</Icon>
+                                    </IconButton>
+                                </Tooltip>
 
-                                <IconButton
-                                    onClick={(ev) => {
-                                        ev.stopPropagation();
-                                        onRemove(row.original.id);
-                                    }}
-                                >
-                                    <Icon>delete</Icon>
-                                </IconButton>
+                                <Tooltip title="Delete" className={classes.toolTip}>
+                                    <IconButton
+                                        onClick={(ev) => {
+                                            ev.stopPropagation();
+                                            onRemove(row.original.id);
+                                        }}
+                                    >
+                                        <Icon>delete</Icon>
+                                    </IconButton>
+                                </Tooltip>
                             </div>
                         )
                     } : {}

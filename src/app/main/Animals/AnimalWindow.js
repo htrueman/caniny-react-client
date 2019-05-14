@@ -154,6 +154,7 @@ class AnimalWindow extends Component {
             if (animal.entryDate) newAnimal.entryDate = moment(animal.entryDate).format('YYYY-MM-DD');
             if (animal.leaveDate) newAnimal.leaveDate = moment(animal.leaveDate).format('YYYY-MM-DD');
             if (animal.joinDate) newAnimal.joinDate = moment(animal.joinDate).format('YYYY-MM-DD');
+            if (animal.owners) if (animal.owners.registrationDate) newAnimal.owners.registrationDate = moment(animal.owners.registrationDate).format('YYYY-MM-DD');
 
             await animalsService.updateAnimal(newAnimal, animal.id)
         } else {
@@ -188,6 +189,8 @@ class AnimalWindow extends Component {
             if (animal.entryDate) newAnimal.entryDate = moment(animal.entryDate).format('YYYY-MM-DD');
             if (animal.leaveDate) newAnimal.leaveDate = moment(animal.leaveDate).format('YYYY-MM-DD');
             newAnimal.joinDate = animal.joinDate ? moment(animal.joinDate).format('YYYY-MM-DD') : '';
+            if (animal.owners) if (animal.owners.registrationDate) newAnimal.owners.registrationDate = moment(animal.owners.registrationDate).format('YYYY-MM-DD');
+
 
             await animalsService.createNewAnimal(
                 newAnimal
@@ -288,13 +291,29 @@ class AnimalWindow extends Component {
 
     handleChangeDatePicker = (name, object) => (value) => {
         if (name === 'dateOfBirth') {
-            const age = moment().diff(new Date(value), 'years');
+            let mdate = moment(value).format('YYYY-MM-DD').toString();
+            let yearThen = parseInt(mdate.substring(0, 4), 10);
+            let monthThen = parseInt(mdate.substring(5, 7), 10);
+            let dayThen = parseInt(mdate.substring(8, 10), 10);
+
+            let today = new Date();
+            let birthday = new Date(yearThen, monthThen - 1, dayThen);
+
+            let differenceInMilisecond = today.valueOf() - birthday.valueOf();
+
+            let year_age = Math.floor(differenceInMilisecond / 31536000000);
+            let day_age = Math.floor((differenceInMilisecond % 31536000000) / 86400000);
+
+
+            let month_age = Math.floor(day_age / 30);
+
+            day_age = day_age % 30;
 
             this.setState({
                 animal: {
                     ...this.state.animal,
                     dateOfBirth: value,
-                    age
+                    age: `${year_age}y ${month_age}m ${day_age}d`
                 }
             })
         } else {
@@ -469,9 +488,9 @@ class AnimalWindow extends Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.animal.id) {
             let newAnimal = nextProps.animal;
-
             if (newAnimal.dateOfBirth) newAnimal.dateOfBirth = new Date(newAnimal.dateOfBirth);
             if (newAnimal.health) if (newAnimal.health.sterilizedDate) newAnimal.health.sterilizedDate = new Date(newAnimal.health.sterilizedDate);
+            if (newAnimal.owners) if (newAnimal.owners.registrationDate) newAnimal.owners.registrationDate = new Date(newAnimal.owners.registrationDate);
             if (newAnimal.adoptionDate) newAnimal.adoptionDate = new Date(newAnimal.adoptionDate);
             if (newAnimal.fosteringDate) newAnimal.fosteringDate = new Date(newAnimal.fosteringDate);
             if (newAnimal.entryDate) newAnimal.entryDate = new Date(newAnimal.entryDate);
@@ -574,7 +593,8 @@ class AnimalWindow extends Component {
                 address,
                 comment,
                 profileImageBase,
-                profileIdImageBase
+                profileIdImageBase,
+                registrationDate
             } = this.state.animal.owners[0] ? this.state.animal.owners[0] : {},
 
             {
@@ -586,7 +606,8 @@ class AnimalWindow extends Component {
             {
                 classes,
                 onClose,
-                open
+                open,
+                openHelperAnimal
             } = this.props;
 
         const {
@@ -702,14 +723,15 @@ class AnimalWindow extends Component {
                                     <Avatar className="w-96 h-96" alt="contact avatar"
                                             src={image ? `data:image/jpeg;base64,${image}` : 'assets/images/avatars/avatar.svg'}/>
 
-                                    <ImageUploader
-                                        withIcon={true}
-                                        buttonText='Choose images'
-                                        onChange={this.onDrop}
-                                        imgExtension={['.jpg', '.gif', '.png']}
-                                        maxFileSize={5242880}
-                                        singleImage={true}
-                                    />
+                                    {!openHelperAnimal ?
+                                        <ImageUploader
+                                            withIcon={true}
+                                            buttonText='Choose images'
+                                            onChange={this.onDrop}
+                                            imgExtension={['.jpg', '.jpeg', '.gif', '.png']}
+                                            maxFileSize={5242880}
+                                            singleImage={true}
+                                        /> : <span className='mt-6'>{name || 'Name'}</span>}
                                 </div>
 
                                 <div className='width-80 ml-auto'>
@@ -721,6 +743,7 @@ class AnimalWindow extends Component {
                                                     id="name"
                                                     type="text"
                                                     value={name}
+                                                    disabled={openHelperAnimal}
                                                     required={true}
                                                     onChange={this.handleChangeInput('name')}
                                                 />
@@ -731,6 +754,7 @@ class AnimalWindow extends Component {
                                                 <Select
                                                     value={gender}
                                                     required
+                                                    disabled={openHelperAnimal}
                                                     native
                                                     input={<Input id="name"/>}
                                                     onChange={this.handleChangeInput('gender')}
@@ -750,31 +774,50 @@ class AnimalWindow extends Component {
                                                 <DatePicker
                                                     selected={dateOfBirth}
                                                     onChange={this.handleChangeDatePicker('dateOfBirth')}
+                                                    disabled={openHelperAnimal}
                                                     className="date-filter"
                                                     dateFormat="dd-MM-yyyy"
                                                 />
                                             </div>
 
-                                            <div className={classes.formControl}>
-                                                <InputLabel htmlFor="age-simple">Age*</InputLabel>
-                                                <TextField
-                                                    id="Age"
-                                                    required
-                                                    disabled={dateOfBirth}
-                                                    inputProps={{
-                                                        min: 0,
-                                                        pattern: '[0-9]{0,5}'
-                                                    }}
-                                                    type="number"
-                                                    value={age}
-                                                    onChange={this.handleChangeInput('age')}
-                                                />
-                                            </div>
+                                            {dateOfBirth ? <div className={classes.formControl}>
+                                                    <InputLabel htmlFor="age-simple">Age*</InputLabel>
+                                                    <TextField
+                                                        id="Age"
+                                                        disabled={dateOfBirth}
+                                                        inputProps={{
+                                                            min: 0,
+                                                            pattern: '[0-9]{0,5}'
+                                                        }}
+                                                        type="text"
+                                                        value={age}
+                                                        onChange={this.handleChangeInput('age')}
+                                                    />
+                                                </div>
+                                                :
+                                                <div className={classes.formControl}>
+                                                    <InputLabel htmlFor="age-simple">Age*</InputLabel>
+                                                    <TextField
+                                                        id="Age"
+                                                        required
+                                                        disabled={openHelperAnimal}
+                                                        inputProps={{
+                                                            min: 0,
+                                                            pattern: '[0-9]{0,5}'
+                                                        }}
+                                                        type="number"
+                                                        value={age}
+                                                        onChange={this.handleChangeInput('age')}
+                                                    />
+                                                </div>
+                                            }
+
 
                                             <div className={classes.formControl}>
                                                 <InputLabel htmlFor="age-simple">Life Stage</InputLabel>
                                                 <Select
                                                     value={lifeStage}
+                                                    disabled={openHelperAnimal}
                                                     native
                                                     onChange={this.handleChangeInput('lifeStage')}
                                                 >
@@ -795,6 +838,7 @@ class AnimalWindow extends Component {
                                                 <InputLabel htmlFor="age-simple">Species*</InputLabel>
                                                 <Select
                                                     value={species}
+                                                    disabled={openHelperAnimal}
                                                     required={true}
                                                     native
                                                     onChange={this.handleChangeInput('species')}
@@ -812,7 +856,7 @@ class AnimalWindow extends Component {
                                                     value={breed}
                                                     required
                                                     native
-                                                    disabled={species === 'other'}
+                                                    disabled={species === 'other' || openHelperAnimal}
                                                     onChange={this.handleChangeInput('breed')}
                                                 >
                                                     <option value=''></option>
@@ -835,6 +879,7 @@ class AnimalWindow extends Component {
                                                 <TextField
                                                     id="name"
                                                     type="text"
+                                                    disabled={openHelperAnimal}
                                                     value={speciesDetails}
                                                     onChange={this.handleChangeInput('speciesDetails')}
                                                 />
@@ -860,6 +905,7 @@ class AnimalWindow extends Component {
                                             <Select
                                                 value={this.state.animal.originCountry}
                                                 native
+                                                disabled={openHelperAnimal}
                                                 onChange={this.handleChangeInput('originCountry')}
                                             >
                                                 <option value=''></option>
@@ -878,6 +924,7 @@ class AnimalWindow extends Component {
                                             <TextField
                                                 id="name"
                                                 type="text"
+                                                disabled={openHelperAnimal}
                                                 value={tagId}
                                                 onChange={this.handleChangeInput('tagId')}
                                             />
@@ -888,6 +935,7 @@ class AnimalWindow extends Component {
                                             <TextField
                                                 id="name"
                                                 type="text"
+                                                disabled={openHelperAnimal}
                                                 value={chipProducer}
                                                 onChange={this.handleChangeInput('chipProducer')}
                                             />
@@ -898,6 +946,7 @@ class AnimalWindow extends Component {
                                             <TextField
                                                 id="name"
                                                 type="text"
+                                                disabled={openHelperAnimal}
                                                 value={chipId}
                                                 onChange={this.handleChangeInput('chipId')}
                                             />
@@ -911,6 +960,7 @@ class AnimalWindow extends Component {
                                                 id="date"
                                                 onChange={this.handleChangeInput('history')}
                                                 value={history}
+                                                disabled={openHelperAnimal}
                                                 rows={3}
                                                 fullWidth
                                                 multiline={true}
@@ -921,16 +971,16 @@ class AnimalWindow extends Component {
                                 </div>
                             </div>
 
+                            {!openHelperAnimal ? <DialogActions>
+                                    <Button onClick={onClose} color="secondary" className={classes.button}>
+                                        Cancel
+                                    </Button>
 
-                            <DialogActions>
-                                <Button onClick={onClose} color="secondary" className={classes.button}>
-                                    Cancel
-                                </Button>
-
-                                <Button type='submit' color="secondary" className={classes.button}>
-                                    Save
-                                </Button>
-                            </DialogActions>
+                                    <Button type='submit' color="secondary" className={classes.button}>
+                                        Save
+                                    </Button>
+                                </DialogActions>
+                                : ''}
                         </form>
                     </div>}
 
@@ -956,6 +1006,7 @@ class AnimalWindow extends Component {
                                                 <Select
                                                     value={personality}
                                                     native
+                                                    disabled={openHelperAnimal}
                                                     onChange={this.handleChangeInput('personality')}
                                                 >
                                                     <option value=""/>
@@ -974,6 +1025,7 @@ class AnimalWindow extends Component {
                                                 <label className="switch">
                                                     <input type="checkbox"
                                                            value={bites}
+                                                           disabled={openHelperAnimal}
                                                            checked={bites === 'yes' && true}
                                                            onChange={this.handleChangeCheckbox('bites')}/>
                                                     <span className="slider round"></span>
@@ -985,6 +1037,7 @@ class AnimalWindow extends Component {
                                                 <Select
                                                     value={energyLevel}
                                                     native
+                                                    disabled={openHelperAnimal}
                                                     onChange={this.handleChangeInput('energyLevel')}
                                                 >
                                                     <option value=""/>
@@ -1004,6 +1057,7 @@ class AnimalWindow extends Component {
                                                     <Select
                                                         value={humansFriendly}
                                                         native
+                                                        disabled={openHelperAnimal}
                                                         onChange={this.handleChangeInput('humansFriendly')}
                                                     >
                                                         <option value=""/>
@@ -1020,6 +1074,7 @@ class AnimalWindow extends Component {
                                                     <Select
                                                         value={kidsFriendly}
                                                         native
+                                                        disabled={openHelperAnimal}
                                                         onChange={this.handleChangeInput('kidsFriendly')}
                                                     >
                                                         <option value=""/>
@@ -1041,6 +1096,7 @@ class AnimalWindow extends Component {
                                                     <Select
                                                         value={animalsFriendly}
                                                         native
+                                                        disabled={openHelperAnimal}
                                                         onChange={this.handleChangeInput('animalsFriendly')}
                                                     >
                                                         <option value=""/>
@@ -1057,6 +1113,7 @@ class AnimalWindow extends Component {
                                                     <Select
                                                         value={dogsFriendly}
                                                         native
+                                                        disabled={openHelperAnimal}
                                                         onChange={this.handleChangeInput('dogsFriendly')}
                                                     >
                                                         <option value=""/>
@@ -1073,6 +1130,7 @@ class AnimalWindow extends Component {
                                                     <Select
                                                         value={catsFriendly}
                                                         native
+                                                        disabled={openHelperAnimal}
                                                         onChange={this.handleChangeInput('catsFriendly')}
                                                     >
                                                         <option value=""/>
@@ -1095,6 +1153,7 @@ class AnimalWindow extends Component {
                                             id="name"
                                             type="text"
                                             rows={3}
+                                            disabled={openHelperAnimal}
                                             multiline={true}
                                             fullWidth
                                             value={personalityDescription}
@@ -1104,15 +1163,16 @@ class AnimalWindow extends Component {
                                 </div>
                             </div>
 
-                            <DialogActions>
-                                <Button onClick={onClose} color="secondary" className={classes.button}>
-                                    Cancel
-                                </Button>
+                            {!openHelperAnimal ?
+                                <DialogActions>
+                                    <Button onClick={onClose} color="secondary" className={classes.button}>
+                                        Cancel
+                                    </Button>
 
-                                <Button type='submit' color="secondary" className={classes.button}>
-                                    Save
-                                </Button>
-                            </DialogActions>
+                                    <Button type='submit' color="secondary" className={classes.button}>
+                                        Save
+                                    </Button>
+                                </DialogActions> : ''}
                         </form>
                     </div>}
 
@@ -1138,6 +1198,7 @@ class AnimalWindow extends Component {
                                                 <Select
                                                     value={coatType ? coatType : ''}
                                                     native
+                                                    disabled={openHelperAnimal}
                                                     onChange={this.handleChangeInput('coatType', 'appearance')}
                                                 >
                                                     <option value=""/>
@@ -1153,6 +1214,7 @@ class AnimalWindow extends Component {
                                                 <Select
                                                     value={size}
                                                     native
+                                                    disabled={openHelperAnimal}
                                                     onChange={this.handleChangeInput('size', 'appearance')}
                                                 >
                                                     <option value=""/>
@@ -1171,6 +1233,7 @@ class AnimalWindow extends Component {
                                                 <Select
                                                     value={firstCoatColor}
                                                     native
+                                                    disabled={openHelperAnimal}
                                                     onChange={this.handleChangeInput('firstCoatColor', 'appearance')}
                                                 >
                                                     <option value=""/>
@@ -1191,6 +1254,7 @@ class AnimalWindow extends Component {
                                                 <Select
                                                     value={secondCoatColor}
                                                     native
+                                                    disabled={openHelperAnimal}
                                                     onChange={this.handleChangeInput('secondCoatColor', 'appearance')}
                                                 >
                                                     <option value=""/>
@@ -1211,6 +1275,7 @@ class AnimalWindow extends Component {
                                                 <Select
                                                     value={thirdCoatColor}
                                                     native
+                                                    disabled={openHelperAnimal}
                                                     onChange={this.handleChangeInput('thirdCoatColor', 'appearance')}
                                                 >
                                                     <option value=""/>
@@ -1237,6 +1302,7 @@ class AnimalWindow extends Component {
                                                 <Select
                                                     value={firstEyeColor}
                                                     native
+                                                    disabled={openHelperAnimal}
                                                     onChange={this.handleChangeInput('firstEyeColor', 'appearance')}
                                                 >
                                                     <option value=""/>
@@ -1254,6 +1320,7 @@ class AnimalWindow extends Component {
                                                 <Select
                                                     value={secondEyeColor}
                                                     native
+                                                    disabled={openHelperAnimal}
                                                     onChange={this.handleChangeInput('secondEyeColor', 'appearance')}
                                                 >
                                                     <option value=""/>
@@ -1273,6 +1340,7 @@ class AnimalWindow extends Component {
                                                 <Select
                                                     value={ears}
                                                     native
+                                                    disabled={openHelperAnimal}
                                                     onChange={this.handleChangeInput('ears', 'appearance')}
                                                 >
                                                     <option value=""/>
@@ -1288,6 +1356,7 @@ class AnimalWindow extends Component {
                                                 <Select
                                                     value={tail}
                                                     native
+                                                    disabled={openHelperAnimal}
                                                     onChange={this.handleChangeInput('tail', 'appearance')}
                                                 >
                                                     <option value=""/>
@@ -1306,6 +1375,7 @@ class AnimalWindow extends Component {
                                                 id="name"
                                                 type="text"
                                                 rows={3}
+                                                disabled={openHelperAnimal}
                                                 multiline={true}
                                                 fullWidth={true}
                                                 value={describeAppearance}
@@ -1316,15 +1386,16 @@ class AnimalWindow extends Component {
                                 </div>
                             </div>
 
-                            <DialogActions>
-                                <Button onClick={onClose} color="secondary" className={classes.button}>
-                                    Cancel
-                                </Button>
+                            {!openHelperAnimal ?
+                                <DialogActions>
+                                    <Button onClick={onClose} color="secondary" className={classes.button}>
+                                        Cancel
+                                    </Button>
 
-                                <Button type='submit' color="secondary" className={classes.button}>
-                                    Save
-                                </Button>
-                            </DialogActions>
+                                    <Button type='submit' color="secondary" className={classes.button}>
+                                        Save
+                                    </Button>
+                                </DialogActions> : ''}
                         </form>
                     </div>}
 
@@ -1349,6 +1420,7 @@ class AnimalWindow extends Component {
                                             <Select
                                                 value={obedience}
                                                 native
+                                                disabled={openHelperAnimal}
                                                 onChange={this.handleChangeInput('obedience', 'training')}
                                             >
                                                 <option value=""/>
@@ -1365,6 +1437,7 @@ class AnimalWindow extends Component {
                                                 <input
                                                     type="checkbox"
                                                     value={houseTrained}
+                                                    disabled={openHelperAnimal}
                                                     checked={houseTrained}
                                                     onChange={this.handleChangeCheckboxBool('houseTrained', 'training')}
                                                 />
@@ -1380,6 +1453,7 @@ class AnimalWindow extends Component {
                                                 <input
                                                     type="checkbox"
                                                     value={crateTrained}
+                                                    disabled={openHelperAnimal}
                                                     checked={crateTrained}
                                                     onChange={this.handleChangeCheckboxBool('crateTrained', 'training')}
                                                 />
@@ -1393,6 +1467,7 @@ class AnimalWindow extends Component {
                                                 <input
                                                     type="checkbox"
                                                     value={fenceRequired}
+                                                    disabled={openHelperAnimal}
                                                     checked={fenceRequired}
                                                     onChange={this.handleChangeCheckboxBool('fenceRequired', 'training')}
                                                 />
@@ -1413,6 +1488,7 @@ class AnimalWindow extends Component {
                                             type="text"
                                             fullWidth={true}
                                             multiline={true}
+                                            disabled={openHelperAnimal}
                                             rows={3}
                                             value={describeTraining}
                                             onChange={this.handleChangeInput('describeTraining', 'training')}
@@ -1421,16 +1497,16 @@ class AnimalWindow extends Component {
                                 </div>
                             </div>
 
+                            {!openHelperAnimal ?
+                                <DialogActions>
+                                    <Button onClick={onClose} color="secondary" className={classes.button}>
+                                        Cancel
+                                    </Button>
 
-                            <DialogActions>
-                                <Button onClick={onClose} color="secondary" className={classes.button}>
-                                    Cancel
-                                </Button>
-
-                                <Button type='submit' color="secondary" className={classes.button}>
-                                    Save
-                                </Button>
-                            </DialogActions>
+                                    <Button type='submit' color="secondary" className={classes.button}>
+                                        Save
+                                    </Button>
+                                </DialogActions> : ''}
                         </form>
                     </div>}
 
@@ -1455,6 +1531,7 @@ class AnimalWindow extends Component {
                                             <TextField
                                                 id="name"
                                                 type="number"
+                                                disabled={openHelperAnimal}
                                                 inputProps={{
                                                     min: 0,
                                                     pattern: '[0-9]{0,5}'
@@ -1469,6 +1546,7 @@ class AnimalWindow extends Component {
                                             <TextField
                                                 id="name"
                                                 type="number"
+                                                disabled={openHelperAnimal}
                                                 inputProps={{
                                                     min: 0,
                                                     pattern: '[0-9]{0,5}'
@@ -1483,6 +1561,7 @@ class AnimalWindow extends Component {
                                             <TextField
                                                 id="name"
                                                 type="number"
+                                                disabled={openHelperAnimal}
                                                 inputProps={{
                                                     min: 0,
                                                     pattern: '[0-9]{0,5}'
@@ -1503,6 +1582,7 @@ class AnimalWindow extends Component {
                                             <input
                                                 type="checkbox"
                                                 checked={cryptorchid}
+                                                disabled={openHelperAnimal}
                                                 value={cryptorchid}
                                                 onChange={this.handleChangeCheckboxBool('cryptorchid', 'health')}
                                             />
@@ -1515,6 +1595,7 @@ class AnimalWindow extends Component {
                                         <Select
                                             value={sterilized}
                                             native
+                                            disabled={openHelperAnimal}
                                             onChange={this.handleChangeInput('sterilized', 'health')}
                                         >
                                             <option value=""/>
@@ -1528,6 +1609,7 @@ class AnimalWindow extends Component {
                                         <InputLabel htmlFor="age-simple">Sterilization Date</InputLabel>
                                         <DatePicker
                                             selected={sterilizedDate}
+                                            disabled={openHelperAnimal}
                                             onChange={this.handleChangeDatePicker('sterilizedDate', 'health')}
                                             className="date-filter"
                                             dateFormat="dd-MM-yyyy"
@@ -1545,6 +1627,7 @@ class AnimalWindow extends Component {
                                                     <input
                                                         type="checkbox"
                                                         value={pregnant}
+                                                        disabled={openHelperAnimal}
                                                         checked={pregnant}
                                                         onChange={this.handleChangeCheckboxBool('pregnant')}
                                                     />
@@ -1558,6 +1641,7 @@ class AnimalWindow extends Component {
                                                     <input
                                                         type="checkbox"
                                                         checked={disabled}
+                                                        disabled={openHelperAnimal}
                                                         value={disabled}
                                                         onChange={this.handleChangeCheckboxBool('disabled', 'health')}
                                                     />
@@ -1571,6 +1655,7 @@ class AnimalWindow extends Component {
                                                 <InputLabel htmlFor="age-simple">Weight Condition</InputLabel>
                                                 <Select
                                                     value={weightCondition}
+                                                    disabled={openHelperAnimal}
                                                     native
                                                     onChange={this.handleChangeInput('weightCondition', 'health')}
                                                 >
@@ -1588,6 +1673,7 @@ class AnimalWindow extends Component {
                                                     <input
                                                         type="checkbox"
                                                         checked={injured}
+                                                        disabled={openHelperAnimal}
                                                         value={injured}
                                                         onChange={this.handleChangeCheckboxBool('injured', 'health')}
                                                     />
@@ -1602,6 +1688,7 @@ class AnimalWindow extends Component {
                                             <InputLabel htmlFor="age-simple">Eye Sight</InputLabel>
                                             <Select
                                                 value={eyesSight}
+                                                disabled={openHelperAnimal}
                                                 native
                                                 onChange={this.handleChangeInput('eyesSight', 'health')}
                                             >
@@ -1617,6 +1704,7 @@ class AnimalWindow extends Component {
                                             <InputLabel htmlFor="age-simple">Blind</InputLabel>
                                             <Select
                                                 value={blind}
+                                                disabled={openHelperAnimal}
                                                 native
                                                 onChange={this.handleChangeInput('blind', 'health')}
                                             >
@@ -1631,6 +1719,7 @@ class AnimalWindow extends Component {
                                             <InputLabel htmlFor="age-simple">Deaf</InputLabel>
                                             <Select
                                                 value={deaf}
+                                                disabled={openHelperAnimal}
                                                 native
                                                 onChange={this.handleChangeInput('deaf', 'health')}
                                             >
@@ -1650,6 +1739,7 @@ class AnimalWindow extends Component {
                                         <InputLabel htmlFor="age-simple">Teeth</InputLabel>
                                         <Select
                                             value={teeth}
+                                            disabled={openHelperAnimal}
                                             native
                                             onChange={this.handleChangeInput('teeth', 'health')}
                                         >
@@ -1669,6 +1759,7 @@ class AnimalWindow extends Component {
                                         <InputLabel htmlFor="age-simple">Gums</InputLabel>
                                         <Select
                                             value={gums}
+                                            disabled={openHelperAnimal}
                                             native
                                             onChange={this.handleChangeInput('gums', 'health')}
                                         >
@@ -1687,6 +1778,7 @@ class AnimalWindow extends Component {
                                             <InputLabel htmlFor="name">Health Description</InputLabel>
                                             <TextField
                                                 id="name"
+                                                disabled={openHelperAnimal}
                                                 type="text"
                                                 style={{padding: '3px 0'}}
                                                 rows={6}
@@ -1700,15 +1792,16 @@ class AnimalWindow extends Component {
                                 </div>
                             </div>
 
-                            <DialogActions>
-                                <Button onClick={onClose} color="secondary" className={classes.button}>
-                                    Cancel
-                                </Button>
+                            {!openHelperAnimal ?
+                                <DialogActions>
+                                    <Button onClick={onClose} color="secondary" className={classes.button}>
+                                        Cancel
+                                    </Button>
 
-                                <Button type='submit' color="secondary" className={classes.button}>
-                                    Save
-                                </Button>
-                            </DialogActions>
+                                    <Button type='submit' color="secondary" className={classes.button}>
+                                        Save
+                                    </Button>
+                                </DialogActions> : ''}
                         </form>
                     </div>}
 
@@ -1733,6 +1826,7 @@ class AnimalWindow extends Component {
                                                 <Select
                                                     value={careValues ? (careValues[index] ? careValues[index].careType : '') : ''}
                                                     native
+                                                    disabled={openHelperAnimal}
                                                     onChange={this.handleChangeInputCare('careType', index)}
                                                 >
                                                     <option value=""/>
@@ -1749,6 +1843,7 @@ class AnimalWindow extends Component {
                                                 <TextField
                                                     id="name"
                                                     type="text"
+                                                    disabled={openHelperAnimal}
                                                     value={careValues ? (careValues[index] ? careValues[index].note : '') : ''}
                                                     onChange={this.handleChangeInputCare('note', index)}
                                                 />
@@ -1760,6 +1855,7 @@ class AnimalWindow extends Component {
                                                     selected={careValues ? (careValues[index] ? careValues[index].date : '') : ''}
                                                     onChange={this.handleChangeDatePickerCare('date', index)}
                                                     className="date-filter"
+                                                    disabled={openHelperAnimal}
                                                     dateFormat="dd-MM-yyyy"
                                                 />
                                             </div>
@@ -1768,16 +1864,16 @@ class AnimalWindow extends Component {
                                 </div>
                             </div>
 
+                            {!openHelperAnimal ?
+                                <DialogActions>
+                                    <Button onClick={onClose} color="secondary" className={classes.button}>
+                                        Cancel
+                                    </Button>
 
-                            <DialogActions>
-                                <Button onClick={onClose} color="secondary" className={classes.button}>
-                                    Cancel
-                                </Button>
-
-                                <Button type='submit' color="secondary" className={classes.button}>
-                                    Save
-                                </Button>
-                            </DialogActions>
+                                    <Button type='submit' color="secondary" className={classes.button}>
+                                        Save
+                                    </Button>
+                                </DialogActions> : ''}
                         </form>
                     </div>}
 
@@ -1801,6 +1897,7 @@ class AnimalWindow extends Component {
                                             <InputLabel htmlFor="age-simple">Accommodation</InputLabel>
                                             <Select
                                                 value={accommodation}
+                                                disabled={openHelperAnimal}
                                                 native
                                                 onChange={this.handleChangeInput('accommodation')}
                                             >
@@ -1821,6 +1918,7 @@ class AnimalWindow extends Component {
                                                 <InputLabel htmlFor="age-simple">Adopted</InputLabel>
                                                 <Select
                                                     value={forAdoption}
+                                                    disabled={openHelperAnimal}
                                                     native
                                                     onChange={this.handleChangeInput('forAdoption')}
                                                 >
@@ -1836,6 +1934,7 @@ class AnimalWindow extends Component {
                                                 <InputLabel htmlFor="age-simple">Adoption Date</InputLabel>
                                                 <DatePicker
                                                     selected={adoptionDate}
+                                                    disabled={openHelperAnimal}
                                                     onChange={this.handleChangeDatePicker('adoptionDate')}
                                                     className="date-filter"
                                                     dateFormat="dd-MM-yyyy"
@@ -1849,6 +1948,7 @@ class AnimalWindow extends Component {
                                                 <InputLabel htmlFor="age-simple">Fostered</InputLabel>
                                                 <Select
                                                     value={forFoster}
+                                                    disabled={openHelperAnimal}
                                                     native
                                                     onChange={this.handleChangeInput('forFoster')}
                                                 >
@@ -1864,6 +1964,7 @@ class AnimalWindow extends Component {
                                                 <InputLabel htmlFor="age-simple">Fostering Date</InputLabel>
                                                 <DatePicker
                                                     selected={fosteringDate}
+                                                    disabled={openHelperAnimal}
                                                     onChange={this.handleChangeDatePicker('fosteringDate')}
                                                     className="date-filter"
                                                     dateFormat="dd-MM-yyyy"
@@ -1880,6 +1981,7 @@ class AnimalWindow extends Component {
                                     <InputLabel htmlFor="age-simple">Entry Reason</InputLabel>
                                     <Select
                                         value={joinedReason}
+                                        disabled={openHelperAnimal}
                                         native
                                         onChange={this.handleChangeInput('joinedReason')}
                                     >
@@ -1898,6 +2000,7 @@ class AnimalWindow extends Component {
                                     <InputLabel htmlFor="age-simple">Entry Date</InputLabel>
                                     <DatePicker
                                         selected={entryDate}
+                                        disabled={openHelperAnimal}
                                         onChange={this.handleChangeDatePicker('entryDate')}
                                         className="date-filter"
                                         dateFormat="dd-MM-yyyy"
@@ -1909,6 +2012,7 @@ class AnimalWindow extends Component {
                                     <InputLabel htmlFor="age-simple">Leave Reason</InputLabel>
                                     <Select
                                         value={leaveReason}
+                                        disabled={openHelperAnimal}
                                         native
                                         onChange={this.handleChangeInput('leaveReason')}
                                     >
@@ -1927,6 +2031,7 @@ class AnimalWindow extends Component {
                                     <InputLabel htmlFor="age-simple">Leave Date</InputLabel>
                                     <DatePicker
                                         selected={leaveDate}
+                                        disabled={openHelperAnimal}
                                         onChange={this.handleChangeDatePicker('leaveDate')}
                                         className="date-filter"
                                         dateFormat="dd-MM-yyyy"
@@ -1941,6 +2046,7 @@ class AnimalWindow extends Component {
                                     <TextField
                                         id="name"
                                         type="text"
+                                        disabled={openHelperAnimal}
                                         rows={3}
                                         multiline={true}
                                         fullWidth
@@ -1950,16 +2056,16 @@ class AnimalWindow extends Component {
                                 </div>
                             </div>
 
+                            {!openHelperAnimal ?
+                                <DialogActions>
+                                    <Button onClick={onClose} color="secondary" className={classes.button}>
+                                        Cancel
+                                    </Button>
 
-                            <DialogActions>
-                                <Button onClick={onClose} color="secondary" className={classes.button}>
-                                    Cancel
-                                </Button>
-
-                                <Button type='submit' color="secondary" className={classes.button}>
-                                    Save
-                                </Button>
-                            </DialogActions>
+                                    <Button type='submit' color="secondary" className={classes.button}>
+                                        Save
+                                    </Button>
+                                </DialogActions> : ''}
                         </form>
                     </div>}
 
@@ -1975,14 +2081,15 @@ class AnimalWindow extends Component {
                                         <Avatar className="w-96 h-96" alt="contact avatar"
                                                 src={profileImageBase ? `data:image/jpeg;base64,${profileImageBase}` : 'assets/images/avatars/avatar.svg'}/>
 
-                                        <ImageUploader
-                                            withIcon={true}
-                                            buttonText='Choose images'
-                                            onChange={this.onDropOwnerAvatar}
-                                            imgExtension={['.jpg', '.gif', '.png']}
-                                            maxFileSize={5242880}
-                                            singleImage={true}
-                                        />
+                                        {!openHelperAnimal ?
+                                            <ImageUploader
+                                                withIcon={true}
+                                                buttonText='Choose images'
+                                                onChange={this.onDropOwnerAvatar}
+                                                imgExtension={['.jpg', '.jpeg', '.gif', '.png']}
+                                                maxFileSize={5242880}
+                                                singleImage={true}
+                                            /> : ''}
                                     </div>
 
                                     <div className='width-80 flex flex-col shadow-section'>
@@ -1991,6 +2098,7 @@ class AnimalWindow extends Component {
                                                 <InputLabel htmlFor="age-simple">Group</InputLabel>
                                                 <Select
                                                     value={ownerStatus}
+                                                    disabled={openHelperAnimal}
                                                     native
                                                     onChange={this.handleChangeInput('ownerStatus', 'owners')}
                                                 >
@@ -2007,6 +2115,7 @@ class AnimalWindow extends Component {
                                                 <InputLabel htmlFor="name">First Name </InputLabel>
                                                 <TextField
                                                     id="name"
+                                                    disabled={openHelperAnimal}
                                                     type="text"
                                                     value={firstName}
                                                     onChange={this.handleChangeInput('firstName', 'owners')}
@@ -2016,6 +2125,7 @@ class AnimalWindow extends Component {
                                                 <InputLabel htmlFor="name">Last Name</InputLabel>
                                                 <TextField
                                                     id="name"
+                                                    disabled={openHelperAnimal}
                                                     type="text"
                                                     value={lastName}
                                                     onChange={this.handleChangeInput('lastName', 'owners')}
@@ -2028,6 +2138,7 @@ class AnimalWindow extends Component {
                                                 <InputLabel htmlFor="name">Email</InputLabel>
                                                 <TextField
                                                     id="name"
+                                                    disabled={openHelperAnimal}
                                                     type="text"
                                                     value={email}
                                                     onChange={this.handleChangeInput('email', 'owners')}
@@ -2038,6 +2149,7 @@ class AnimalWindow extends Component {
                                                 <InputLabel htmlFor="name">Phone</InputLabel>
                                                 <TextField
                                                     id="name"
+                                                    disabled={openHelperAnimal}
                                                     type="text"
                                                     value={phoneNumber}
                                                     onChange={this.handleChangeInput('phoneNumber', 'owners')}
@@ -2049,6 +2161,7 @@ class AnimalWindow extends Component {
                                                 <InputLabel htmlFor="name">City</InputLabel>
                                                 <TextField
                                                     id="name"
+                                                    disabled={openHelperAnimal}
                                                     type="text"
                                                     value={city}
                                                     onChange={this.handleChangeInput('city', 'owners')}
@@ -2061,6 +2174,7 @@ class AnimalWindow extends Component {
                                                 <InputLabel htmlFor="name">State</InputLabel>
                                                 <TextField
                                                     id="name"
+                                                    disabled={openHelperAnimal}
                                                     type="text"
                                                     value={state}
                                                     onChange={this.handleChangeInput('state', 'owners')}
@@ -2071,6 +2185,7 @@ class AnimalWindow extends Component {
                                                 <InputLabel htmlFor="name">Zip Code</InputLabel>
                                                 <TextField
                                                     id="name"
+                                                    disabled={openHelperAnimal}
                                                     type="text"
                                                     value={zipCode}
                                                     onChange={this.handleChangeInput('zipCode', 'owners')}
@@ -2082,6 +2197,7 @@ class AnimalWindow extends Component {
                                                 <Select
                                                     value={this.state.animal.owners[0] ? this.state.animal.owners[0].originCountry : ''}
                                                     native
+                                                    disabled={openHelperAnimal}
                                                     onChange={this.handleChangeInput('originCountry', 'owners')}
                                                 >
                                                     <option value=""/>
@@ -2099,6 +2215,7 @@ class AnimalWindow extends Component {
                                                     <TextField
                                                         id="name"
                                                         type="text"
+                                                        disabled={openHelperAnimal}
                                                         value={address}
                                                         onChange={this.handleChangeInput('address', 'owners')}
                                                     />
@@ -2107,11 +2224,12 @@ class AnimalWindow extends Component {
 
                                             <div style={{width: '25%'}}>
                                                 <div className={classes.formHistoryControl}>
-                                                    <InputLabel htmlFor="age-simple">Ownership Registration</InputLabel>
+                                                    <InputLabel htmlFor="age-simple">Owner Registration</InputLabel>
                                                     <DatePicker
-                                                        selected={dateOfBirth}
-                                                        onChange={this.handleChangeDatePicker('dateOfBirth', 'owners')}
+                                                        selected={registrationDate}
+                                                        onChange={this.handleChangeDatePicker('registrationDate', 'owners')}
                                                         className="date-filter"
+                                                        disabled={openHelperAnimal}
                                                         dateFormat="dd-MM-yyyy"
                                                     />
 
@@ -2130,6 +2248,7 @@ class AnimalWindow extends Component {
                                             fullWidth={true}
                                             multiline={true}
                                             rows={5}
+                                            disabled={openHelperAnimal}
                                             value={comment}
                                             onChange={this.handleChangeInput('comment', 'owners')}
                                         />
@@ -2137,15 +2256,16 @@ class AnimalWindow extends Component {
                                 </div>
                             </div>
 
-                            <DialogActions>
-                                <Button onClick={onClose} color="secondary" className={classes.button}>
-                                    Cancel
-                                </Button>
+                            {!openHelperAnimal ?
+                                <DialogActions>
+                                    <Button onClick={onClose} color="secondary" className={classes.button}>
+                                        Cancel
+                                    </Button>
 
-                                <Button type='submit' color="secondary" className={classes.button}>
-                                    Save
-                                </Button>
-                            </DialogActions>
+                                    <Button type='submit' color="secondary" className={classes.button}>
+                                        Save
+                                    </Button>
+                                </DialogActions> : ''}
                         </form>
                     </div>}
 
@@ -2168,14 +2288,14 @@ class AnimalWindow extends Component {
 
                                     <div className='width-100 flex justify-around'>
                                         <div className='drop-block flex flex-col'>
-                                            <ImageUploader
+                                            {!openHelperAnimal ? <ImageUploader
                                                 withIcon={true}
                                                 buttonText='User ID'
                                                 onChange={this.onDropUserId}
-                                                imgExtension={['.jpg', '.gif', '.png']}
+                                                imgExtension={['.jpg', '.jpeg', '.gif', '.png']}
                                                 maxFileSize={5242880}
                                                 singleImage={true}
-                                            />
+                                            /> : ''}
 
                                             <img
                                                 src={profileIdImageBase ? `data:image/jpeg;base64,${profileIdImageBase}` : ''}
@@ -2184,14 +2304,15 @@ class AnimalWindow extends Component {
                                         </div>
 
                                         <div className='drop-block flex flex-col'>
-                                            <ImageUploader
+                                            {!openHelperAnimal ? <ImageUploader
                                                 withIcon={true}
                                                 buttonText='Animal ID'
                                                 onChange={this.onDropImageId}
-                                                imgExtension={['.jpg', '.gif', '.png']}
+                                                imgExtension={['.jpg', '.jpeg', '.gif', '.png']}
                                                 maxFileSize={5242880}
                                                 singleImage={true}
-                                            />
+                                            /> : ''}
+
                                             <img src={imageId ? `data:image/jpeg;base64,${imageId}` : ''} alt=""
                                                  className='id-photo'/>
                                         </div>
@@ -2199,16 +2320,16 @@ class AnimalWindow extends Component {
                                 </div>
                             </div>
 
+                            {!openHelperAnimal ?
+                                <DialogActions>
+                                    <Button onClick={onClose} color="secondary" className={classes.button}>
+                                        Cancel
+                                    </Button>
 
-                            <DialogActions>
-                                <Button onClick={onClose} color="secondary" className={classes.button}>
-                                    Cancel
-                                </Button>
-
-                                <Button type='submit' color="secondary" className={classes.button}>
-                                    Save
-                                </Button>
-                            </DialogActions>
+                                    <Button type='submit' color="secondary" className={classes.button}>
+                                        Save
+                                    </Button>
+                                </DialogActions> : ''}
                         </form>
                     </div>}
                 </DialogContent>

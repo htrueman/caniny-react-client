@@ -69,6 +69,10 @@
     width: 100px;
 }
 
+.rt-td {
+    font-size: 13px;
+}
+
 /*checkbox*/
 /* The switch - the box around the slider */
 .switch {
