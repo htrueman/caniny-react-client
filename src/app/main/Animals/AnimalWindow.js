@@ -507,7 +507,7 @@ class AnimalWindow extends Component {
         if (nextProps.animal.id) {
             let newAnimal = nextProps.animal;
 
-            if(newAnimal.dateOfBirth) {
+            if (newAnimal.dateOfBirth) {
                 let mdate = moment(newAnimal.dateOfBirth).format('YYYY-MM-DD').toString();
                 let yearThen = parseInt(mdate.substring(0, 4), 10);
                 let monthThen = parseInt(mdate.substring(5, 7), 10);
@@ -792,7 +792,8 @@ class AnimalWindow extends Component {
                                             </div>
 
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Gender*</InputLabel>
+                                                <InputLabel className="custom-label"
+                                                            htmlFor="age-simple">Gender*</InputLabel>
                                                 <Select
                                                     value={gender}
                                                     required
@@ -812,8 +813,10 @@ class AnimalWindow extends Component {
 
                                         <div className='flex justify-between width-100'>
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Birthday</InputLabel>
+                                                <InputLabel className="custom-label"
+                                                            htmlFor="age-simple">Birthday</InputLabel>
                                                 <DatePicker
+                                                    showYearDropdown
                                                     selected={dateOfBirth ? new Date(dateOfBirth) : ''}
                                                     onChange={this.handleChangeDatePicker('dateOfBirth')}
                                                     disabled={openHelperAnimal}
@@ -824,7 +827,8 @@ class AnimalWindow extends Component {
                                             </div>
 
                                             {dateOfBirth ? <div className={classes.formControl}>
-                                                    <InputLabel className="custom-label" htmlFor="age-simple">Age*</InputLabel>
+                                                    <InputLabel className="custom-label"
+                                                                htmlFor="age-simple">Age*</InputLabel>
                                                     <TextField
                                                         id="Age"
                                                         disabled={dateOfBirth}
@@ -839,7 +843,8 @@ class AnimalWindow extends Component {
                                                 </div>
                                                 :
                                                 <div className={classes.formControl}>
-                                                    <InputLabel className="custom-label" htmlFor="age-simple">Age*</InputLabel>
+                                                    <InputLabel className="custom-label"
+                                                                htmlFor="age-simple">Age*</InputLabel>
                                                     <TextField
                                                         id="Age"
                                                         required
@@ -857,7 +862,8 @@ class AnimalWindow extends Component {
 
 
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Life Stage</InputLabel>
+                                                <InputLabel className="custom-label" htmlFor="age-simple">Life
+                                                    Stage</InputLabel>
                                                 <Select
                                                     value={lifeStage}
                                                     disabled={openHelperAnimal}
@@ -878,7 +884,8 @@ class AnimalWindow extends Component {
 
                                         <div className='flex justify-between width-100'>
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Species*</InputLabel>
+                                                <InputLabel className="custom-label"
+                                                            htmlFor="age-simple">Species*</InputLabel>
                                                 <Select
                                                     value={species}
                                                     disabled={openHelperAnimal}
@@ -894,7 +901,8 @@ class AnimalWindow extends Component {
                                             </div>
 
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Breed*</InputLabel>
+                                                <InputLabel className="custom-label"
+                                                            htmlFor="age-simple">Breed*</InputLabel>
                                                 <Select
                                                     value={breed}
                                                     required
@@ -918,7 +926,8 @@ class AnimalWindow extends Component {
                                             </div>
 
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Species details</InputLabel>
+                                                <InputLabel className="custom-label" htmlFor="age-simple">Species
+                                                    details</InputLabel>
                                                 <TextField
                                                     id="name"
                                                     type="text"
@@ -933,8 +942,10 @@ class AnimalWindow extends Component {
 
                                     <div className='flex justify-between width-100 shadow-section'>
                                         <div className={classes.formControl}>
-                                            <InputLabel className="custom-label" htmlFor="age-simple">Animal Registration</InputLabel>
+                                            <InputLabel className="custom-label" htmlFor="age-simple">Animal
+                                                Registration</InputLabel>
                                             <DatePicker
+                                                showYearDropdown
                                                 selected={joinDate ? new Date(joinDate) : ''}
                                                 className="date-filter"
                                                 dateFormat="dd-MM-yyyy"
@@ -944,7 +955,8 @@ class AnimalWindow extends Component {
                                         </div>
 
                                         <div className={classes.formControl}>
-                                            <InputLabel className="custom-label" htmlFor="age-simple">Origin Country</InputLabel>
+                                            <InputLabel className="custom-label" htmlFor="age-simple">Origin
+                                                Country</InputLabel>
                                             <Select
                                                 value={this.state.animal.originCountry}
                                                 native
@@ -963,7 +975,8 @@ class AnimalWindow extends Component {
 
                                     <div className='flex justify-between width-100 shadow-section'>
                                         <div className={classes.formControl}>
-                                            <InputLabel className="custom-label" htmlFor="age-simple">Tag ID</InputLabel>
+                                            <InputLabel className="custom-label" htmlFor="age-simple">Tag
+                                                ID</InputLabel>
                                             <TextField
                                                 id="name"
                                                 type="text"
@@ -974,7 +987,8 @@ class AnimalWindow extends Component {
                                         </div>
 
                                         <div className={classes.formControl}>
-                                            <InputLabel className="custom-label" htmlFor="age-simple">Chip Producer</InputLabel>
+                                            <InputLabel className="custom-label" htmlFor="age-simple">Chip
+                                                Producer</InputLabel>
                                             <TextField
                                                 id="name"
                                                 type="text"
@@ -985,7 +999,8 @@ class AnimalWindow extends Component {
                                         </div>
 
                                         <div className={classes.formControl}>
-                                            <InputLabel className="custom-label" htmlFor="age-simple">Chip ID</InputLabel>
+                                            <InputLabel className="custom-label" htmlFor="age-simple">Chip
+                                                ID</InputLabel>
                                             <TextField
                                                 id="name"
                                                 type="text"
@@ -998,7 +1013,8 @@ class AnimalWindow extends Component {
 
                                     <div className='flex justify-between width-100 shadow-section'>
                                         <div className={classes.formHistoryControl}>
-                                            <InputLabel className="custom-label" htmlFor="age-simple">History</InputLabel>
+                                            <InputLabel className="custom-label"
+                                                        htmlFor="age-simple">History</InputLabel>
                                             <TextField
                                                 id="date"
                                                 onChange={this.handleChangeInput('history')}
@@ -1045,7 +1061,8 @@ class AnimalWindow extends Component {
                                     <div className='width-80'>
                                         <div className='flex justify-between width-100 shadow-section'>
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Temperament</InputLabel>
+                                                <InputLabel className="custom-label"
+                                                            htmlFor="age-simple">Temperament</InputLabel>
                                                 <Select
                                                     value={personality}
                                                     native
@@ -1064,7 +1081,8 @@ class AnimalWindow extends Component {
                                             </div>
 
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Bites</InputLabel>
+                                                <InputLabel className="custom-label"
+                                                            htmlFor="age-simple">Bites</InputLabel>
                                                 <label className="switch">
                                                     <input type="checkbox"
                                                            value={bites}
@@ -1076,7 +1094,8 @@ class AnimalWindow extends Component {
                                             </div>
 
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Energy Level</InputLabel>
+                                                <InputLabel className="custom-label" htmlFor="age-simple">Energy
+                                                    Level</InputLabel>
                                                 <Select
                                                     value={energyLevel}
                                                     native
@@ -1096,7 +1115,8 @@ class AnimalWindow extends Component {
                                         <div className="shadow-section">
                                             <div className='flex justify-between width-100'>
                                                 <div className={classes.formControl}>
-                                                    <InputLabel className="custom-label" htmlFor="age-simple">Human Friendly</InputLabel>
+                                                    <InputLabel className="custom-label" htmlFor="age-simple">Human
+                                                        Friendly</InputLabel>
                                                     <Select
                                                         value={humansFriendly}
                                                         native
@@ -1113,7 +1133,8 @@ class AnimalWindow extends Component {
                                                 </div>
 
                                                 <div className={classes.formControl}>
-                                                    <InputLabel className="custom-label" htmlFor="age-simple">Kids Friendly</InputLabel>
+                                                    <InputLabel className="custom-label" htmlFor="age-simple">Kids
+                                                        Friendly</InputLabel>
                                                     <Select
                                                         value={kidsFriendly}
                                                         native
@@ -1135,7 +1156,8 @@ class AnimalWindow extends Component {
 
                                             <div className='flex justify-between width-100'>
                                                 <div className={classes.formControl}>
-                                                    <InputLabel className="custom-label" htmlFor="age-simple">Animals Friendly</InputLabel>
+                                                    <InputLabel className="custom-label" htmlFor="age-simple">Animals
+                                                        Friendly</InputLabel>
                                                     <Select
                                                         value={animalsFriendly}
                                                         native
@@ -1152,7 +1174,8 @@ class AnimalWindow extends Component {
                                                 </div>
 
                                                 <div className={classes.formControl}>
-                                                    <InputLabel className="custom-label" htmlFor="age-simple">Dogs Friendly</InputLabel>
+                                                    <InputLabel className="custom-label" htmlFor="age-simple">Dogs
+                                                        Friendly</InputLabel>
                                                     <Select
                                                         value={dogsFriendly}
                                                         native
@@ -1169,7 +1192,8 @@ class AnimalWindow extends Component {
                                                 </div>
 
                                                 <div className={classes.formControl}>
-                                                    <InputLabel className="custom-label" htmlFor="age-simple">Cats Friendly</InputLabel>
+                                                    <InputLabel className="custom-label" htmlFor="age-simple">Cats
+                                                        Friendly</InputLabel>
                                                     <Select
                                                         value={catsFriendly}
                                                         native
@@ -1191,7 +1215,8 @@ class AnimalWindow extends Component {
 
                                 <div className='width-80 ml-auto shadow-section'>
                                     <div className={classes.formHistoryControl}>
-                                        <InputLabel className="custom-label" htmlFor="name">Personality Description</InputLabel>
+                                        <InputLabel className="custom-label" htmlFor="name">Personality
+                                            Description</InputLabel>
                                         <TextField
                                             id="name"
                                             type="text"
@@ -1237,7 +1262,8 @@ class AnimalWindow extends Component {
                                     <div className='width-80'>
                                         <div className='flex justify-between width-100 shadow-section'>
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Coat Type</InputLabel>
+                                                <InputLabel className="custom-label" htmlFor="age-simple">Coat
+                                                    Type</InputLabel>
                                                 <Select
                                                     value={coatType ? coatType : ''}
                                                     native
@@ -1253,7 +1279,8 @@ class AnimalWindow extends Component {
                                             </div>
 
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Size</InputLabel>
+                                                <InputLabel className="custom-label"
+                                                            htmlFor="age-simple">Size</InputLabel>
                                                 <Select
                                                     value={size}
                                                     native
@@ -1272,7 +1299,8 @@ class AnimalWindow extends Component {
 
                                         <div className='flex justify-between width-100 shadow-section'>
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">1st Coat Color</InputLabel>
+                                                <InputLabel className="custom-label" htmlFor="age-simple">1st Coat
+                                                    Color</InputLabel>
                                                 <Select
                                                     value={firstCoatColor}
                                                     native
@@ -1293,7 +1321,8 @@ class AnimalWindow extends Component {
                                             </div>
 
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">2nd Coat Color</InputLabel>
+                                                <InputLabel className="custom-label" htmlFor="age-simple">2nd Coat
+                                                    Color</InputLabel>
                                                 <Select
                                                     value={secondCoatColor}
                                                     native
@@ -1314,7 +1343,8 @@ class AnimalWindow extends Component {
                                             </div>
 
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">3rd Coat Color</InputLabel>
+                                                <InputLabel className="custom-label" htmlFor="age-simple">3rd Coat
+                                                    Color</InputLabel>
                                                 <Select
                                                     value={thirdCoatColor}
                                                     native
@@ -1341,7 +1371,8 @@ class AnimalWindow extends Component {
                                     <div className="flex width-100">
                                         <div className='shadow-section flex flex-1 flex-col mr-16'>
                                             <div className={classes.formHistoryControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">1st Eye Color</InputLabel>
+                                                <InputLabel className="custom-label" htmlFor="age-simple">1st Eye
+                                                    Color</InputLabel>
                                                 <Select
                                                     value={firstEyeColor}
                                                     native
@@ -1359,7 +1390,8 @@ class AnimalWindow extends Component {
                                             </div>
 
                                             <div className={classes.formHistoryControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">2nd Eye Color</InputLabel>
+                                                <InputLabel className="custom-label" htmlFor="age-simple">2nd Eye
+                                                    Color</InputLabel>
                                                 <Select
                                                     value={secondEyeColor}
                                                     native
@@ -1379,7 +1411,8 @@ class AnimalWindow extends Component {
 
                                         <div className='flex flex-col flex-1 shadow-section ml-16'>
                                             <div className={classes.formHistoryControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Ears</InputLabel>
+                                                <InputLabel className="custom-label"
+                                                            htmlFor="age-simple">Ears</InputLabel>
                                                 <Select
                                                     value={ears}
                                                     native
@@ -1395,7 +1428,8 @@ class AnimalWindow extends Component {
                                             </div>
 
                                             <div className={classes.formHistoryControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Tail</InputLabel>
+                                                <InputLabel className="custom-label"
+                                                            htmlFor="age-simple">Tail</InputLabel>
                                                 <Select
                                                     value={tail}
                                                     native
@@ -1413,7 +1447,8 @@ class AnimalWindow extends Component {
 
                                     <div className='flex justify-between width-100 shadow-section'>
                                         <div className={classes.formHistoryControl}>
-                                            <InputLabel className="custom-label" htmlFor="name">Appearance Description</InputLabel>
+                                            <InputLabel className="custom-label" htmlFor="name">Appearance
+                                                Description</InputLabel>
                                             <TextField
                                                 id="name"
                                                 type="text"
@@ -1459,7 +1494,8 @@ class AnimalWindow extends Component {
                                 <div className='width-80 shadow-section'>
                                     <div className='flex justify-around width-100'>
                                         <div className={classes.formControl}>
-                                            <InputLabel className="custom-label" htmlFor="age-simple">Obedience</InputLabel>
+                                            <InputLabel className="custom-label"
+                                                        htmlFor="age-simple">Obedience</InputLabel>
                                             <Select
                                                 value={obedience}
                                                 native
@@ -1475,7 +1511,8 @@ class AnimalWindow extends Component {
                                         </div>
 
                                         <div className={classes.formControl}>
-                                            <InputLabel className="custom-label" htmlFor="age-simple">House trained</InputLabel>
+                                            <InputLabel className="custom-label" htmlFor="age-simple">House
+                                                trained</InputLabel>
                                             <label className="switch">
                                                 <input
                                                     type="checkbox"
@@ -1491,7 +1528,8 @@ class AnimalWindow extends Component {
 
                                     <div className='flex justify-around width-100'>
                                         <div className={classes.formControl}>
-                                            <InputLabel className="custom-label" htmlFor="age-simple">Crate trained</InputLabel>
+                                            <InputLabel className="custom-label" htmlFor="age-simple">Crate
+                                                trained</InputLabel>
                                             <label className="switch">
                                                 <input
                                                     type="checkbox"
@@ -1505,7 +1543,8 @@ class AnimalWindow extends Component {
                                         </div>
 
                                         <div className={classes.formControl}>
-                                            <InputLabel className="custom-label" htmlFor="age-simple">Fence Needed</InputLabel>
+                                            <InputLabel className="custom-label" htmlFor="age-simple">Fence
+                                                Needed</InputLabel>
                                             <label className="switch">
                                                 <input
                                                     type="checkbox"
@@ -1524,7 +1563,8 @@ class AnimalWindow extends Component {
                             <div className='width-100'>
                                 <div className='width-80 shadow-section ml-auto'>
                                     <div className={classes.formHistoryControl}>
-                                        <InputLabel className="custom-label" htmlFor="name">Training, Show or Competitions
+                                        <InputLabel className="custom-label" htmlFor="name">Training, Show or
+                                            Competitions
                                             Description</InputLabel>
                                         <TextField
                                             id="name"
@@ -1568,7 +1608,7 @@ class AnimalWindow extends Component {
                                 </div>
 
                                 <div className='width-80 shadow-section'>
-                                    <div className='flex justify-between width-100'>
+                                    <div className='flex justify-around width-100'>
                                         <div className={classes.formControl}>
                                             <InputLabel className="custom-label" htmlFor="name">Height</InputLabel>
                                             <TextField
@@ -1598,7 +1638,8 @@ class AnimalWindow extends Component {
                                                 onChange={this.handleChangeInput('length', 'health')}
                                             />
                                         </div>
-
+                                    </div>
+                                    <div className='flex justify-around width-100'>
                                         <div className={classes.formControl}>
                                             <InputLabel className="custom-label" htmlFor="name">Weight</InputLabel>
                                             <TextField
@@ -1613,6 +1654,54 @@ class AnimalWindow extends Component {
                                                 onChange={this.handleChangeInput('weight', 'health')}
                                             />
                                         </div>
+
+                                        <div className={classes.formControl}>
+                                            <InputLabel className="custom-label" htmlFor="age-simple">Weight
+                                                Condition</InputLabel>
+                                            <Select
+                                                value={weightCondition}
+                                                disabled={openHelperAnimal}
+                                                native
+                                                onChange={this.handleChangeInput('weightCondition', 'health')}
+                                            >
+                                                <option value=""/>
+                                                <option value='normal'>Normal</option>
+                                                <option value='underweight'>Underweight</option>
+                                                <option value='overweight'>Overweight</option>
+                                            </Select>
+                                        </div>
+                                    </div>
+
+                                    <div className='flex justify-around width-100'>
+                                        <div className={classes.formControl}>
+                                            <InputLabel className="custom-label"
+                                                        htmlFor="age-simple">Sterilized</InputLabel>
+                                            <Select
+                                                value={sterilized}
+                                                native
+                                                disabled={openHelperAnimal}
+                                                onChange={this.handleChangeInput('sterilized', 'health')}
+                                            >
+                                                <option value=""/>
+                                                <option value='spayed'>Spayed</option>
+                                                <option value='neutered'>Neutered</option>
+                                                <option value='no'>No</option>
+                                            </Select>
+                                        </div>
+
+                                        <div className={classes.formControl}>
+                                            <InputLabel className="custom-label" htmlFor="age-simple">Sterilization
+                                                Date</InputLabel>
+                                            <DatePicker
+                                                showYearDropdown
+                                                selected={sterilizedDate ? new Date(sterilizedDate) : ''}
+                                                disabled={openHelperAnimal}
+                                                onChange={this.handleChangeDatePicker('sterilizedDate', 'health')}
+                                                className="date-filter"
+                                                dateFormat="dd-MM-yyyy"
+                                            />
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1620,7 +1709,8 @@ class AnimalWindow extends Component {
                             <div className='flex justify-between'>
                                 <div className='width-20 flex flex-col mr-36 shadow-section'>
                                     <div className={classes.formHistoryControl}>
-                                        <InputLabel className="custom-label" htmlFor="age-simple">Cryptorchid</InputLabel>
+                                        <InputLabel className="custom-label"
+                                                    htmlFor="age-simple">Cryptorchid</InputLabel>
                                         <label className="switch">
                                             <input
                                                 type="checkbox"
@@ -1633,39 +1723,15 @@ class AnimalWindow extends Component {
                                         </label>
                                     </div>
 
-                                    <div className={classes.formHistoryControl}>
-                                        <InputLabel className="custom-label" htmlFor="age-simple">Sterilized</InputLabel>
-                                        <Select
-                                            value={sterilized}
-                                            native
-                                            disabled={openHelperAnimal}
-                                            onChange={this.handleChangeInput('sterilized', 'health')}
-                                        >
-                                            <option value=""/>
-                                            <option value='spayed'>Spayed</option>
-                                            <option value='neutered'>Neutered</option>
-                                            <option value='no'>No</option>
-                                        </Select>
-                                    </div>
 
-                                    <div className={classes.formHistoryControl}>
-                                        <InputLabel className="custom-label" htmlFor="age-simple">Sterilization Date</InputLabel>
-                                        <DatePicker
-                                            selected={sterilizedDate ? new Date(sterilizedDate) : ''}
-                                            disabled={openHelperAnimal}
-                                            onChange={this.handleChangeDatePicker('sterilizedDate', 'health')}
-                                            className="date-filter"
-                                            dateFormat="dd-MM-yyyy"
-                                        />
-
-                                    </div>
                                 </div>
 
                                 <div className='width-80 '>
                                     <div className="shadow-section">
                                         <div className='flex justify-between width-100'>
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Pregnant</InputLabel>
+                                                <InputLabel className="custom-label"
+                                                            htmlFor="age-simple">Pregnant</InputLabel>
                                                 <label className="switch">
                                                     <input
                                                         type="checkbox"
@@ -1679,7 +1745,8 @@ class AnimalWindow extends Component {
                                             </div>
 
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Disabled</InputLabel>
+                                                <InputLabel className="custom-label"
+                                                            htmlFor="age-simple">Disabled</InputLabel>
                                                 <label className="switch">
                                                     <input
                                                         type="checkbox"
@@ -1694,24 +1761,11 @@ class AnimalWindow extends Component {
                                         </div>
 
                                         <div className='flex flex-row justify-between width-100'>
-                                            <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Weight Condition</InputLabel>
-                                                <Select
-                                                    value={weightCondition}
-                                                    disabled={openHelperAnimal}
-                                                    native
-                                                    onChange={this.handleChangeInput('weightCondition', 'health')}
-                                                >
-                                                    <option value=""/>
-                                                    <option value='normal'>Normal</option>
-                                                    <option value='underweight'>Underweight</option>
-                                                    <option value='overweight'>Overweight</option>
-                                                </Select>
-                                            </div>
 
 
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Injured</InputLabel>
+                                                <InputLabel className="custom-label"
+                                                            htmlFor="age-simple">Injured</InputLabel>
                                                 <label className="switch">
                                                     <input
                                                         type="checkbox"
@@ -1728,7 +1782,8 @@ class AnimalWindow extends Component {
 
                                     <div className='flex flex-row justify-between width-100 shadow-section'>
                                         <div className={classes.formControl}>
-                                            <InputLabel className="custom-label" htmlFor="age-simple">Eye Sight</InputLabel>
+                                            <InputLabel className="custom-label" htmlFor="age-simple">Eye
+                                                Sight</InputLabel>
                                             <Select
                                                 value={eyesSight}
                                                 disabled={openHelperAnimal}
@@ -1818,7 +1873,8 @@ class AnimalWindow extends Component {
                                 <div className='width-80 flex flex-col shadow-section'>
                                     <div className='width-100'>
                                         <div className={classes.formHistoryControl}>
-                                            <InputLabel className="custom-label" htmlFor="name">Health Description</InputLabel>
+                                            <InputLabel className="custom-label" htmlFor="name">Health
+                                                Description</InputLabel>
                                             <TextField
                                                 id="name"
                                                 disabled={openHelperAnimal}
@@ -1865,7 +1921,8 @@ class AnimalWindow extends Component {
                                     {[0, 1, 2, 3, 4, 5].map(index => (
                                         <div className='flex justify-between width-100'>
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Care Type</InputLabel>
+                                                <InputLabel className="custom-label" htmlFor="age-simple">Care
+                                                    Type</InputLabel>
                                                 <Select
                                                     value={careValues ? (careValues[index] ? careValues[index].careType : '') : ''}
                                                     native
@@ -1882,7 +1939,8 @@ class AnimalWindow extends Component {
                                             </div>
 
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="name">Care Note</InputLabel>
+                                                <InputLabel className="custom-label" htmlFor="name">Care
+                                                    Note</InputLabel>
                                                 <TextField
                                                     id="name"
                                                     type="text"
@@ -1893,9 +1951,11 @@ class AnimalWindow extends Component {
                                             </div>
 
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Care Date</InputLabel>
+                                                <InputLabel className="custom-label" htmlFor="age-simple">Care
+                                                    Date</InputLabel>
 
                                                 <DatePicker
+                                                    showYearDropdown
                                                     selected={careValues ? (careValues[index] ? (careValues[index].date ? new Date(careValues[index].date) : '') : '') : ''}
                                                     onChange={this.handleChangeDatePickerCare('date', index)}
                                                     className="date-filter"
@@ -1938,7 +1998,8 @@ class AnimalWindow extends Component {
                                 <div className='flex width-80'>
                                     <div className='flex justify-between width-20 mr-36'>
                                         <div className={classes.formHistoryControl}>
-                                            <InputLabel className="custom-label" htmlFor="age-simple">Accommodation</InputLabel>
+                                            <InputLabel className="custom-label"
+                                                        htmlFor="age-simple">Accommodation</InputLabel>
                                             <Select
                                                 value={accommodation}
                                                 disabled={openHelperAnimal}
@@ -1959,7 +2020,8 @@ class AnimalWindow extends Component {
                                     <div className='flex flex-col justify-between width-80 shadow-section'>
                                         <div className='flex justify-around width-100'>
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Adopted</InputLabel>
+                                                <InputLabel className="custom-label"
+                                                            htmlFor="age-simple">Adopted</InputLabel>
                                                 <Select
                                                     value={forAdoption}
                                                     disabled={openHelperAnimal}
@@ -1975,8 +2037,10 @@ class AnimalWindow extends Component {
                                             </div>
 
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Adoption Date</InputLabel>
+                                                <InputLabel className="custom-label" htmlFor="age-simple">Adoption
+                                                    Date</InputLabel>
                                                 <DatePicker
+                                                    showYearDropdown
                                                     selected={adoptionDate ? new Date(adoptionDate) : ''}
                                                     disabled={openHelperAnimal}
                                                     onChange={this.handleChangeDatePicker('adoptionDate')}
@@ -1989,7 +2053,8 @@ class AnimalWindow extends Component {
 
                                         <div className='flex justify-around width-100'>
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Fostered</InputLabel>
+                                                <InputLabel className="custom-label"
+                                                            htmlFor="age-simple">Fostered</InputLabel>
                                                 <Select
                                                     value={forFoster}
                                                     disabled={openHelperAnimal}
@@ -2005,8 +2070,10 @@ class AnimalWindow extends Component {
                                             </div>
 
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Fostering Date</InputLabel>
+                                                <InputLabel className="custom-label" htmlFor="age-simple">Fostering
+                                                    Date</InputLabel>
                                                 <DatePicker
+                                                    showYearDropdown
                                                     selected={fosteringDate ? new Date(fosteringDate) : ''}
                                                     disabled={openHelperAnimal}
                                                     onChange={this.handleChangeDatePicker('fosteringDate')}
@@ -2043,6 +2110,7 @@ class AnimalWindow extends Component {
                                 <div className={`${classes.formControl} mr-36`}>
                                     <InputLabel className="custom-label" htmlFor="age-simple">Entry Date</InputLabel>
                                     <DatePicker
+                                        showYearDropdown
                                         selected={entryDate ? new Date(entryDate) : ''}
                                         disabled={openHelperAnimal}
                                         onChange={this.handleChangeDatePicker('entryDate')}
@@ -2074,6 +2142,7 @@ class AnimalWindow extends Component {
                                 <div className={classes.formControl}>
                                     <InputLabel className="custom-label" htmlFor="age-simple">Leave Date</InputLabel>
                                     <DatePicker
+                                        showYearDropdown
                                         selected={leaveDate ? new Date(leaveDate) : ''}
                                         disabled={openHelperAnimal}
                                         onChange={this.handleChangeDatePicker('leaveDate')}
@@ -2086,7 +2155,8 @@ class AnimalWindow extends Component {
 
                             <div className='flex justify-between width-100 shadow-section'>
                                 <div className={classes.formHistoryControl}>
-                                    <InputLabel className="custom-label" htmlFor="name">Sheltering Background</InputLabel>
+                                    <InputLabel className="custom-label" htmlFor="name">Sheltering
+                                        Background</InputLabel>
                                     <TextField
                                         id="name"
                                         type="text"
@@ -2139,7 +2209,8 @@ class AnimalWindow extends Component {
                                     <div className='width-80 flex flex-col shadow-section'>
                                         <div className='flex justify-between width-100'>
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Group</InputLabel>
+                                                <InputLabel className="custom-label"
+                                                            htmlFor="age-simple">Group</InputLabel>
                                                 <Select
                                                     value={ownerStatus}
                                                     disabled={openHelperAnimal}
@@ -2156,7 +2227,8 @@ class AnimalWindow extends Component {
                                                 </Select>
                                             </div>
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="name">First Name </InputLabel>
+                                                <InputLabel className="custom-label" htmlFor="name">First
+                                                    Name </InputLabel>
                                                 <TextField
                                                     id="name"
                                                     disabled={openHelperAnimal}
@@ -2166,7 +2238,8 @@ class AnimalWindow extends Component {
                                                 />
                                             </div>
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="name">Last Name</InputLabel>
+                                                <InputLabel className="custom-label" htmlFor="name">Last
+                                                    Name</InputLabel>
                                                 <TextField
                                                     id="name"
                                                     disabled={openHelperAnimal}
@@ -2226,7 +2299,8 @@ class AnimalWindow extends Component {
                                             </div>
 
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="name">Zip Code</InputLabel>
+                                                <InputLabel className="custom-label" htmlFor="name">Zip
+                                                    Code</InputLabel>
                                                 <TextField
                                                     id="name"
                                                     disabled={openHelperAnimal}
@@ -2237,7 +2311,8 @@ class AnimalWindow extends Component {
                                             </div>
 
                                             <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Country</InputLabel>
+                                                <InputLabel className="custom-label"
+                                                            htmlFor="age-simple">Country</InputLabel>
                                                 <Select
                                                     value={this.state.animal.owners[0] ? this.state.animal.owners[0].originCountry : ''}
                                                     native
@@ -2255,7 +2330,8 @@ class AnimalWindow extends Component {
                                         <div className='flex justify-between width-100'>
                                             <div style={{width: '63%'}}>
                                                 <div className={classes.formHistoryControl}>
-                                                    <InputLabel className="custom-label" htmlFor="name">Address</InputLabel>
+                                                    <InputLabel className="custom-label"
+                                                                htmlFor="name">Address</InputLabel>
                                                     <TextField
                                                         id="name"
                                                         type="text"
@@ -2268,8 +2344,10 @@ class AnimalWindow extends Component {
 
                                             <div style={{width: '25%'}}>
                                                 <div className={classes.formHistoryControl}>
-                                                    <InputLabel className="custom-label" htmlFor="age-simple">Owner Registration</InputLabel>
+                                                    <InputLabel className="custom-label" htmlFor="age-simple">Owner
+                                                        Registration</InputLabel>
                                                     <DatePicker
+                                                        showYearDropdown
                                                         selected={registrationDate ? new Date(registrationDate) : ''}
                                                         onChange={this.handleChangeDatePicker('registrationDate', 'owners')}
                                                         className="date-filter"
@@ -2328,7 +2406,8 @@ class AnimalWindow extends Component {
                                 </div>
 
                                 <div className='width-80 flex flex-col'>
-                                    <InputLabel className="custom-label" htmlFor="age-simple" style={{margin: '0 auto'}}>Upload</InputLabel>
+                                    <InputLabel className="custom-label" htmlFor="age-simple"
+                                                style={{margin: '0 auto'}}>Upload</InputLabel>
 
                                     <div className='width-100 flex justify-around'>
                                         <div className='drop-block flex flex-col'>
