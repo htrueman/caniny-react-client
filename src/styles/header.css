@@ -80,4 +80,5 @@ header {
     font-family: Muli, Roboto, "Helvetica", Arial, sans-serif !important;
     line-height: 1;
     transform-origin: top left;
+    font-weight: 400 !important;
 }

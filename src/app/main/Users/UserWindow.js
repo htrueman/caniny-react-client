@@ -6,7 +6,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {withStyles} from "@material-ui/core/styles/index";
@@ -17,9 +16,16 @@ import PhoneInput from 'react-phone-number-input'
 import {formatPhoneNumber, formatPhoneNumberIntl} from 'react-phone-number-input'
 import jwtService from 'app/services/jwtService';
 import moment from 'moment';
+import DatePicker from 'react-datepicker'
 
 const styles = theme => ({
-    layoutRoot: {}
+    layoutRoot: {},
+    formControl: {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        margin: '20px 0'
+    },
 });
 
 
@@ -32,7 +38,7 @@ class UserWindow extends Component {
         phoneNumber: '',
         userType: 'helper',
         description: '',
-        joinDate: moment(new Date()).format('DD-MM-YYYY'),
+        joinDate: new Date(),
         isActive: true,
         isActiveOn: false,
         uploadImg: false
@@ -72,7 +78,7 @@ class UserWindow extends Component {
                     userType,
                     isActive,
                     avatar,
-                    joinDate: moment(joinDate, 'DD-MM-YYYY').format('YYYY-MM-DD')
+                    joinDate: moment(joinDate).format('YYYY-MM-DD')
                 })
             } else {
                 await jwtService.createNewUser({
@@ -82,7 +88,7 @@ class UserWindow extends Component {
                     phoneNumber,
                     userType,
                     isActive,
-                    joinDate: moment(joinDate, 'DD-MM-YYYY').format('YYYY-MM-DD')
+                    joinDate: moment(joinDate).format('YYYY-MM-DD')
                 })
             }
         }
@@ -131,7 +137,7 @@ class UserWindow extends Component {
             phoneNumber: '',
             userType: 'helper',
             description: '',
-            joinDate: moment(new Date()).format('DD-MM-YYYY'),
+            joinDate: new Date(),
             isActive: true,
             uploadImg: false
         });
@@ -188,7 +194,7 @@ class UserWindow extends Component {
                             </div>
 
                             <div className='flex flex-col justify-around'>
-                                <div>
+                                <div className={classes.formControl}>
                                     <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}}
                                                 className="custom-label">First Name</InputLabel>
                                     <TextField
@@ -204,7 +210,7 @@ class UserWindow extends Component {
                                     />
                                 </div>
 
-                                <div>
+                                <div className={classes.formControl}>
                                     <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}}
                                                 className="custom-label">Last Name</InputLabel>
                                     <TextField
@@ -222,55 +228,59 @@ class UserWindow extends Component {
                             </div>
                         </div>
 
-                        <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}} className="custom-label">Email
-                            Address</InputLabel>
-                        <TextField
-                            id="email"
-                            type="email"
-                            value={email}
-                            disabled={openHelper}
-                            onChange={this.handleChangeInput('email')}
-                            fullWidth
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
+                        <div className={classes.formControl}>
+                            <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}} className="custom-label">Email
+                                Address</InputLabel>
+                            <TextField
+                                id="email"
+                                type="email"
+                                value={email}
+                                disabled={openHelper}
+                                onChange={this.handleChangeInput('email')}
+                                fullWidth
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </div>
 
-                        <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}}
-                                    className="custom-label">Phone</InputLabel>
-                        <PhoneInput
-                            placeholder=""
-                            value={phoneNumber}
-                            disabled={openHelper}
-                            onChange={(phoneNumber, e) => {
-                                this.setState({phoneNumber: formatPhoneNumberIntl(phoneNumber)})
-                            }}/>
+                        <div className={classes.formControl}>
+                            <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}}
+                                        className="custom-label">Phone</InputLabel>
+                            <PhoneInput
+                                placeholder=""
+                                value={phoneNumber}
+                                disabled={openHelper}
+                                onChange={(phoneNumber, e) => {
+                                    this.setState({phoneNumber: formatPhoneNumberIntl(phoneNumber)})
+                                }}/>
+                        </div>
 
-                        <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}} className="custom-label">Join
-                            Date</InputLabel>
-                        <TextField
-                            id="date"
-                            type="text"
-                            value={joinDate}
-                            disabled
-                            fullWidth
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
+                        <div className={classes.formControl}>
+                            <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}} className="custom-label">Join
+                                Date</InputLabel>
+                            <DatePicker
+                                selected={joinDate ? new Date(joinDate) : ''}
+                                className="date-filter"
+                                dateFormat="dd-MM-yyyy"
+                                disabled
+                            />
+                        </div>
 
-                        <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}}>Group</InputLabel>
-                        <Select
-                            value={userType}
-                            native
-                            disabled={openHelper}
-                            onChange={this.handleChangeInput('userType')}
-                            fullWidth
-                        >
-                            <option value='helper'>Assistant</option>
-                            <option value='admin'>Staff</option>
-                            <option value='super_admin'>Admin</option>
-                        </Select>
+                        <div className={classes.formControl}>
+                            <InputLabel htmlFor="age-simple" style={{fontWeight: '100'}}>Group</InputLabel>
+                            <Select
+                                value={userType}
+                                native
+                                disabled={openHelper}
+                                onChange={this.handleChangeInput('userType')}
+                                fullWidth
+                            >
+                                <option value='helper'>Assistant</option>
+                                <option value='admin'>Staff</option>
+                                <option value='super_admin'>Admin</option>
+                            </Select>
+                        </div>
 
                         {!isActive && this.state.id ?
                             <FormControl>

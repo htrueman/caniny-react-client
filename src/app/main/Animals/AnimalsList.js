@@ -1355,7 +1355,7 @@ class RenderColumsMenu extends Component {
 
         return (
             <Fragment>
-                <Tooltip title="Rows Selection">
+                <Tooltip title="Add Columns">
                     <Button
                         aria-owns={anchorEl ? 'simple-menu' : undefined}
                         aria-haspopup="true"

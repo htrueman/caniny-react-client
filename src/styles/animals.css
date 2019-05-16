@@ -73,6 +73,10 @@
     font-size: 13px;
 }
 
+.animal-window button:hover {
+    background: rgba(3, 155, 229, 0.08) !important;
+}
+
 /*checkbox*/
 /* The switch - the box around the slider */
 .switch {

@@ -90,8 +90,13 @@ class Users extends Component {
     handleClose = () => {
         this.setState({
             open: false,
-            openHelper: false,
             selectedUser: {}
+        }, () => {
+            setTimeout(() => {
+                this.setState({
+                    openHelper: false
+                })
+            }, 500)
         });
         this.getUsers();
     };
