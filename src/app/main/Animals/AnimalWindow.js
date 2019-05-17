@@ -1136,65 +1136,67 @@ class AnimalWindow extends Component {
                                                     Level</InputLabel>
 
                                                 <div className="rating">
-                                                    <Tooltip title="Lazy">
-                                                        <label>
-                                                            <input type="radio" name="stars" value="lazy"
-                                                                   onChange={this.handleChangeInput('energyLevel')}
-                                                                   checked={energyLevel === 'lazy'}
-                                                            />
+                                                    <label>
+                                                        <input type="radio" name="stars" value="lazy"
+                                                               onChange={this.handleChangeInput('energyLevel')}
+                                                               checked={energyLevel === 'lazy'}
+                                                        />
+                                                        <Tooltip title="Lazy">
                                                             <span className="icon" title="Lazy">★</span>
-                                                        </label>
-                                                    </Tooltip>
+                                                        </Tooltip>
+                                                    </label>
 
-                                                    <Tooltip title="Chill">
-                                                        <label>
-                                                            <input type="radio" name="stars" value="chill"
-                                                                   onChange={this.handleChangeInput('energyLevel')}
-                                                                   checked={energyLevel === 'chill'}
-                                                            />
-                                                            <span className="icon" title="Lazy">★</span>
+                                                    <label>
+                                                        <input type="radio" name="stars" value="chill"
+                                                               onChange={this.handleChangeInput('energyLevel')}
+                                                               checked={energyLevel === 'chill'}
+                                                        />
+                                                        <span className="icon" title="Lazy">★</span>
+                                                        <Tooltip title="Chill">
                                                             <span className="icon" title="Chill">★</span>
-                                                        </label>
-                                                    </Tooltip>
+                                                        </Tooltip>
+                                                    </label>
 
-                                                    <Tooltip title="Active">
-                                                        <label>
-                                                            <input type="radio" name="stars" value="active"
-                                                                   onChange={this.handleChangeInput('energyLevel')}
-                                                                   checked={energyLevel === 'active'}
-                                                            />
-                                                            <span className="icon" title="Lazy">★</span>
-                                                            <span className="icon" title="Chill">★</span>
+                                                    <label>
+                                                        <input type="radio" name="stars" value="active"
+                                                               onChange={this.handleChangeInput('energyLevel')}
+                                                               checked={energyLevel === 'active'}
+                                                        />
+                                                        <span className="icon" title="Lazy">★</span>
+                                                        <span className="icon" title="Chill">★</span>
+                                                        <Tooltip title="Active">
                                                             <span className="icon" title="Active">★</span>
-                                                        </label>
-                                                    </Tooltip>
+                                                        </Tooltip>
+                                                    </label>
 
-                                                    <Tooltip title="Energetic">
-                                                        <label>
-                                                            <input type="radio" name="stars" value="energetic"
-                                                                   onChange={this.handleChangeInput('energyLevel')}
-                                                                   checked={energyLevel === 'energetic'}
-                                                            />
-                                                            <span className="icon" title="Lazy">★</span>
-                                                            <span className="icon" title="Chill">★</span>
-                                                            <span className="icon" title="Active">★</span>
+                                                    <label>
+                                                        <input type="radio" name="stars" value="energetic"
+                                                               onChange={this.handleChangeInput('energyLevel')}
+                                                               checked={energyLevel === 'energetic'}
+                                                        />
+                                                        <span className="icon" title="Lazy">★</span>
+                                                        <span className="icon" title="Chill">★</span>
+                                                        <span className="icon" title="Active">★</span>
+                                                        <Tooltip title="Energetic">
                                                             <span className="icon" title="Energetic">★</span>
-                                                        </label>
-                                                    </Tooltip>
+                                                        </Tooltip>
+                                                    </label>
 
-                                                    <Tooltip title="Hyper">
-                                                        <label>
-                                                            <input type="radio" name="stars" value="hyper"
-                                                                   onChange={this.handleChangeInput('energyLevel')}
-                                                                   checked={energyLevel === 'hyper'}
-                                                            />
-                                                            <span className="icon" title="Lazy">★</span>
-                                                            <span className="icon" title="Chill">★</span>
-                                                            <span className="icon" title="Active">★</span>
-                                                            <span className="icon" title="Energetic">★</span>
+                                                    {/*<Tooltip title="Hyper">*/}
+                                                    <label>
+                                                        <input type="radio" name="stars" value="hyper"
+                                                               onChange={this.handleChangeInput('energyLevel')}
+                                                               checked={energyLevel === 'hyper'}
+                                                        />
+                                                        <span className="icon" title="Lazy">★</span>
+                                                        <span className="icon" title="Chill">★</span>
+                                                        <span className="icon" title="Active">★</span>
+                                                        <span className="icon" title="Energetic">★</span>
+                                                        <Tooltip title="Hyper">
                                                             <span className="icon" title="Hyper">★</span>
-                                                        </label>
-                                                    </Tooltip>
+                                                        </Tooltip>
+                                                    </label>
+                                                    {/*</Tooltip>*/}
                                                 </div>
 
 
@@ -1385,95 +1387,114 @@ class AnimalWindow extends Component {
                                                             htmlFor="age-simple">Size</InputLabel>
 
                                                 <div className="rating">
-                                                    <Tooltip title="Extra small">
-                                                        <label>
-                                                            <input type="radio" name="stars" value="extra_small"
-                                                                   onChange={this.handleChangeInput('size', 'appearance')}
-                                                                   checked={size === 'extra_small'}
-                                                            />
-                                                            <span className="icon" title="Lazy">
-                                                                <FontAwesomeIcon style={{fontSize: '20px'}} icon={faPaw}/>
-                                                            </span>
-                                                        </label>
-                                                    </Tooltip>
+                                                    <label>
+                                                        <input type="radio" name="stars" value="extra_small"
+                                                               onChange={this.handleChangeInput('size', 'appearance')}
+                                                               checked={size === 'extra_small'}
+                                                        />
+                                                        <Tooltip title="Extra small">
 
-                                                    <Tooltip title="Small">
-                                                        <label>
-                                                            <input type="radio" name="stars" value="small"
-                                                                   onChange={this.handleChangeInput('size', 'appearance')}
-                                                                   checked={size === 'small'}
-                                                            />
                                                             <span className="icon" title="Lazy">
-                                                                <FontAwesomeIcon style={{fontSize: '20px'}} icon={faPaw}/>
-                                                            </span>
-                                                            <span className="icon" title="Chill">
-                                                                <FontAwesomeIcon style={{fontSize: '22px'}} icon={faPaw}/>
-                                                            </span>
-                                                        </label>
-                                                    </Tooltip>
+                        <FontAwesomeIcon style={{fontSize: '20px'}}
+                                         icon={faPaw}/>
+                        </span>
+                                                        </Tooltip>
+                                                    </label>
 
-                                                    <Tooltip title="Medium">
-                                                        <label>
-                                                            <input type="radio" name="stars" value="medium"
-                                                                   onChange={this.handleChangeInput('size', 'appearance')}
-                                                                   checked={size === 'medium'}
-                                                            />
-                                                            <span className="icon" title="Lazy">
-                                                                <FontAwesomeIcon style={{fontSize: '20px'}} icon={faPaw}/>
-                                                            </span>
+                                                    <label>
+                                                        <input type="radio" name="stars" value="small"
+                                                               onChange={this.handleChangeInput('size', 'appearance')}
+                                                               checked={size === 'small'}
+                                                        />
+                                                        <span className="icon" title="Lazy">
+                        <FontAwesomeIcon style={{fontSize: '20px'}}
+                                         icon={faPaw}/>
+                        </span>
+                                                        <Tooltip title="Small">
+
                                                             <span className="icon" title="Chill">
-                                                                <FontAwesomeIcon style={{fontSize: '22px'}} icon={faPaw}/>
-                                                            </span>
+                        <FontAwesomeIcon style={{fontSize: '22px'}}
+                                         icon={faPaw}/>
+                        </span>
+                                                        </Tooltip>
+                                                    </label>
+
+                                                    <label>
+                                                        <input type="radio" name="stars" value="medium"
+                                                               onChange={this.handleChangeInput('size', 'appearance')}
+                                                               checked={size === 'medium'}
+                                                        />
+                                                        <span className="icon" title="Lazy">
+                        <FontAwesomeIcon style={{fontSize: '20px'}}
+                                         icon={faPaw}/>
+                        </span>
+                                                        <span className="icon" title="Chill">
+                        <FontAwesomeIcon style={{fontSize: '22px'}}
+                                         icon={faPaw}/>
+                        </span>
+                                                        <Tooltip title="Medium">
+
                                                             <span className="icon" title="Active">
-                                                                <FontAwesomeIcon style={{fontSize: '24px'}} icon={faPaw}/>
-                                                            </span>
-                                                        </label>
-                                                    </Tooltip>
+                        <FontAwesomeIcon style={{fontSize: '24px'}}
+                                         icon={faPaw}/>
+                        </span>
+                                                        </Tooltip>
+                                                    </label>
 
-                                                    <Tooltip title="Large">
-                                                        <label>
-                                                            <input type="radio" name="stars" value="large"
-                                                                   onChange={this.handleChangeInput('size', 'appearance')}
-                                                                   checked={size === 'large'}
-                                                            />
-                                                            <span className="icon" title="Lazy">
-                                                                <FontAwesomeIcon style={{fontSize: '20px'}} icon={faPaw}/>
-                                                            </span>
-                                                            <span className="icon" title="Chill">
-                                                                <FontAwesomeIcon style={{fontSize: '22px'}} icon={faPaw}/>
-                                                            </span>
-                                                            <span className="icon" title="Active">
-                                                                <FontAwesomeIcon style={{fontSize: '24px'}} icon={faPaw}/>
-                                                            </span>
+                                                    <label>
+                                                        <input type="radio" name="stars" value="large"
+                                                               onChange={this.handleChangeInput('size', 'appearance')}
+                                                               checked={size === 'large'}
+                                                        />
+                                                        <span className="icon" title="Lazy">
+                        <FontAwesomeIcon style={{fontSize: '20px'}}
+                                         icon={faPaw}/>
+                        </span>
+                                                        <span className="icon" title="Chill">
+                        <FontAwesomeIcon style={{fontSize: '22px'}}
+                                         icon={faPaw}/>
+                        </span>
+                                                        <span className="icon" title="Active">
+                        <FontAwesomeIcon style={{fontSize: '24px'}}
+                                         icon={faPaw}/>
+                        </span>
+                                                        <Tooltip title="Large">
                                                             <span className="icon" title="Energetic">
-                                                                <FontAwesomeIcon style={{fontSize: '26px'}} icon={faPaw}/>
-                                                            </span>
-                                                        </label>
-                                                    </Tooltip>
+                        <FontAwesomeIcon style={{fontSize: '26px'}}
+                                         icon={faPaw}/>
+                        </span>
+                                                        </Tooltip>
+                                                    </label>
 
-                                                    <Tooltip title="Extra large">
-                                                        <label>
-                                                            <input type="radio" name="stars" value="extra_large"
-                                                                   onChange={this.handleChangeInput('size', 'appearance')}
-                                                                   checked={size === 'extra_large'}
-                                                            />
-                                                            <span className="icon" title="Lazy">
-                                                                <FontAwesomeIcon style={{fontSize: '20px'}} icon={faPaw}/>
-                                                            </span>
-                                                            <span className="icon" title="Chill">
-                                                                <FontAwesomeIcon style={{fontSize: '22px'}} icon={faPaw}/>
-                                                            </span>
-                                                            <span className="icon" title="Active">
-                                                                <FontAwesomeIcon style={{fontSize: '24px'}} icon={faPaw}/>
-                                                            </span>
-                                                            <span className="icon" title="Energetic">
-                                                                <FontAwesomeIcon style={{fontSize: '26px'}} icon={faPaw}/>
-                                                            </span>
+                                                    <label>
+                                                        <input type="radio" name="stars" value="extra_large"
+                                                               onChange={this.handleChangeInput('size', 'appearance')}
+                                                               checked={size === 'extra_large'}
+                                                        />
+                                                        <span className="icon" title="Lazy">
+                        <FontAwesomeIcon style={{fontSize: '20px'}}
+                                         icon={faPaw}/>
+                        </span>
+                                                        <span className="icon" title="Chill">
+                        <FontAwesomeIcon style={{fontSize: '22px'}}
+                                         icon={faPaw}/>
+                        </span>
+                                                        <span className="icon" title="Active">
+                        <FontAwesomeIcon style={{fontSize: '24px'}}
+                                         icon={faPaw}/>
+                        </span>
+                                                        <span className="icon" title="Energetic">
+                        <FontAwesomeIcon style={{fontSize: '26px'}}
+                                         icon={faPaw}/>
+                        </span>
+                                                        <Tooltip title="Extra large">
+
                                                             <span className="icon" title="Hyper">
-                                                                <FontAwesomeIcon style={{fontSize: '28px'}} icon={faPaw}/>
-                                                            </span>
-                                                        </label>
-                                                    </Tooltip>
+                        <FontAwesomeIcon style={{fontSize: '28px'}}
+                                         icon={faPaw}/>
+                        </span>
+                                                        </Tooltip>
+                                                    </label>
                                                 </div>
 
 

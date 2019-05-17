@@ -243,9 +243,9 @@ input:checked + .slider:before {
     position: absolute;
     top: 0;
     left: 0;
-    height: 100%;
     cursor: pointer;
     font-size: 20px;
+    height: 30px;
 }
 
 .rating label:last-child {
@@ -283,6 +283,7 @@ input:checked + .slider:before {
     float: left;
     color: transparent;
     margin: 0 5px 0 0;
+    height: 30px;
 }
 
 .rating label:last-child .icon {

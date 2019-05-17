@@ -103,7 +103,7 @@ class UserWindow extends Component {
     }
 
     onDrop = (file) => {
-        this.getBase64(file[0], (result) => {
+        this.getBase64(file[file.length - 1], (result) => {
             this.setState({
                 avatar: result,
                 uploadImg: true
@@ -175,7 +175,7 @@ class UserWindow extends Component {
             >
                 <DialogTitle id="form-dialog-title">{this.state.id ? 'User Profile' : 'User Profile'}</DialogTitle>
 
-                <DialogContent>
+                <DialogContent className='user-window'>
                     <form className={classes.root} autoComplete="off">
                         <div className='flex'>
                             <div className='drop-block'>
