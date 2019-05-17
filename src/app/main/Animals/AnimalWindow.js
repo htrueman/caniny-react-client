@@ -19,6 +19,10 @@ import moment from 'moment';
 import {countryList} from './countryList';
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faMars} from "@fortawesome/free-solid-svg-icons";
+import {faPaw, faVenus} from "@fortawesome/free-solid-svg-icons/index";
+import Tooltip from '@material-ui/core/Tooltip';
 
 
 const styles = theme => ({
@@ -93,7 +97,7 @@ const styles = theme => ({
 
 const animalFields = {
     name: '',
-    gender: '',
+    gender: 'male',
     species: '',
     joinDate: new Date(),
 
@@ -357,7 +361,8 @@ class AnimalWindow extends Component {
 
     handleChangeInput = (name, object) => (e) => {
         const value = e.target.value;
-
+        console.log(name);
+        console.log(value);
 
         if (name === 'dateOfBirth') {
             const age = moment().diff(new Date(value), 'years');
@@ -794,18 +799,51 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel className="custom-label"
                                                             htmlFor="age-simple">Gender*</InputLabel>
-                                                <Select
-                                                    value={gender}
-                                                    required
-                                                    disabled={openHelperAnimal}
-                                                    native
-                                                    input={<Input id="name"/>}
-                                                    onChange={this.handleChangeInput('gender')}
-                                                >
-                                                    <option value=''></option>
-                                                    <option value='male'>Male</option>
-                                                    <option value='female'>Female</option>
-                                                </Select>
+
+                                                <div className='gender-block flex '>
+
+                                                    <Tooltip title="Male">
+                                                        <div>
+                                                            <input onChange={this.handleChangeInput('gender')}
+                                                                   value='male'
+                                                                   type="radio"
+                                                                   id="Male"
+                                                                   name="radio-group"
+                                                                   checked={gender === 'male'}
+                                                            />
+                                                            <label htmlFor="Male">
+                                                                <FontAwesomeIcon icon={faMars}/>
+                                                            </label>
+                                                        </div>
+                                                    </Tooltip>
+
+                                                    <Tooltip title="Female">
+                                                        <div>
+                                                            <input onChange={this.handleChangeInput('gender')}
+                                                                   value='female'
+                                                                   type="radio"
+                                                                   id="Female"
+                                                                   name="radio-group"
+                                                                   checked={gender === 'female'}
+                                                            />
+                                                            <label htmlFor="Female">
+                                                                <FontAwesomeIcon icon={faVenus}/>
+                                                            </label>
+                                                        </div>
+                                                    </Tooltip>
+                                                </div>
+                                                {/*<Select*/}
+                                                {/*value={gender}*/}
+                                                {/*required*/}
+                                                {/*disabled={openHelperAnimal}*/}
+                                                {/*native*/}
+                                                {/*input={<Input id="name"/>}*/}
+                                                {/*onChange={this.handleChangeInput('gender')}*/}
+                                                {/*>*/}
+                                                {/*<option value=''></option>*/}
+                                                {/*<option value='male'>Male</option>*/}
+                                                {/*<option value='female'>Female</option>*/}
+                                                {/*</Select>*/}
                                             </div>
                                         </div>
 
@@ -1080,7 +1118,7 @@ class AnimalWindow extends Component {
                                                 </Select>
                                             </div>
 
-                                            <div className={classes.formControl}>
+                                            <div className={`${classes.formControl} items-center`}>
                                                 <InputLabel className="custom-label"
                                                             htmlFor="age-simple">Bites</InputLabel>
                                                 <label className="switch">
@@ -1096,19 +1134,83 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel className="custom-label" htmlFor="age-simple">Energy
                                                     Level</InputLabel>
-                                                <Select
-                                                    value={energyLevel}
-                                                    native
-                                                    disabled={openHelperAnimal}
-                                                    onChange={this.handleChangeInput('energyLevel')}
-                                                >
-                                                    <option value=""/>
-                                                    <option value='lazy'>1: Lazy</option>
-                                                    <option value='chill'>2: Chill</option>
-                                                    <option value='active'>3: Active</option>
-                                                    <option value='energetic'>4: Energetic</option>
-                                                    <option value='hyper'>5: Hyper</option>
-                                                </Select>
+
+                                                <div className="rating">
+                                                    <Tooltip title="Lazy">
+                                                        <label>
+                                                            <input type="radio" name="stars" value="lazy"
+                                                                   onChange={this.handleChangeInput('energyLevel')}
+                                                                   checked={energyLevel === 'lazy'}
+                                                            />
+                                                            <span className="icon" title="Lazy">★</span>
+                                                        </label>
+                                                    </Tooltip>
+
+                                                    <Tooltip title="Chill">
+                                                        <label>
+                                                            <input type="radio" name="stars" value="chill"
+                                                                   onChange={this.handleChangeInput('energyLevel')}
+                                                                   checked={energyLevel === 'chill'}
+                                                            />
+                                                            <span className="icon" title="Lazy">★</span>
+                                                            <span className="icon" title="Chill">★</span>
+                                                        </label>
+                                                    </Tooltip>
+
+                                                    <Tooltip title="Active">
+                                                        <label>
+                                                            <input type="radio" name="stars" value="active"
+                                                                   onChange={this.handleChangeInput('energyLevel')}
+                                                                   checked={energyLevel === 'active'}
+                                                            />
+                                                            <span className="icon" title="Lazy">★</span>
+                                                            <span className="icon" title="Chill">★</span>
+                                                            <span className="icon" title="Active">★</span>
+                                                        </label>
+                                                    </Tooltip>
+
+                                                    <Tooltip title="Energetic">
+                                                        <label>
+                                                            <input type="radio" name="stars" value="energetic"
+                                                                   onChange={this.handleChangeInput('energyLevel')}
+                                                                   checked={energyLevel === 'energetic'}
+                                                            />
+                                                            <span className="icon" title="Lazy">★</span>
+                                                            <span className="icon" title="Chill">★</span>
+                                                            <span className="icon" title="Active">★</span>
+                                                            <span className="icon" title="Energetic">★</span>
+                                                        </label>
+                                                    </Tooltip>
+
+                                                    <Tooltip title="Hyper">
+                                                        <label>
+                                                            <input type="radio" name="stars" value="hyper"
+                                                                   onChange={this.handleChangeInput('energyLevel')}
+                                                                   checked={energyLevel === 'hyper'}
+                                                            />
+                                                            <span className="icon" title="Lazy">★</span>
+                                                            <span className="icon" title="Chill">★</span>
+                                                            <span className="icon" title="Active">★</span>
+                                                            <span className="icon" title="Energetic">★</span>
+                                                            <span className="icon" title="Hyper">★</span>
+                                                        </label>
+                                                    </Tooltip>
+                                                </div>
+
+
+                                                {/*<Select*/}
+                                                {/*value={energyLevel}*/}
+                                                {/*native*/}
+                                                {/*disabled={openHelperAnimal}*/}
+                                                {/*onChange={this.handleChangeInput('energyLevel')}*/}
+                                                {/*>*/}
+                                                {/*<option value=""/>*/}
+                                                {/*<option value='lazy'>1: Lazy</option>*/}
+                                                {/*<option value='chill'>2: Chill</option>*/}
+                                                {/*<option value='active'>3: Active</option>*/}
+                                                {/*<option value='energetic'>4: Energetic</option>*/}
+                                                {/*<option value='hyper'>5: Hyper</option>*/}
+                                                {/*</Select>*/}
                                             </div>
                                         </div>
 
@@ -1281,19 +1383,113 @@ class AnimalWindow extends Component {
                                             <div className={classes.formControl}>
                                                 <InputLabel className="custom-label"
                                                             htmlFor="age-simple">Size</InputLabel>
-                                                <Select
-                                                    value={size}
-                                                    native
-                                                    disabled={openHelperAnimal}
-                                                    onChange={this.handleChangeInput('size', 'appearance')}
-                                                >
-                                                    <option value=""/>
-                                                    <option value='extra_small'>Extra small</option>
-                                                    <option value='small'>Small</option>
-                                                    <option value='medium'>Medium</option>
-                                                    <option value='large'>Large</option>
-                                                    <option value='extra_large'>Extra large</option>
-                                                </Select>
+
+                                                <div className="rating">
+                                                    <Tooltip title="Extra small">
+                                                        <label>
+                                                            <input type="radio" name="stars" value="extra_small"
+                                                                   onChange={this.handleChangeInput('size', 'appearance')}
+                                                                   checked={size === 'extra_small'}
+                                                            />
+                                                            <span className="icon" title="Lazy">
+                                                                <FontAwesomeIcon style={{fontSize: '20px'}} icon={faPaw}/>
+                                                            </span>
+                                                        </label>
+                                                    </Tooltip>
+
+                                                    <Tooltip title="Small">
+                                                        <label>
+                                                            <input type="radio" name="stars" value="small"
+                                                                   onChange={this.handleChangeInput('size', 'appearance')}
+                                                                   checked={size === 'small'}
+                                                            />
+                                                            <span className="icon" title="Lazy">
+                                                                <FontAwesomeIcon style={{fontSize: '20px'}} icon={faPaw}/>
+                                                            </span>
+                                                            <span className="icon" title="Chill">
+                                                                <FontAwesomeIcon style={{fontSize: '22px'}} icon={faPaw}/>
+                                                            </span>
+                                                        </label>
+                                                    </Tooltip>
+
+                                                    <Tooltip title="Medium">
+                                                        <label>
+                                                            <input type="radio" name="stars" value="medium"
+                                                                   onChange={this.handleChangeInput('size', 'appearance')}
+                                                                   checked={size === 'medium'}
+                                                            />
+                                                            <span className="icon" title="Lazy">
+                                                                <FontAwesomeIcon style={{fontSize: '20px'}} icon={faPaw}/>
+                                                            </span>
+                                                            <span className="icon" title="Chill">
+                                                                <FontAwesomeIcon style={{fontSize: '22px'}} icon={faPaw}/>
+                                                            </span>
+                                                            <span className="icon" title="Active">
+                                                                <FontAwesomeIcon style={{fontSize: '24px'}} icon={faPaw}/>
+                                                            </span>
+                                                        </label>
+                                                    </Tooltip>
+
+                                                    <Tooltip title="Large">
+                                                        <label>
+                                                            <input type="radio" name="stars" value="large"
+                                                                   onChange={this.handleChangeInput('size', 'appearance')}
+                                                                   checked={size === 'large'}
+                                                            />
+                                                            <span className="icon" title="Lazy">
+                                                                <FontAwesomeIcon style={{fontSize: '20px'}} icon={faPaw}/>
+                                                            </span>
+                                                            <span className="icon" title="Chill">
+                                                                <FontAwesomeIcon style={{fontSize: '22px'}} icon={faPaw}/>
+                                                            </span>
+                                                            <span className="icon" title="Active">
+                                                                <FontAwesomeIcon style={{fontSize: '24px'}} icon={faPaw}/>
+                                                            </span>
+                                                            <span className="icon" title="Energetic">
+                                                                <FontAwesomeIcon style={{fontSize: '26px'}} icon={faPaw}/>
+                                                            </span>
+                                                        </label>
+                                                    </Tooltip>
+
+                                                    <Tooltip title="Extra large">
+                                                        <label>
+                                                            <input type="radio" name="stars" value="extra_large"
+                                                                   onChange={this.handleChangeInput('size', 'appearance')}
+                                                                   checked={size === 'extra_large'}
+                                                            />
+                                                            <span className="icon" title="Lazy">
+                                                                <FontAwesomeIcon style={{fontSize: '20px'}} icon={faPaw}/>
+                                                            </span>
+                                                            <span className="icon" title="Chill">
+                                                                <FontAwesomeIcon style={{fontSize: '22px'}} icon={faPaw}/>
+                                                            </span>
+                                                            <span className="icon" title="Active">
+                                                                <FontAwesomeIcon style={{fontSize: '24px'}} icon={faPaw}/>
+                                                            </span>
+                                                            <span className="icon" title="Energetic">
+                                                                <FontAwesomeIcon style={{fontSize: '26px'}} icon={faPaw}/>
+                                                            </span>
+                                                            <span className="icon" title="Hyper">
+                                                                <FontAwesomeIcon style={{fontSize: '28px'}} icon={faPaw}/>
+                                                            </span>
+                                                        </label>
+                                                    </Tooltip>
+                                                </div>
+
+
+                                                {/*<Select*/}
+                                                {/*value={size}*/}
+                                                {/*native*/}
+                                                {/*disabled={openHelperAnimal}*/}
+                                                {/*onChange={this.handleChangeInput('size', 'appearance')}*/}
+                                                {/*>*/}
+                                                {/*<option value=""/>*/}
+                                                {/*<option value='extra_small'>Extra small</option>*/}
+                                                {/*<option value='small'>Small</option>*/}
+                                                {/*<option value='medium'>Medium</option>*/}
+                                                {/*<option value='large'>Large</option>*/}
+                                                {/*<option value='extra_large'>Extra large</option>*/}
+                                                {/*</Select>*/}
                                             </div>
                                         </div>
 
@@ -1607,72 +1803,74 @@ class AnimalWindow extends Component {
                                     <span className='mt-6'>{name || 'Name'}</span>
                                 </div>
 
-                                <div className='width-80 shadow-section'>
-                                    <div className='flex justify-around width-100'>
-                                        <div className={classes.formControl}>
-                                            <InputLabel className="custom-label" htmlFor="name">Height</InputLabel>
-                                            <TextField
-                                                id="name"
-                                                type="number"
-                                                disabled={openHelperAnimal}
-                                                inputProps={{
-                                                    min: 0,
-                                                    pattern: '[0-9]{0,5}'
-                                                }}
-                                                value={height}
-                                                onChange={this.handleChangeInput('height', 'health')}
-                                            />
-                                        </div>
+                                <div className='width-80 flex flex-col'>
+                                    <div className='shadow-section'>
+                                        <div className='flex justify-around width-100'>
+                                            <div className={classes.formControl}>
+                                                <InputLabel className="custom-label" htmlFor="name">Height</InputLabel>
+                                                <TextField
+                                                    id="name"
+                                                    type="number"
+                                                    disabled={openHelperAnimal}
+                                                    inputProps={{
+                                                        min: 0,
+                                                        pattern: '[0-9]{0,5}'
+                                                    }}
+                                                    value={height}
+                                                    onChange={this.handleChangeInput('height', 'health')}
+                                                />
+                                            </div>
 
-                                        <div className={classes.formControl}>
-                                            <InputLabel className="custom-label" htmlFor="name">Length</InputLabel>
-                                            <TextField
-                                                id="name"
-                                                type="number"
-                                                disabled={openHelperAnimal}
-                                                inputProps={{
-                                                    min: 0,
-                                                    pattern: '[0-9]{0,5}'
-                                                }}
-                                                value={length}
-                                                onChange={this.handleChangeInput('length', 'health')}
-                                            />
+                                            <div className={classes.formControl}>
+                                                <InputLabel className="custom-label" htmlFor="name">Length</InputLabel>
+                                                <TextField
+                                                    id="name"
+                                                    type="number"
+                                                    disabled={openHelperAnimal}
+                                                    inputProps={{
+                                                        min: 0,
+                                                        pattern: '[0-9]{0,5}'
+                                                    }}
+                                                    value={length}
+                                                    onChange={this.handleChangeInput('length', 'health')}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className='flex justify-around width-100'>
+                                            <div className={classes.formControl}>
+                                                <InputLabel className="custom-label" htmlFor="name">Weight</InputLabel>
+                                                <TextField
+                                                    id="name"
+                                                    type="number"
+                                                    disabled={openHelperAnimal}
+                                                    inputProps={{
+                                                        min: 0,
+                                                        pattern: '[0-9]{0,5}'
+                                                    }}
+                                                    value={weight}
+                                                    onChange={this.handleChangeInput('weight', 'health')}
+                                                />
+                                            </div>
+
+                                            <div className={classes.formControl}>
+                                                <InputLabel className="custom-label" htmlFor="age-simple">Weight
+                                                    Condition</InputLabel>
+                                                <Select
+                                                    value={weightCondition}
+                                                    disabled={openHelperAnimal}
+                                                    native
+                                                    onChange={this.handleChangeInput('weightCondition', 'health')}
+                                                >
+                                                    <option value=""/>
+                                                    <option value='normal'>Normal</option>
+                                                    <option value='underweight'>Underweight</option>
+                                                    <option value='overweight'>Overweight</option>
+                                                </Select>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className='flex justify-around width-100'>
-                                        <div className={classes.formControl}>
-                                            <InputLabel className="custom-label" htmlFor="name">Weight</InputLabel>
-                                            <TextField
-                                                id="name"
-                                                type="number"
-                                                disabled={openHelperAnimal}
-                                                inputProps={{
-                                                    min: 0,
-                                                    pattern: '[0-9]{0,5}'
-                                                }}
-                                                value={weight}
-                                                onChange={this.handleChangeInput('weight', 'health')}
-                                            />
-                                        </div>
 
-                                        <div className={classes.formControl}>
-                                            <InputLabel className="custom-label" htmlFor="age-simple">Weight
-                                                Condition</InputLabel>
-                                            <Select
-                                                value={weightCondition}
-                                                disabled={openHelperAnimal}
-                                                native
-                                                onChange={this.handleChangeInput('weightCondition', 'health')}
-                                            >
-                                                <option value=""/>
-                                                <option value='normal'>Normal</option>
-                                                <option value='underweight'>Underweight</option>
-                                                <option value='overweight'>Overweight</option>
-                                            </Select>
-                                        </div>
-                                    </div>
-
-                                    <div className='flex justify-around width-100'>
+                                    <div className='flex shadow-section justify-around width-100'>
                                         <div className={classes.formControl}>
                                             <InputLabel className="custom-label"
                                                         htmlFor="age-simple">Sterilized</InputLabel>
@@ -1700,36 +1898,12 @@ class AnimalWindow extends Component {
                                                 className="date-filter"
                                                 dateFormat="dd-MM-yyyy"
                                             />
-
                                         </div>
                                     </div>
-                                </div>
-                            </div>
 
-                            <div className='flex justify-between'>
-                                <div className='width-20 flex flex-col mr-36 shadow-section'>
-                                    <div className={classes.formHistoryControl}>
-                                        <InputLabel className="custom-label"
-                                                    htmlFor="age-simple">Cryptorchid</InputLabel>
-                                        <label className="switch">
-                                            <input
-                                                type="checkbox"
-                                                checked={cryptorchid}
-                                                disabled={openHelperAnimal}
-                                                value={cryptorchid}
-                                                onChange={this.handleChangeCheckboxBool('cryptorchid', 'health')}
-                                            />
-                                            <span className="slider round"></span>
-                                        </label>
-                                    </div>
-
-
-                                </div>
-
-                                <div className='width-80 '>
-                                    <div className="shadow-section">
-                                        <div className='flex justify-between width-100'>
-                                            <div className={classes.formControl}>
+                                    <div className="shadow-section width-100">
+                                        <div className='flex justify-around width-100'>
+                                            <div className={`${classes.formControl} items-center`}>
                                                 <InputLabel className="custom-label"
                                                             htmlFor="age-simple">Pregnant</InputLabel>
                                                 <label className="switch">
@@ -1744,26 +1918,7 @@ class AnimalWindow extends Component {
                                                 </label>
                                             </div>
 
-                                            <div className={classes.formControl}>
-                                                <InputLabel className="custom-label"
-                                                            htmlFor="age-simple">Disabled</InputLabel>
-                                                <label className="switch">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={disabled}
-                                                        disabled={openHelperAnimal}
-                                                        value={disabled}
-                                                        onChange={this.handleChangeCheckboxBool('disabled', 'health')}
-                                                    />
-                                                    <span className="slider round"></span>
-                                                </label>
-                                            </div>
-                                        </div>
-
-                                        <div className='flex flex-row justify-between width-100'>
-
-
-                                            <div className={classes.formControl}>
+                                            <div className={`${classes.formControl} items-center`}>
                                                 <InputLabel className="custom-label"
                                                             htmlFor="age-simple">Injured</InputLabel>
                                                 <label className="switch">
@@ -1778,9 +1933,79 @@ class AnimalWindow extends Component {
                                                 </label>
                                             </div>
                                         </div>
+
+                                        <div className='flex justify-around width-100'>
+                                            <div className={`${classes.formControl} items-center`}>
+                                                <InputLabel className="custom-label"
+                                                            htmlFor="age-simple">Cryptorchid</InputLabel>
+                                                <label className="switch">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={cryptorchid}
+                                                        disabled={openHelperAnimal}
+                                                        value={cryptorchid}
+                                                        onChange={this.handleChangeCheckboxBool('cryptorchid', 'health')}
+                                                    />
+                                                    <span className="slider round"></span>
+                                                </label>
+                                            </div>
+
+                                            <div className={`${classes.formControl} items-center`}>
+                                                <InputLabel className="custom-label"
+                                                            htmlFor="age-simple">Disabled</InputLabel>
+                                                <label className="switch">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={disabled}
+                                                        disabled={openHelperAnimal}
+                                                        value={disabled}
+                                                        onChange={this.handleChangeCheckboxBool('disabled', 'health')}
+                                                    />
+                                                    <span className="slider round"></span>
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <div className='flex flex-row justify-between width-100 shadow-section'>
+                                    <div className='width-100 flex justify-around shadow-section'>
+                                        <div className={classes.formControl}>
+                                            <InputLabel className="custom-label" htmlFor="age-simple">Teeth</InputLabel>
+                                            <Select
+                                                value={teeth}
+                                                disabled={openHelperAnimal}
+                                                native
+                                                onChange={this.handleChangeInput('teeth', 'health')}
+                                            >
+                                                <option value=""/>
+                                                <option value='clean'>Clean</option>
+                                                <option value='tartar'>Tartar</option>
+                                                <option value='rotten'>Rotten</option>
+                                                <option value='abscess_or_sores'>Abscess/Sores</option>
+                                                <option value='worn'>Worn</option>
+                                                <option value='impacted'>Impacted</option>
+                                                <option value='few_missing'>Few missing</option>
+                                                <option value='none'>None</option>
+                                            </Select>
+                                        </div>
+
+                                        <div className={classes.formControl}>
+                                            <InputLabel className="custom-label" htmlFor="age-simple">Gums</InputLabel>
+                                            <Select
+                                                value={gums}
+                                                disabled={openHelperAnimal}
+                                                native
+                                                onChange={this.handleChangeInput('gums', 'health')}
+                                            >
+                                                <option value=""/>
+                                                <option value='pink'>Pink</option>
+                                                <option value='red'>Red</option>
+                                                <option value='white'>White</option>
+                                                <option value='abscess_or_sores'>Abscess/Sores</option>
+                                            </Select>
+                                        </div>
+                                    </div>
+
+                                    <div className='flex justify-between width-100 shadow-section'>
                                         <div className={classes.formControl}>
                                             <InputLabel className="custom-label" htmlFor="age-simple">Eye
                                                 Sight</InputLabel>
@@ -1828,50 +2053,8 @@ class AnimalWindow extends Component {
                                             </Select>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
 
-                            <div className='flex justify-between'>
-                                <div className='width-20 flex flex-col justify-around mr-36 shadow-section'>
-                                    <div className={classes.formHistoryControl}>
-                                        <InputLabel className="custom-label" htmlFor="age-simple">Teeth</InputLabel>
-                                        <Select
-                                            value={teeth}
-                                            disabled={openHelperAnimal}
-                                            native
-                                            onChange={this.handleChangeInput('teeth', 'health')}
-                                        >
-                                            <option value=""/>
-                                            <option value='clean'>Clean</option>
-                                            <option value='tartar'>Tartar</option>
-                                            <option value='rotten'>Rotten</option>
-                                            <option value='abscess_or_sores'>Abscess/Sores</option>
-                                            <option value='worn'>Worn</option>
-                                            <option value='impacted'>Impacted</option>
-                                            <option value='few_missing'>Few missing</option>
-                                            <option value='none'>None</option>
-                                        </Select>
-                                    </div>
-
-                                    <div className={classes.formHistoryControl}>
-                                        <InputLabel className="custom-label" htmlFor="age-simple">Gums</InputLabel>
-                                        <Select
-                                            value={gums}
-                                            disabled={openHelperAnimal}
-                                            native
-                                            onChange={this.handleChangeInput('gums', 'health')}
-                                        >
-                                            <option value=""/>
-                                            <option value='pink'>Pink</option>
-                                            <option value='red'>Red</option>
-                                            <option value='white'>White</option>
-                                            <option value='abscess_or_sores'>Abscess/Sores</option>
-                                        </Select>
-                                    </div>
-                                </div>
-
-                                <div className='width-80 flex flex-col shadow-section'>
-                                    <div className='width-100'>
+                                    <div className='width-100 flex flex-col shadow-section'>
                                         <div className={classes.formHistoryControl}>
                                             <InputLabel className="custom-label" htmlFor="name">Health
                                                 Description</InputLabel>
@@ -1917,7 +2100,7 @@ class AnimalWindow extends Component {
                                     <span className='mt-6'>{name || 'Name'}</span>
                                 </div>
 
-                                <div className='width-80 flex-col flex'>
+                                <div className='width-80 flex-col flex shadow-section'>
                                     {[0, 1, 2, 3, 4, 5].map(index => (
                                         <div className='flex justify-between width-100'>
                                             <div className={classes.formControl}>
@@ -1995,180 +2178,190 @@ class AnimalWindow extends Component {
                                     <span className='mt-6'>{name || 'Name'}</span>
                                 </div>
 
-                                <div className='flex width-80'>
-                                    <div className='flex justify-between width-20 mr-36'>
+                                <div className='flex flex-col width-80'>
+                                    <div className='shadow-section width-100 flex'>
+                                        <div className='flex justify-between width-20 mr-36'>
+                                            <div className={classes.formHistoryControl}>
+                                                <InputLabel className="custom-label"
+                                                            htmlFor="age-simple">Accommodation</InputLabel>
+                                                <Select
+                                                    value={accommodation}
+                                                    disabled={openHelperAnimal}
+                                                    native
+                                                    onChange={this.handleChangeInput('accommodation')}
+                                                >
+                                                    <option value=""/>
+                                                    <option value='apartment'>Apartment</option>
+                                                    <option value='townhouse'>Townhouse</option>
+                                                    <option value='house'>House</option>
+                                                    <option value='villa'>Villa</option>
+                                                    <option value='farm'>Farm</option>
+                                                    <option value='other'>Other</option>
+                                                </Select>
+                                            </div>
+                                        </div>
+
+                                        <div className='flex flex-col justify-between width-80 '>
+                                            <div className='flex justify-around width-100'>
+                                                <div className={classes.formControl}>
+                                                    <InputLabel className="custom-label"
+                                                                htmlFor="age-simple">Adopted</InputLabel>
+                                                    <Select
+                                                        value={forAdoption}
+                                                        disabled={openHelperAnimal}
+                                                        native
+                                                        onChange={this.handleChangeInput('forAdoption')}
+                                                    >
+                                                        <option value=""/>
+                                                        <option value='yes'>Yes</option>
+                                                        <option value='no'>No</option>
+                                                        <option value='to_be'>To Be</option>
+                                                        <option value='hold'>Hold</option>
+                                                    </Select>
+                                                </div>
+
+                                                <div className={classes.formControl}>
+                                                    <InputLabel className="custom-label" htmlFor="age-simple">Adoption
+                                                        Date</InputLabel>
+                                                    <DatePicker
+                                                        showYearDropdown
+                                                        selected={adoptionDate ? new Date(adoptionDate) : ''}
+                                                        disabled={openHelperAnimal}
+                                                        onChange={this.handleChangeDatePicker('adoptionDate')}
+                                                        className="date-filter"
+                                                        dateFormat="dd-MM-yyyy"
+                                                    />
+
+                                                </div>
+                                            </div>
+
+                                            <div className='flex justify-around width-100'>
+                                                <div className={classes.formControl}>
+                                                    <InputLabel className="custom-label"
+                                                                htmlFor="age-simple">Fostered</InputLabel>
+                                                    <Select
+                                                        value={forFoster}
+                                                        disabled={openHelperAnimal}
+                                                        native
+                                                        onChange={this.handleChangeInput('forFoster')}
+                                                    >
+                                                        <option value=""/>
+                                                        <option value='yes'>Yes</option>
+                                                        <option value='no'>No</option>
+                                                        <option value='to_be'>To Be</option>
+                                                        <option value='hold'>Hold</option>
+                                                    </Select>
+                                                </div>
+
+                                                <div className={classes.formControl}>
+                                                    <InputLabel className="custom-label" htmlFor="age-simple">Fostering
+                                                        Date</InputLabel>
+                                                    <DatePicker
+                                                        showYearDropdown
+                                                        selected={fosteringDate ? new Date(fosteringDate) : ''}
+                                                        disabled={openHelperAnimal}
+                                                        onChange={this.handleChangeDatePicker('fosteringDate')}
+                                                        className="date-filter"
+                                                        dateFormat="dd-MM-yyyy"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className='flex flex-col width-100 shadow-section'>
+                                        <div className='flex justify-around'>
+                                            <div className={`${classes.formControl}`}>
+                                                <InputLabel className="custom-label" htmlFor="age-simple">Entry
+                                                    Reason</InputLabel>
+                                                <Select
+                                                    value={joinedReason}
+                                                    disabled={openHelperAnimal}
+                                                    native
+                                                    onChange={this.handleChangeInput('joinedReason')}
+                                                >
+                                                    <option value=""/>
+                                                    <option value='stray'>Stray</option>
+                                                    <option value='rescue'>Rescue</option>
+                                                    <option value='transfer'>Transfer</option>
+                                                    <option value='medical'>Medical</option>
+                                                    <option value='temporary'>Temporary</option>
+                                                    <option value='neglected'>Neglectance</option>
+                                                    <option value='other'>Other</option>
+                                                </Select>
+                                            </div>
+
+                                            <div className={`${classes.formControl}`}>
+                                                <InputLabel className="custom-label" htmlFor="age-simple">Entry
+                                                    Date</InputLabel>
+                                                <DatePicker
+                                                    showYearDropdown
+                                                    selected={entryDate ? new Date(entryDate) : ''}
+                                                    disabled={openHelperAnimal}
+                                                    onChange={this.handleChangeDatePicker('entryDate')}
+                                                    className="date-filter"
+                                                    dateFormat="dd-MM-yyyy"
+                                                />
+
+                                            </div>
+                                        </div>
+
+                                        <div className='flex justify-around'>
+                                            <div className={`${classes.formControl}`}>
+                                                <InputLabel className="custom-label" htmlFor="age-simple">Leave
+                                                    Reason</InputLabel>
+                                                <Select
+                                                    value={leaveReason}
+                                                    disabled={openHelperAnimal}
+                                                    native
+                                                    onChange={this.handleChangeInput('leaveReason')}
+                                                >
+                                                    <option value=""/>
+                                                    <option value='adoption'>Adoption</option>
+                                                    <option value='foster'>Foster</option>
+                                                    <option value='transfer'>Transfer</option>
+                                                    <option value='medical'>Medical</option>
+                                                    <option value='temporary'>Temporary</option>
+                                                    <option value='death'>Death</option>
+                                                    <option value='other'>Other</option>
+                                                </Select>
+                                            </div>
+
+                                            <div className={classes.formControl}>
+                                                <InputLabel className="custom-label" htmlFor="age-simple">Leave
+                                                    Date</InputLabel>
+                                                <DatePicker
+                                                    showYearDropdown
+                                                    selected={leaveDate ? new Date(leaveDate) : ''}
+                                                    disabled={openHelperAnimal}
+                                                    onChange={this.handleChangeDatePicker('leaveDate')}
+                                                    className="date-filter"
+                                                    dateFormat="dd-MM-yyyy"
+                                                />
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className='flex justify-between width-100 shadow-section'>
                                         <div className={classes.formHistoryControl}>
-                                            <InputLabel className="custom-label"
-                                                        htmlFor="age-simple">Accommodation</InputLabel>
-                                            <Select
-                                                value={accommodation}
+                                            <InputLabel className="custom-label" htmlFor="name">Sheltering
+                                                Background</InputLabel>
+                                            <TextField
+                                                id="name"
+                                                type="text"
                                                 disabled={openHelperAnimal}
-                                                native
-                                                onChange={this.handleChangeInput('accommodation')}
-                                            >
-                                                <option value=""/>
-                                                <option value='apartment'>Apartment</option>
-                                                <option value='townhouse'>Townhouse</option>
-                                                <option value='house'>House</option>
-                                                <option value='villa'>Villa</option>
-                                                <option value='farm'>Farm</option>
-                                                <option value='other'>Other</option>
-                                            </Select>
-                                        </div>
-                                    </div>
-
-                                    <div className='flex flex-col justify-between width-80 shadow-section'>
-                                        <div className='flex justify-around width-100'>
-                                            <div className={classes.formControl}>
-                                                <InputLabel className="custom-label"
-                                                            htmlFor="age-simple">Adopted</InputLabel>
-                                                <Select
-                                                    value={forAdoption}
-                                                    disabled={openHelperAnimal}
-                                                    native
-                                                    onChange={this.handleChangeInput('forAdoption')}
-                                                >
-                                                    <option value=""/>
-                                                    <option value='yes'>Yes</option>
-                                                    <option value='no'>No</option>
-                                                    <option value='to_be'>To Be</option>
-                                                    <option value='hold'>Hold</option>
-                                                </Select>
-                                            </div>
-
-                                            <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Adoption
-                                                    Date</InputLabel>
-                                                <DatePicker
-                                                    showYearDropdown
-                                                    selected={adoptionDate ? new Date(adoptionDate) : ''}
-                                                    disabled={openHelperAnimal}
-                                                    onChange={this.handleChangeDatePicker('adoptionDate')}
-                                                    className="date-filter"
-                                                    dateFormat="dd-MM-yyyy"
-                                                />
-
-                                            </div>
-                                        </div>
-
-                                        <div className='flex justify-around width-100'>
-                                            <div className={classes.formControl}>
-                                                <InputLabel className="custom-label"
-                                                            htmlFor="age-simple">Fostered</InputLabel>
-                                                <Select
-                                                    value={forFoster}
-                                                    disabled={openHelperAnimal}
-                                                    native
-                                                    onChange={this.handleChangeInput('forFoster')}
-                                                >
-                                                    <option value=""/>
-                                                    <option value='yes'>Yes</option>
-                                                    <option value='no'>No</option>
-                                                    <option value='to_be'>To Be</option>
-                                                    <option value='hold'>Hold</option>
-                                                </Select>
-                                            </div>
-
-                                            <div className={classes.formControl}>
-                                                <InputLabel className="custom-label" htmlFor="age-simple">Fostering
-                                                    Date</InputLabel>
-                                                <DatePicker
-                                                    showYearDropdown
-                                                    selected={fosteringDate ? new Date(fosteringDate) : ''}
-                                                    disabled={openHelperAnimal}
-                                                    onChange={this.handleChangeDatePicker('fosteringDate')}
-                                                    className="date-filter"
-                                                    dateFormat="dd-MM-yyyy"
-                                                />
-
-                                            </div>
+                                                rows={3}
+                                                multiline={true}
+                                                fullWidth
+                                                value={shelteringBackground}
+                                                onChange={this.handleChangeInput('shelteringBackground')}
+                                            />
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className='flex justify-between width-100 shadow-section'>
-                                <div className={`${classes.formControl} mr-36`}>
-                                    <InputLabel className="custom-label" htmlFor="age-simple">Entry Reason</InputLabel>
-                                    <Select
-                                        value={joinedReason}
-                                        disabled={openHelperAnimal}
-                                        native
-                                        onChange={this.handleChangeInput('joinedReason')}
-                                    >
-                                        <option value=""/>
-                                        <option value='stray'>Stray</option>
-                                        <option value='rescue'>Rescue</option>
-                                        <option value='transfer'>Transfer</option>
-                                        <option value='medical'>Medical</option>
-                                        <option value='temporary'>Temporary</option>
-                                        <option value='neglected'>Neglectance</option>
-                                        <option value='other'>Other</option>
-                                    </Select>
-                                </div>
-
-                                <div className={`${classes.formControl} mr-36`}>
-                                    <InputLabel className="custom-label" htmlFor="age-simple">Entry Date</InputLabel>
-                                    <DatePicker
-                                        showYearDropdown
-                                        selected={entryDate ? new Date(entryDate) : ''}
-                                        disabled={openHelperAnimal}
-                                        onChange={this.handleChangeDatePicker('entryDate')}
-                                        className="date-filter"
-                                        dateFormat="dd-MM-yyyy"
-                                    />
-
-                                </div>
-
-                                <div className={`${classes.formControl} mr-36`}>
-                                    <InputLabel className="custom-label" htmlFor="age-simple">Leave Reason</InputLabel>
-                                    <Select
-                                        value={leaveReason}
-                                        disabled={openHelperAnimal}
-                                        native
-                                        onChange={this.handleChangeInput('leaveReason')}
-                                    >
-                                        <option value=""/>
-                                        <option value='adoption'>Adoption</option>
-                                        <option value='foster'>Foster</option>
-                                        <option value='transfer'>Transfer</option>
-                                        <option value='medical'>Medical</option>
-                                        <option value='temporary'>Temporary</option>
-                                        <option value='death'>Death</option>
-                                        <option value='other'>Other</option>
-                                    </Select>
-                                </div>
-
-                                <div className={classes.formControl}>
-                                    <InputLabel className="custom-label" htmlFor="age-simple">Leave Date</InputLabel>
-                                    <DatePicker
-                                        showYearDropdown
-                                        selected={leaveDate ? new Date(leaveDate) : ''}
-                                        disabled={openHelperAnimal}
-                                        onChange={this.handleChangeDatePicker('leaveDate')}
-                                        className="date-filter"
-                                        dateFormat="dd-MM-yyyy"
-                                    />
-
-                                </div>
-                            </div>
-
-                            <div className='flex justify-between width-100 shadow-section'>
-                                <div className={classes.formHistoryControl}>
-                                    <InputLabel className="custom-label" htmlFor="name">Sheltering
-                                        Background</InputLabel>
-                                    <TextField
-                                        id="name"
-                                        type="text"
-                                        disabled={openHelperAnimal}
-                                        rows={3}
-                                        multiline={true}
-                                        fullWidth
-                                        value={shelteringBackground}
-                                        onChange={this.handleChangeInput('shelteringBackground')}
-                                    />
-                                </div>
-                            </div>
 
                             {!openHelperAnimal ?
                                 <DialogActions>
@@ -2405,7 +2598,7 @@ class AnimalWindow extends Component {
                                     <span className='mt-6'>{name || 'Name'}</span>
                                 </div>
 
-                                <div className='width-80 flex flex-col'>
+                                <div className='width-80 flex flex-col shadow-section' style={{height: '200px'}}>
                                     <InputLabel className="custom-label" htmlFor="age-simple"
                                                 style={{margin: '0 auto'}}>Upload</InputLabel>
 

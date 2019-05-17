@@ -20,6 +20,8 @@ import Button from '@material-ui/core/Button';
 import animalsService from 'app/services/animalsService';
 import {countryList} from './countryList';
 import moment from "moment/moment";
+import DatePicker from 'react-datepicker'
+import "react-datepicker/dist/react-datepicker.css";
 
 function arrowGenerator(color) {
     return {
@@ -506,6 +508,7 @@ class ContactsList extends PureComponent {
                     <TextField
                         onChange={changeFilterValue}
                         placeholder="Filter"
+                        type='number'
                         style={{
                             width: '100%',
                             height: '40px',
@@ -515,6 +518,69 @@ class ContactsList extends PureComponent {
                         value={this.state[`filterValue&${field}`]}
                         autoFocus={focus === `filterValue&${field}`}
                     />
+
+                    {filterParams[`filterType&${field}`] || 'Grater than'}
+                </div>
+
+                <RenderAgeMenu
+                    changeFilterType={changeFilterType}
+                />
+
+            </div>
+        )
+    };
+
+    customDateFilter = (filter, onChangeFilter, field) => {
+        const {focus} = this.state;
+
+        const changeFilterType = (value) => {
+            this.setState({
+                [`filterType&${field}`]: value,
+            }, () => {
+                onChangeFilter({
+                    type: 'date',
+                    filterValue: moment(this.state[`filterValue&${field}`]).format('YYYY-MM-DD'),
+                    filterType: value
+                });
+            });
+        };
+
+        const changeFilterValue = (value) => {
+            this.setState({
+                [`filterValue&${field}`]: value,
+                focus: `filterValue&${field}`
+            }, () => onChangeFilter({
+                type: 'date',
+                filterValue: value ? moment(value).format('YYYY-MM-DD') : '',
+                filterType: this.state[`filterType&${field}`] ? this.state[`filterType&${field}`] : 'gte'
+            }));
+        };
+
+        return (
+            <div className="filter-block">
+                <div className='filter-input' key='1'>
+                    <DatePicker
+                        showYearDropdown
+                        selected={this.state[`filterValue&${field}`]}
+                        onChange={changeFilterValue}
+                        placeholderText="Filter"
+                        className="date-filter"
+                        dateFormat="dd-MM-yyyy"
+                    />
+
+                    {/*<TextField*/}
+                    {/*onChange={}*/}
+                    {/*placeholder="Filter"*/}
+                    {/*type='number'*/}
+                    {/*style={{*/}
+                    {/*width: '100%',*/}
+                    {/*height: '40px',*/}
+                    {/*float: 'left',*/}
+                    {/*fontSize: '12px'*/}
+                    {/*}}*/}
+                    {/*value={this.state[`filterValue&${field}`]}*/}
+                    {/*autoFocus={focus === `filterValue&${field}`}*/}
+                    {/*/>*/}
 
                     {filterParams[`filterType&${field}`] || 'Grater than'}
                 </div>
@@ -707,7 +773,7 @@ class ContactsList extends PureComponent {
                     accessor: 'entryDate',
                     filterable: true,
                     Filter: ({filter, onChange}) => (
-                        this.customFilter(filter, onChange, item)
+                        this.customDateFilter(filter, onChange, item)
                     ),
                     Cell: row => {
                         return (
@@ -715,13 +781,13 @@ class ContactsList extends PureComponent {
                         )
                     }
                 })
-            }else if (item === 'leave_date') {
+            } else if (item === 'leave_date') {
                 return ({
                     Header: 'Leave Date',
                     accessor: 'leaveDate',
                     filterable: true,
                     Filter: ({filter, onChange}) => (
-                        this.customFilter(filter, onChange, item)
+                        this.customDateFilter(filter, onChange, item)
                     ),
                     Cell: row => {
                         return (

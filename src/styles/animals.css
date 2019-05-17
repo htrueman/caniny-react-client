@@ -19,10 +19,28 @@
     margin: 0;
 }
 
+.rt-thead .rt-th {
+    overflow: inherit !important;
+}
+
+.filter-block .react-datepicker__input-container{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.42) !important;
+    margin: 0 0 10px 0;
+}
+
+.filter-block .react-datepicker__input-container input {
+    margin: 0;
+}
+
+.filter-block  input {
+    height: 30px;
+}
+
 .columns-list {
     margin: 0;
     padding: 0;
 }
+
 .columns-list li {
     /*opacity: 1 !important;*/
     /*visibility: visible !important;*/
@@ -44,6 +62,7 @@
 .width-70 {
     width: 70%;
 }
+
 .width-80 {
     width: 80%;
 }
@@ -58,7 +77,7 @@
 }
 
 .shadow-section {
-  border: 1px solid rgba(0, 118, 255, 0.67);
+    border: 1px solid rgba(0, 118, 255, 0.67);
 
     padding: 15px;
     margin-bottom: 20px !important;
@@ -141,4 +160,158 @@ input:checked + .slider:before {
 
 .slider.round:before {
     border-radius: 50%;
+}
+
+.gender-block {
+    margin: 10px 0 0 0;
+}
+
+.gender-block label {
+    margin: 0 20px 0 0;
+}
+.gender-block label svg {
+    font-size: 20px;
+}
+
+.gender-block [type="radio"]:checked,
+.gender-block [type="radio"]:not(:checked) {
+    position: absolute;
+    left: -9999px;
+}
+
+.gender-block [type="radio"]:checked + label,
+.gender-block [type="radio"]:not(:checked) + label {
+    position: relative;
+    padding-left: 28px;
+    cursor: pointer;
+    line-height: 20px;
+    display: inline-block;
+    color: #666;
+
+}
+
+.gender-block [type="radio"]:checked + label:before,
+.gender-block [type="radio"]:not(:checked) + label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #ddd;
+    border-radius: 100%;
+    background: #fff;
+}
+
+.gender-block [type="radio"]:checked + label:after,
+.gender-block [type="radio"]:not(:checked) + label:after {
+    content: '';
+    width: 12px;
+    height: 12px;
+    background: #09f;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    border-radius: 100%;
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+
+.gender-block [type="radio"]:not(:checked) + label:after {
+    opacity: 0;
+    -webkit-transform: scale(0);
+    transform: scale(0);
+}
+
+.gender-block [type="radio"]:checked + label:after {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+
+
+
+.rating {
+    display: inline-block;
+    position: relative;
+    height: 50px;
+    line-height: 50px;
+    font-size: 20px;
+}
+
+.rating label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.rating label:last-child {
+    position: static;
+}
+
+.rating label:nth-child(1) {
+    z-index: 5;
+}
+
+.rating label:nth-child(2) {
+    z-index: 4;
+}
+
+.rating label:nth-child(3) {
+    z-index: 3;
+}
+
+.rating label:nth-child(4) {
+    z-index: 2;
+}
+
+.rating label:nth-child(5) {
+    z-index: 1;
+}
+
+.rating label input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+}
+
+.rating label .icon {
+    float: left;
+    color: transparent;
+    margin: 0 5px 0 0;
+}
+
+.rating label:last-child .icon {
+    color: #d9d9d9;
+}
+
+
+.rating:not(:hover) label input:checked ~ .icon,
+.rating:hover label:hover input ~ .icon {
+    color: #09f;
+
+}
+
+.rating label input:focus:not(:checked) ~ .icon:last-child {
+    color: #000;
+    text-shadow: 0 0 5px #09f;
+}
+
+.rating > input:checked ~ label {
+    color: #84ceff;
+}
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+    color: #84ceff;
+}
+.rating > input:checked + label:hover,
+.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {
+    color: #6eaed8;
 }
