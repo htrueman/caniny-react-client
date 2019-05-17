@@ -56,6 +56,26 @@ const animalParams = {
     date: 'entry_date',
 };
 
+const searchParams = {
+    breed: 'breed__name',
+    entryDate: 'entry_date',
+    joinedReason: 'joined_reason',
+    chipProducer: 'chip_producer',
+    dogsFriendly: 'dogs_friendly',
+    animalsFriendly: 'animals_friendly',
+    humansFriendly: 'humans_friendly',
+    catsFriendly: 'cats_friendly',
+    energyLevel: 'energy_level',
+    kidsFriendly: 'kids_friendly',
+    adoptionDate: 'for_adoption',
+    forFoster: 'for_foster',
+    tagId: 'tag_id',
+    chipId: 'chip_id',
+    leaveReason: 'leave_reason',
+    leaveDate: 'leave_date',
+
+};
+
 class Animals extends Component {
     state = {
         animals: [],
@@ -104,10 +124,11 @@ class Animals extends Component {
         ];
 
         await filters.forEach(filter => {
-            if (filter.column === 'age') {
-                urlParams.push(`&${filter.column}__${filter.filterType}=${filter.filterValue}`)
+            console.log(filter);
+            if (filter.column === 'age' || filter.type === 'date') {
+                urlParams.push(filter.filterValue ? `&${filter.column}__${filter.filterType}=${filter.filterValue}` : '')
             } else {
-                urlParams.push(`&${filter.column}__i${filter.filterType}=${filter.filterValue ? filter.filterValue : ''}`)
+                urlParams.push(filter.filterValue ? `&${filter.column}__i${filter.filterType}=${filter.filterValue ? filter.filterValue : ''}` : '')
             }
         });
 
@@ -187,14 +208,21 @@ class Animals extends Component {
             if (item.value.type === 'date') {
                 return {
                     type: item.value.type,
-                    column: item.id,
+                    column: searchParams[item.id]  ? searchParams[item.id]  : item.id,
+                    filterType: item.value.filterType,
+                    filterValue: item.value.filterValue
+                }
+            } else if(item.value.type === 'age') {
+                return {
+                    type: item.value.type,
+                    column: 'age',
                     filterType: item.value.filterType,
                     filterValue: item.value.filterValue
                 }
             } else {
                 return {
                     type: item.value.type,
-                    column: item.id === 'breed' ? 'breed__name' : item.id,
+                    column: searchParams[item.id]  ? searchParams[item.id]  : item.id,
                     filterType: item.value.filterType,
                     filterValue: item.value.filterValue
                 }

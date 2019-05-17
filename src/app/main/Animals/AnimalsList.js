@@ -486,6 +486,7 @@ class ContactsList extends PureComponent {
                 [`filterType&${field}`]: value,
             }, () => {
                 onChangeFilter({
+                    type: 'age',
                     filterValue: this.state[`filterValue&${field}`],
                     filterType: value
                 });
@@ -497,6 +498,7 @@ class ContactsList extends PureComponent {
                 [`filterValue&${field}`]: value,
                 focus: `filterValue&${field}`
             }, () => onChangeFilter({
+                type: 'age',
                 filterValue: value,
                 filterType: this.state[`filterType&${field}`] ? this.state[`filterType&${field}`] : 'gte'
             }));
@@ -723,7 +725,7 @@ class ContactsList extends PureComponent {
                     accessor: 'adoptionDate',
                     filterable: true,
                     Filter: ({filter, onChange}) => (
-                        this.customFilter(filter, onChange, item)
+                        this.customDateFilter(filter, onChange, item)
                     ),
                     Cell: row => {
                         return (
