@@ -7,6 +7,7 @@ import firebase from 'firebase/app';
 import firebaseService from 'app/services/firebaseService';
 import auth0Service from 'app/services/auth0Service';
 import jwtService from 'app/services/jwtService';
+import organizationService from 'app/services/organizationService';
 import {LOGIN_ERROR} from "./login.actions";
 
 export const SET_USER_DATA = '[USER] SET DATA';
@@ -85,10 +86,10 @@ export function createUserSettingsFirebase(authUser) {
  */
 export function setUserData() {
     return (dispatch) =>
-        jwtService.getUserProfile()
+        Promise.all([jwtService.getUserProfile(), organizationService.getOrganizationInfo()])
             .then((res) => {
-                console.log(res);
-                return dispatch({
+                    console.log(res);
+                    return dispatch({
                         type: SET_USER_DATA,
                         payload: res
                     });
@@ -176,5 +177,4 @@ export function updateUserData(user) {
                     });
                 }
             )
-
 }

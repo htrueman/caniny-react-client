@@ -9,7 +9,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import {Avatar} from "@material-ui/core";
 import {TextFieldFormsy} from '@fuse';
 import Formsy from 'formsy-react';
-import jwtService from 'app/services/jwtService';
+import organizationService from 'app/services/organizationService';
 import {formatPhoneNumberIntl} from "react-phone-number-input";
 import PhoneInput from 'react-phone-number-input'
 import * as Actions from 'app/auth/store/actions';
@@ -39,7 +39,7 @@ const userTypes = {
     django_admin: 'Django admin'
 };
 
-class UserProfile extends Component {
+class OrganizationProfile extends Component {
     state = {};
 
     handleChangeInput = (name) => ({target: {value}}) => {
@@ -49,7 +49,8 @@ class UserProfile extends Component {
     };
 
     handleUpdateUser = async () => {
-        await this.props.updateUserData(this.state);
+        await organizationService.updateOrganization(this.state);
+        await this.props.setUserData();
     };
 
     onDrop = async (file) => {
@@ -76,33 +77,14 @@ class UserProfile extends Component {
         };
     }
 
-    onResetPass = async (pass) => {
-        await jwtService.resetPassword(pass);
-        this.form.reset();
-    };
-
-    // getUserInfo = () => {
-    //     this.setState(this.props.user)
-    // };
-    //
-    // componentDidMount() {
-    //     this.getUserInfo();
-    // }
-    //
-    // componentWillReceiveProps() {
-    //     this.getUserInfo();
-    // }
-
     render() {
         const {classes} = this.props,
             {
                 firstName,
-                lastName,
+                name,
                 email,
                 address,
-
                 avatar,
-                userType,
                 phoneNumber
             } = this.props.user;
 
@@ -122,34 +104,24 @@ class UserProfile extends Component {
                         <div className='user-profile-page'>
                             <div className="profile-form">
                                 <div className="general-title">
-                                    User Profile
+                                    Organization Profile
 
                                     <button className='save-btn' onClick={this.handleUpdateUser}>Save</button>
                                 </div>
 
                                 <section className='first-section'>
                                     <div className="section-title">
-                                        USER INFORMATION
+                                        ORGANIZATION INFORMATION
                                     </div>
 
                                     <div className='flex justify-between flex-wrap ml-36'>
                                         <div className={classes.formControl}>
-                                            <InputLabel htmlFor="name">First name</InputLabel>
+                                            <InputLabel htmlFor="name">Name</InputLabel>
                                             <TextField
                                                 id="name"
                                                 type="text"
-                                                value={this.state.firstName ? this.state.firstName : firstName}
+                                                value={this.state.name ? this.state.name : name}
                                                 onChange={this.handleChangeInput('firstName')}
-                                            />
-                                        </div>
-
-                                        <div className={classes.formControl}>
-                                            <InputLabel htmlFor="name">Last name</InputLabel>
-                                            <TextField
-                                                id="name"
-                                                type="text"
-                                                value={this.state.lastName ? this.state.lastName : lastName}
-                                                onChange={this.handleChangeInput('lastName')}
                                             />
                                         </div>
 
@@ -190,91 +162,8 @@ class UserProfile extends Component {
                                                 onChange={this.handleChangeInput('address')}
                                             />
                                         </div>
-
-                                        {/*<div className={classes.formControl}>*/}
-                                        {/*<InputLabel htmlFor="name">City</InputLabel>*/}
-                                        {/*<TextField*/}
-                                        {/*id="name"*/}
-                                        {/*type="text"*/}
-                                        {/*value={city}*/}
-                                        {/*onChange={this.handleChangeInput('city')}*/}
-                                        {/*/>*/}
-                                        {/*</div>*/}
-
-                                        {/*<div className={classes.formControl}>*/}
-                                        {/*<InputLabel htmlFor="name">Country</InputLabel>*/}
-                                        {/*<TextField*/}
-                                        {/*id="name"*/}
-                                        {/*type="text"*/}
-                                        {/*value={country}*/}
-                                        {/*onChange={this.handleChangeInput('country')}*/}
-                                        {/*/>*/}
-                                        {/*</div>*/}
                                     </div>
                                 </section>
-
-                                <div className="general-title">
-                                    Password Reset
-
-                                </div>
-
-                                <Formsy
-                                    onValidSubmit={this.onResetPass}
-                                    onValid={this.enableButton}
-                                    onInvalid={this.disableButton}
-                                    ref={(form) => this.form = form}
-                                    className="flex flex-col justify-center reset-block ml-36"
-                                >
-                                    <TextFieldFormsy
-                                        className="mb-16"
-                                        type="text"
-                                        name="oldPassword"
-                                        autocomplete={false}
-                                        label="Current Password"
-                                        // validations="equalsField:password2"
-                                        // validationErrors={{
-                                        //     equalsField: 'Passwords do not match'
-                                        // }}
-                                        required
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                    />
-
-                                    <TextFieldFormsy
-                                        className="mb-16"
-                                        type="password"
-                                        autocomplete={false}
-                                        name="password1"
-                                        label="New Password"
-                                        validations="equalsField:password2"
-                                        validationErrors={{
-                                            equalsField: 'Passwords do not match'
-                                        }}
-                                        required
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                    />
-
-                                    <TextFieldFormsy
-                                        className="mb-16"
-                                        type="password"
-                                        autocomplete={false}
-                                        name="password2"
-                                        label="Confirm Password"
-                                        validations="equalsField:password1"
-                                        validationErrors={{
-                                            equalsField: 'Passwords do not match'
-                                        }}
-                                        required
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                    />
-
-                                    <button className='save-btn reset-btn'>Reset</button>
-                                </Formsy>
                             </div>
 
                             <div className="user-avatar">
@@ -291,8 +180,7 @@ class UserProfile extends Component {
                                 />
 
                                 <div
-                                    className='name'>{this.state.firstName ? this.state.firstName : (firstName ? firstName : 'User')} {this.state.lastName ? this.state.lastName : lastName}</div>
-                                <div className='role'>{userTypes[userType]}</div>
+                                    className='name'>{this.state.firstName ? this.state.firstName : (name ? name : 'Organization')}</div>
 
                             </div>
                         </div>
@@ -312,10 +200,10 @@ function mapStateToProps({auth}) {
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
-        updateUserData: Actions.updateUserData
+        setUserData: Actions.setUserData
     }, dispatch);
 };
 
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(UserProfile)));
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(OrganizationProfile)));
 
 

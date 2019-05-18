@@ -40,9 +40,14 @@ class ToolbarLayout2 extends Component {
 
         scrollSpy.update();
         this.getUser();
+        this.getOrganization();
     };
 
     getUser = async () => {
+        await this.props.getUserInfo();
+    };
+
+    getOrganization = async () => {
         await this.props.getUserInfo();
     };
 
@@ -202,7 +207,6 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         getUserInfo: Actions.setUserData,
         defaultLogin: Actions.defaultLogin,
-
     }, dispatch);
 };
 

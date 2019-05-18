@@ -10,6 +10,7 @@ import {ActivateAccountConfig} from 'app/main/ActivateAccount/ActivateAccountCon
 import {UsersConfig} from 'app/main/Users/UsersConfig';
 import {AnimalsConfig} from 'app/main/Animals/AnimalsConfig';
 import {UserProfileConfig} from 'app/main/UserProfile/UserProfileConfig';
+import {OrganizationProfileConfig} from 'app/main/OrganizationProfile/OrganizationProfileConfig';
 
 
 const logging = () => {
@@ -27,7 +28,8 @@ const routeConfigs =  [
     ActivateAccountConfig,
     UsersConfig,
     AnimalsConfig,
-    UserProfileConfig
+    UserProfileConfig,
+    OrganizationProfileConfig
 ];
 
 
