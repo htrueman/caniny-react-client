@@ -521,7 +521,8 @@ class ContactsList extends PureComponent {
                         autoFocus={focus === `filterValue&${field}`}
                     />
 
-                    {filterParams[`filterType&${field}`] || 'Grater than'}
+                    {filterParams[this.state[`filterType&${field}`]] || 'Grater than'}
+
                 </div>
 
                 <RenderAgeMenu

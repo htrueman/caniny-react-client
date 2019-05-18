@@ -172,6 +172,10 @@ a[role=button] {
     cursor: pointer;
 }
 
+.ReactTable .rt-table {
+    overflow: initial !important;
+}
+
 .ReactTable .rt-thead.-filters input {
     border: 0 !important;
     background: none !important;
