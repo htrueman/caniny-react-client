@@ -27,11 +27,11 @@ class CompanyMenu extends Component {
             <React.Fragment>
                 <Button className="h-64" onClick={this.userMenuClick}>
 
-                    <Avatar className="" src={user.avatar ? user.avatar : 'assets/images/avatars/company.svg'}/>
+                    <Avatar className="" src={user.logoImage ? user.logoImage : 'assets/images/avatars/company.svg'}/>
 
                     <div className="hidden md:flex flex-col ml-12 items-start">
                         <Typography component="span" className="normal-case font-600 flex display-user-name">
-                            {user.organization || 'Organization'}
+                            {user.name || 'Organization'}
                         </Typography>
                     </div>
                     <Icon className="text-16 ml-12 hidden sm:flex" variant="action"

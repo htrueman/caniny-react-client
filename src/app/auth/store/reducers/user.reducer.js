@@ -2,41 +2,35 @@ import * as Actions from '../actions';
 
 const initialState = {
     role: 'guest',
-    data: {
-        'displayName': 'John Doe',
-        'photoURL'   : 'assets/images/avatars/Velazquez.jpg',
-        'email'      : 'johndoe@withinpixels.com',
-        shortcuts    : [
-            'calendar',
-            'mail',
-            'contacts',
-            'todo'
-        ]
-    }
+    'displayName': 'John Doe',
+    'photoURL': 'assets/images/avatars/Velazquez.jpg',
+    'email': 'johndoe@withinpixels.com',
 };
 
 const user = function (state = initialState, action) {
-    switch ( action.type )
-    {
-        case Actions.SET_USER_DATA:
-        {
+    switch (action.type) {
+        case Actions.SET_USER_DATA: {
             return {
-                ...initialState,
+                ...state,
                 ...action.payload
             };
         }
-        case Actions.REMOVE_USER_DATA:
-        {
+        case Actions.SET_ORGANIZATION_DATA: {
+            console.log(action.payload);
+            return {
+                ...state,
+                ...action.payload
+            };
+        }
+        case Actions.REMOVE_USER_DATA: {
             return {
                 ...initialState
             };
         }
-        case Actions.USER_LOGGED_OUT:
-        {
+        case Actions.USER_LOGGED_OUT: {
             return initialState;
         }
-        default:
-        {
+        default: {
             return state
         }
     }

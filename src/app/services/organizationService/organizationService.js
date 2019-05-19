@@ -46,7 +46,7 @@ class organizationService extends FuseUtils.EventEmitter {
 
     updateOrganization = (data) => {
         return new Promise((resolve, reject) => {
-            axios.patch(`${baseUrl}organizations/managed/`, data)
+            axios.put(`${baseUrl}organizations/managed/`, data)
                 .then(response => {
                     resolve(response.data);
                 })

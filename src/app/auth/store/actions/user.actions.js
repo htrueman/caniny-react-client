@@ -11,6 +11,7 @@ import organizationService from 'app/services/organizationService';
 import {LOGIN_ERROR} from "./login.actions";
 
 export const SET_USER_DATA = '[USER] SET DATA';
+export const SET_ORGANIZATION_DATA = '[USER] SET ORGANIZATION DATA';
 export const REMOVE_USER_DATA = '[USER] REMOVE DATA';
 export const USER_LOGGED_OUT = '[USER] LOGGED OUT';
 
@@ -86,16 +87,30 @@ export function createUserSettingsFirebase(authUser) {
  */
 export function setUserData() {
     return (dispatch) =>
-        Promise.all([jwtService.getUserProfile(), organizationService.getOrganizationInfo()])
+        jwtService.getUserProfile()
             .then((res) => {
-                    console.log(res);
                     return dispatch({
                         type: SET_USER_DATA,
                         payload: res
                     });
                 }
             )
+}
 
+/**
+ * Set Organization Data
+ */
+export function setOrganizationData() {
+    return (dispatch) =>
+        organizationService.getOrganizationInfo()
+            .then((res) => {
+                    console.log(res);
+                    return dispatch({
+                        type: SET_ORGANIZATION_DATA,
+                        payload: res
+                    });
+                }
+            )
 }
 
 /**

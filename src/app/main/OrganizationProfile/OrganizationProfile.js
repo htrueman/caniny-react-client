@@ -56,12 +56,12 @@ class OrganizationProfile extends Component {
     onDrop = async (file) => {
         this.getBase64(file[file.length - 1], (result) => {
             this.setState({
-                avatar: result,
+                logoImage: result,
             });
 
-            this.props.updateUserData({
-                avatar: result
-            });
+            // this.props.updateUserData({
+            //     avatar: result
+            // });
         });
 
     };
@@ -77,6 +77,13 @@ class OrganizationProfile extends Component {
         };
     }
 
+    componentDidMount() {
+        organizationService.getOrganizationInfo()
+            .then(res => {
+                this.setState(res)
+            })
+    }
+
     render() {
         const {classes} = this.props,
             {
@@ -84,9 +91,9 @@ class OrganizationProfile extends Component {
                 name,
                 email,
                 address,
-                avatar,
+                logoImage,
                 phoneNumber
-            } = this.props.user;
+            } = this.state;
 
 
         return (
@@ -120,8 +127,8 @@ class OrganizationProfile extends Component {
                                             <TextField
                                                 id="name"
                                                 type="text"
-                                                value={this.state.name ? this.state.name : name}
-                                                onChange={this.handleChangeInput('firstName')}
+                                                value={name}
+                                                onChange={this.handleChangeInput('name')}
                                             />
                                         </div>
 
@@ -130,7 +137,7 @@ class OrganizationProfile extends Component {
                                             <TextField
                                                 id="name"
                                                 type="text"
-                                                value={this.state.email ? this.state.email : email}
+                                                value={email}
                                                 onChange={this.handleChangeInput('email')}
                                             />
                                         </div>
@@ -139,7 +146,7 @@ class OrganizationProfile extends Component {
                                             <InputLabel htmlFor="age-simple" className="custom-label">Phone</InputLabel>
                                             <PhoneInput
                                                 placeholder=""
-                                                value={this.state.phoneNumber ? this.state.phoneNumber : phoneNumber}
+                                                value={phoneNumber}
                                                 onChange={(phoneNumber, e) => {
                                                     this.setState({phoneNumber: formatPhoneNumberIntl(phoneNumber)})
                                                 }}/>
@@ -158,7 +165,7 @@ class OrganizationProfile extends Component {
                                             <TextField
                                                 id="name"
                                                 type="text"
-                                                value={this.state.address ? this.state.address : address}
+                                                value={address}
                                                 onChange={this.handleChangeInput('address')}
                                             />
                                         </div>
@@ -168,7 +175,7 @@ class OrganizationProfile extends Component {
 
                             <div className="user-avatar">
                                 <Avatar className="photo" alt="contact avatar"
-                                        src={avatar ? avatar : 'assets/images/avatars/avatar.svg'}/>
+                                        src={logoImage ? logoImage : 'assets/images/avatars/avatar.svg'}/>
 
                                 <ImageUploader
                                     withIcon={true}

@@ -48,7 +48,7 @@ class ToolbarLayout2 extends Component {
     };
 
     getOrganization = async () => {
-        await this.props.getUserInfo();
+        await this.props.setOrganizationData();
     };
 
     handleSetActive = (e) => {
@@ -206,6 +206,7 @@ function mapStateToProps({fuse, auth}) {
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         getUserInfo: Actions.setUserData,
+        setOrganizationData: Actions.setOrganizationData,
         defaultLogin: Actions.defaultLogin,
     }, dispatch);
 };
