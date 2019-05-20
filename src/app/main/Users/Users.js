@@ -16,9 +16,12 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faUser} from '@fortawesome/free-solid-svg-icons'
 import {Avatar, Divider} from '@material-ui/core';
 import {FuseAnimate} from '@fuse';
+import {withRouter} from 'react-router-dom';
 
 import UserWindow from './UserWindow';
 import UsersList from './UsersList';
+import {bindActionCreators} from "redux";
+import connect from "react-redux/es/connect/connect";
 
 
 const styles = theme => ({
@@ -249,8 +252,8 @@ class Users extends Component {
                 openHelper,
                 userProfile
             } = this.state,
-
             {
+                user,
                 classes,
             } = this.props;
 
@@ -281,8 +284,8 @@ class Users extends Component {
                             <FuseAnimate animation="transition.slideLeftIn" delay={200}>
                                 <Paper elevation={1} className="rounded-8">
                                     <div className="p-24 flex items-center">
-                                        <Avatar className="mr-12" src='assets/images/avatars/profile.jpg'/>
-                                        <Typography>John Doe</Typography>
+                                        <Avatar style={{margin: '0 10px 0 0'}} src={user.avatar ? user.avatar : 'assets/images/avatars/avatar.svg'}/>
+                                        <Typography>{user.firstName || 'User'}</Typography>
                                     </div>
                                     <Divider/>
                                     <List>
@@ -383,4 +386,16 @@ class Users extends Component {
     }
 }
 
-export default withStyles(styles, {withTheme: true})(Users);
+
+function mapStateToProps({fuse, auth}) {
+    return {
+        user: auth.user
+    }
+}
+
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({}, dispatch);
+};
+
+export default withStyles(styles, {withTheme: true})(withRouter(connect(mapStateToProps, mapDispatchToProps)(Users)));

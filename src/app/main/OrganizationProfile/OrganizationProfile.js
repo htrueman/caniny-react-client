@@ -40,7 +40,9 @@ const userTypes = {
 };
 
 class OrganizationProfile extends Component {
-    state = {};
+    state = {
+        uploadImg: false
+    };
 
     handleChangeInput = (name) => ({target: {value}}) => {
         this.setState({
@@ -49,19 +51,31 @@ class OrganizationProfile extends Component {
     };
 
     handleUpdateUser = async () => {
-        await organizationService.updateOrganization(this.state);
+        let organization = {};
+
+        for (let key in this.state) {
+            if (this.state[key]) {
+                organization[key] = this.state[key]
+            }
+        }
+
+        if (!this.state.uploadImg) delete organization.logoImage;
+
+        await organizationService.updateOrganization(organization);
         await this.props.setUserData();
+        await this.props.setOrganizationData();
+
+        this.setState({
+            uploadImg: false
+        })
     };
 
     onDrop = async (file) => {
         this.getBase64(file[file.length - 1], (result) => {
             this.setState({
                 logoImage: result,
-            });
-
-            // this.props.updateUserData({
-            //     avatar: result
-            // });
+                uploadImg: true
+            }, () => this.handleUpdateUser());
         });
 
     };
@@ -85,9 +99,8 @@ class OrganizationProfile extends Component {
     }
 
     render() {
-        const {classes} = this.props,
+        const {classes, user} = this.props,
             {
-                firstName,
                 name,
                 email,
                 address,
@@ -104,7 +117,7 @@ class OrganizationProfile extends Component {
                     }}
                     header={
                         <div className="p-24 size-container header-users-page profile-header">
-                            <h4>Hello {this.state.firstName ? this.state.firstName : (firstName ? firstName : 'User')}</h4>
+                            <h4>Hello {this.state.firstName ? this.state.firstName : (user.firstName ? user.firstName : 'User')}</h4>
                         </div>
                     }
                     content={
@@ -186,8 +199,8 @@ class OrganizationProfile extends Component {
                                     singleImage={true}
                                 />
 
-                                <div
-                                    className='name'>{this.state.firstName ? this.state.firstName : (name ? name : 'Organization')}</div>
+                                <div className='name'
+                                     style={{color: '#32ADFF'}}>{this.state.firstName ? this.state.firstName : (name ? name : 'Organization')}</div>
 
                             </div>
                         </div>
@@ -207,7 +220,8 @@ function mapStateToProps({auth}) {
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
-        setUserData: Actions.setUserData
+        setUserData: Actions.setUserData,
+        setOrganizationData: Actions.setOrganizationData,
     }, dispatch);
 };
 

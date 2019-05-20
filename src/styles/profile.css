@@ -47,12 +47,18 @@
     display: block;
     padding: 5px 0;
     border-radius: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.11);
     font-size: 15px;
     font-weight: normal;
     width: 10%;
-    color: #039be5;
-    background: none !important;
+    color: #fff;
+    background: #32ADFF;
+}
+
+.user-avatar .chooseFileButton {
+    background: #32ADFF !important;
+}
+.user-avatar .chooseFileButton:hover {
+    background: rgba(50, 173, 255, 0.71) !important;
 }
 
 .profile-form .reset-btn {
@@ -62,7 +68,7 @@
 }
 
 .profile-form .save-btn:hover {
-    background: rgba(0, 0, 0, 0.03) !important;
+    background: rgba(50, 173, 255, 0.71) !important;
 }
 
 .profile-form .section-title {
@@ -74,6 +80,8 @@
 
 .user-avatar {
     width: 25%;
+    display: flex;
+    flex-direction: column;
     padding: 20px;
     border-radius: 10px;
     margin: -50px 0 0 0;
@@ -113,4 +121,16 @@
     text-align: center;
     font-size: 16px;
     font-weight: 400;
+    color: #32ADFF;
+}
+
+.delete-account-btn {
+    display: block;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: normal;
+    color: #fff;
+    margin: auto 0 0 0;
+    padding: 10px 15px;
+    background: rgb(236, 12, 142) !important;
 }

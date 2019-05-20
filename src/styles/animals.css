@@ -36,6 +36,10 @@
     height: 30px;
 }
 
+.upload-file-block {
+    align-items: center;
+}
+
 .columns-list {
     margin: 0;
     padding: 0;
@@ -84,15 +88,24 @@
     border-radius: 10px;
 }
 
+.upload-file-block .drop-block {
+    width: 100%;
+}
+
 .id-photo {
-    width: 100px;
+    width: 80%;
+    min-height: 250px;
+}
+
+.id-photo img{
+    width: 100%;
 }
 
 .rt-td {
     font-size: 13px;
 }
 
-.animal-window button:hover {
+.animal-window .dialog-actions button:hover {
     background: rgba(3, 155, 229, 0.08) !important;
 }
 
@@ -316,3 +329,5 @@ input:checked + .slider:before {
 .rating > label:hover ~ input:checked ~ label {
     color: #6eaed8;
 }
+
+

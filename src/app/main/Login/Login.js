@@ -74,7 +74,7 @@ class Login extends Component {
                     })
                 } else {
                     this.props.getUser();
-                    this.props.history.push('/users')
+                    this.props.history.push('/animals')
                 }
             })
 
@@ -88,7 +88,7 @@ class Login extends Component {
         this.props.googleLogin(user)
             .then(() => {
                 this.props.getUser();
-                this.props.history.push('/users')
+                this.props.history.push('/animals')
             })
     };
 
@@ -103,7 +103,7 @@ class Login extends Component {
             this.props.facebookLogin(user)
                 .then(() => {
                     this.props.getUser();
-                    this.props.history.push('/users')
+                    this.props.history.push('/animals')
                 })
         }
     };
@@ -114,7 +114,7 @@ class Login extends Component {
             token: res
         })
         // .then(() => {
-        //     this.props.history.push('/users')
+        //     this.props.history.push('/animals')
         // })
     };
 

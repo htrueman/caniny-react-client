@@ -14,6 +14,11 @@ import {formatPhoneNumberIntl} from "react-phone-number-input";
 import PhoneInput from 'react-phone-number-input'
 import * as Actions from 'app/auth/store/actions';
 import ImageUploader from 'react-images-upload';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
+
 
 const styles = theme => ({
     layoutRoot: {},
@@ -33,14 +38,16 @@ const styles = theme => ({
 
 
 const userTypes = {
-    helper: 'Assistance',
+    helper: 'Assistant',
     admin: 'Staff',
     super_admin: 'Admin',
     django_admin: 'Django admin'
 };
 
 class UserProfile extends Component {
-    state = {};
+    state = {
+        openRemove: false,
+    };
 
     handleChangeInput = (name) => ({target: {value}}) => {
         this.setState({
@@ -104,7 +111,8 @@ class UserProfile extends Component {
                 avatar,
                 userType,
                 phoneNumber
-            } = this.props.user;
+            } = this.props.user,
+            {openRemove} = this.state;
 
 
         return (
@@ -294,10 +302,33 @@ class UserProfile extends Component {
                                     className='name'>{this.state.firstName ? this.state.firstName : (firstName ? firstName : 'User')} {this.state.lastName ? this.state.lastName : lastName}</div>
                                 <div className='role'>{userTypes[userType]}</div>
 
+                                <button className='delete-account-btn' onClick={() => this.setState({openRemove: true})}>Delete Account</button>
                             </div>
                         </div>
                     }
                 />
+
+                <Dialog
+                    open={openRemove}
+                    onClose={() => this.setState({openRemove: false})}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Are you sure you want to delete your account?"}</DialogTitle>
+
+                    <DialogActions>
+                        <Button onClick={this.handleRemoveUser} style={{color: '#33ADFF'}} autoFocus>
+                            Yes
+                        </Button>
+
+                        <Button style={{color: '#b61423'}}
+                                onClick={() => this.setState({openRemove: false})} color="primary">
+                            No
+                        </Button>
+
+                    </DialogActions>
+                </Dialog>
+
             </Fragment>
         )
     }

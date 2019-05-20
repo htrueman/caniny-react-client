@@ -109,11 +109,11 @@ class ToolbarLayout2 extends Component {
                                 <CompanyMenu/>
 
                                 <div className="left-navigation">
-                                    <Tooltip title="Users" className={classes.toolTip}>
-                                        <NavLink to='/users'><FontAwesomeIcon icon={faUser}/></NavLink>
-                                    </Tooltip>
                                     <Tooltip title="Animals" className={classes.toolTip}>
                                         <NavLink to='/animals'><FontAwesomeIcon icon={faPaw}/></NavLink>
+                                    </Tooltip>
+                                    <Tooltip title="Users" className={classes.toolTip}>
+                                        <NavLink to='/users'><FontAwesomeIcon icon={faUser}/></NavLink>
                                     </Tooltip>
                                 </div>
                             </div>

@@ -23,7 +23,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMars} from "@fortawesome/free-solid-svg-icons";
 import {faPaw, faVenus} from "@fortawesome/free-solid-svg-icons/index";
 import Tooltip from '@material-ui/core/Tooltip';
-
+import {formatPhoneNumberIntl} from "react-phone-number-input";
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
 
 const styles = theme => ({
     layoutRoot: {},
@@ -1068,7 +1070,7 @@ class AnimalWindow extends Component {
                                 </div>
                             </div>
 
-                            {!openHelperAnimal ? <DialogActions>
+                            {!openHelperAnimal ? <DialogActions className='dialog-actions'>
                                     <Button onClick={onClose} color="secondary" className={classes.button}>
                                         Cancel
                                     </Button>
@@ -1336,7 +1338,7 @@ class AnimalWindow extends Component {
                             </div>
 
                             {!openHelperAnimal ?
-                                <DialogActions>
+                                <DialogActions className='dialog-actions'>
                                     <Button onClick={onClose} color="secondary" className={classes.button}>
                                         Cancel
                                     </Button>
@@ -1682,7 +1684,7 @@ class AnimalWindow extends Component {
                             </div>
 
                             {!openHelperAnimal ?
-                                <DialogActions>
+                                <DialogActions className='dialog-actions'>
                                     <Button onClick={onClose} color="secondary" className={classes.button}>
                                         Cancel
                                     </Button>
@@ -1798,7 +1800,7 @@ class AnimalWindow extends Component {
                             </div>
 
                             {!openHelperAnimal ?
-                                <DialogActions>
+                                <DialogActions className='dialog-actions'>
                                     <Button onClick={onClose} color="secondary" className={classes.button}>
                                         Cancel
                                     </Button>
@@ -1817,7 +1819,7 @@ class AnimalWindow extends Component {
                     {value === 4 && <div className='tab5'>
                         <form className={classes.root} autoComplete="off" onSubmit={this.handleSaveAnimal}>
                             <div className='flex justify-between width-100'>
-                                <div className='drop-block' style={{margin: '0 4.4rem 0 0'}}>
+                                <div className='drop-block'>
                                     <Avatar className="w-96 h-96" alt="contact avatar"
                                             src={image ? `data:image/jpeg;base64,${image}` : 'assets/images/avatars/avatar.svg'}/>
 
@@ -2096,7 +2098,7 @@ class AnimalWindow extends Component {
                             </div>
 
                             {!openHelperAnimal ?
-                                <DialogActions>
+                                <DialogActions className='dialog-actions'>
                                     <Button onClick={onClose} color="secondary" className={classes.button}>
                                         Cancel
                                     </Button>
@@ -2173,7 +2175,7 @@ class AnimalWindow extends Component {
                             </div>
 
                             {!openHelperAnimal ?
-                                <DialogActions>
+                                <DialogActions className='dialog-actions'>
                                     <Button onClick={onClose} color="secondary" className={classes.button}>
                                         Cancel
                                     </Button>
@@ -2385,7 +2387,7 @@ class AnimalWindow extends Component {
 
 
                             {!openHelperAnimal ?
-                                <DialogActions>
+                                <DialogActions className='dialog-actions'>
                                     <Button onClick={onClose} color="secondary" className={classes.button}>
                                         Cancel
                                     </Button>
@@ -2478,12 +2480,21 @@ class AnimalWindow extends Component {
 
                                             <div className={classes.formControl}>
                                                 <InputLabel className="custom-label" htmlFor="name">Phone</InputLabel>
-                                                <TextField
-                                                    id="name"
-                                                    disabled={openHelperAnimal}
-                                                    type="text"
+                                                <PhoneInput
+                                                    placeholder=""
                                                     value={phoneNumber}
-                                                    onChange={this.handleChangeInput('phoneNumber', 'owners')}
+                                                    disabled={openHelperAnimal}
+                                                    onChange={(phoneNumber, e) => {
+                                                        this.setState({
+                                                            animal: {
+                                                                ...this.state.animal,
+                                                                owners: [{
+                                                                    ...this.state.animal.owners[0],
+                                                                    phoneNumber: formatPhoneNumberIntl(phoneNumber)
+                                                                }]
+                                                            }
+                                                        })
+                                                    }}
                                                 />
                                             </div>
 
@@ -2593,7 +2604,7 @@ class AnimalWindow extends Component {
                             </div>
 
                             {!openHelperAnimal ?
-                                <DialogActions>
+                                <DialogActions className='dialog-actions'>
                                     <Button onClick={onClose} color="secondary" className={classes.button}>
                                         Cancel
                                     </Button>
@@ -2619,11 +2630,11 @@ class AnimalWindow extends Component {
                                     <span className='mt-6'>{name || 'Name'}</span>
                                 </div>
 
-                                <div className='width-80 flex flex-col shadow-section' style={{height: '200px'}}>
+                                <div className='width-80 flex flex-col shadow-section'>
                                     <InputLabel className="custom-label" htmlFor="age-simple"
                                                 style={{margin: '0 auto'}}>Upload</InputLabel>
 
-                                    <div className='width-100 flex justify-around'>
+                                    <div className='width-100 flex flex-col justify-around upload-file-block'>
                                         <div className='drop-block flex flex-col'>
                                             {!openHelperAnimal ? <ImageUploader
                                                 withIcon={true}
@@ -2634,10 +2645,11 @@ class AnimalWindow extends Component {
                                                 singleImage={true}
                                             /> : ''}
 
-                                            <img
-                                                src={profileIdImageBase ? `data:image/jpeg;base64,${profileIdImageBase}` : ''}
-                                                alt=""
-                                                className='id-photo'/>
+                                            <div className='id-photo'>
+                                                <img
+                                                    src={profileIdImageBase ? `data:image/jpeg;base64,${profileIdImageBase}` : ''}
+                                                    alt=""/>
+                                            </div>
                                         </div>
 
                                         <div className='drop-block flex flex-col'>
@@ -2650,15 +2662,16 @@ class AnimalWindow extends Component {
                                                 singleImage={true}
                                             /> : ''}
 
-                                            <img src={imageId ? `data:image/jpeg;base64,${imageId}` : ''} alt=""
-                                                 className='id-photo'/>
+                                            <div className='id-photo'>
+                                                <img src={imageId ? `data:image/jpeg;base64,${imageId}` : ''} alt=""/>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             {!openHelperAnimal ?
-                                <DialogActions>
+                                <DialogActions className='dialog-actions'>
                                     <Button onClick={onClose} color="secondary" className={classes.button}>
                                         Cancel
                                     </Button>
