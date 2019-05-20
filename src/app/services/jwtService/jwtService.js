@@ -310,6 +310,18 @@ class jwtService extends FuseUtils.EventEmitter {
                 });
         });
     };
+    removeUserProfile = () => {
+        return new Promise((resolve, reject) => {
+            axios.delete(`${baseUrl}profile/`)
+                .then(response => {
+                    resolve(response.data);
+                })
+                .catch(error => {
+                    this.handleError(error);
+                    reject(error.response.data);
+                });
+        });
+    };
 }
 
 const instance = new jwtService();

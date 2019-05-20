@@ -83,6 +83,13 @@ class UserProfile extends Component {
         };
     }
 
+    handleRemoveUser = () => {
+        console.log('egeg')
+        jwtService.removeUserProfile();
+        this.props.history.push('/');
+        sessionStorage.removeItem('token');
+    };
+
     onResetPass = async (pass) => {
         await jwtService.resetPassword(pass);
         this.form.reset();
