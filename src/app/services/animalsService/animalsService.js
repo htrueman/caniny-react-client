@@ -94,7 +94,7 @@ class animalsService extends FuseUtils.EventEmitter {
                 })
                 .catch(error => {
                     this.handleError(error);
-                    reject(error.response.data);
+                    reject(error.response);
                 });
         });
     };

@@ -269,7 +269,7 @@ class Animals extends Component {
                 pageSize,
                 openHelperAnimal
             } = this.state,
-            {classes} = this.props;
+            {classes, user} = this.props;
 
         return (
             <Fragment>
@@ -298,8 +298,8 @@ class Animals extends Component {
                             <FuseAnimate animation="transition.slideLeftIn" delay={200}>
                                 <Paper elevation={1} className="rounded-8">
                                     <div className="p-24 flex items-center">
-                                        <Avatar className="mr-12" src='assets/images/avatars/profile.jpg'/>
-                                        <Typography>John Doe</Typography>
+                                        <Avatar style={{margin: '0 10px 0 0'}} src={user.avatar ? user.avatar : 'assets/images/avatars/avatar.svg'}/>
+                                        <Typography>{user.firstName || 'User'}</Typography>
                                     </div>
                                     <Divider/>
                                     <List>

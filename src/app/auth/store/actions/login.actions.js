@@ -1,6 +1,6 @@
 import firebaseService from 'app/services/firebaseService';
 import jwtService from 'app/services/jwtService';
-import {setUserData} from './user.actions';
+import {setUserData, setOrganizationData} from './user.actions';
 import * as Actions from 'app/store/actions';
 import {SHOW_MESSAGE} from "./message.actions";
 
@@ -32,6 +32,7 @@ export function googleLogin(user) {
         jwtService.signInWithEmailAndPassword(user)
             .then((user) => {
                     dispatch(setUserData(user));
+                    dispatch(setOrganizationData());
 
                     return dispatch({
                         type: LOGIN_SUCCESS

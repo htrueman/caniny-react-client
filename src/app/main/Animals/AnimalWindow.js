@@ -810,6 +810,7 @@ class AnimalWindow extends Component {
                                                                    value='male'
                                                                    type="radio"
                                                                    id="Male"
+                                                                   disabled={openHelperAnimal}
                                                                    name="radio-group"
                                                                    checked={gender === 'male'}
                                                             />
@@ -825,6 +826,7 @@ class AnimalWindow extends Component {
                                                                    value='female'
                                                                    type="radio"
                                                                    id="Female"
+                                                                   disabled={openHelperAnimal}
                                                                    name="radio-group"
                                                                    checked={gender === 'female'}
                                                             />
@@ -1142,6 +1144,7 @@ class AnimalWindow extends Component {
                                                         <input type="radio" name="stars" value="lazy"
                                                                onChange={this.handleChangeInput('energyLevel')}
                                                                checked={energyLevel === 'lazy'}
+                                                               disabled={openHelperAnimal}
                                                         />
                                                         <Tooltip title="Lazy">
                                                             <span className="icon" title="Lazy">★</span>
@@ -1152,6 +1155,7 @@ class AnimalWindow extends Component {
                                                         <input type="radio" name="stars" value="chill"
                                                                onChange={this.handleChangeInput('energyLevel')}
                                                                checked={energyLevel === 'chill'}
+                                                               disabled={openHelperAnimal}
                                                         />
                                                         <span className="icon" title="Lazy">★</span>
                                                         <Tooltip title="Chill">
@@ -1163,6 +1167,7 @@ class AnimalWindow extends Component {
                                                         <input type="radio" name="stars" value="active"
                                                                onChange={this.handleChangeInput('energyLevel')}
                                                                checked={energyLevel === 'active'}
+                                                               disabled={openHelperAnimal}
                                                         />
                                                         <span className="icon" title="Lazy">★</span>
                                                         <span className="icon" title="Chill">★</span>
@@ -1175,6 +1180,7 @@ class AnimalWindow extends Component {
                                                         <input type="radio" name="stars" value="energetic"
                                                                onChange={this.handleChangeInput('energyLevel')}
                                                                checked={energyLevel === 'energetic'}
+                                                               disabled={openHelperAnimal}
                                                         />
                                                         <span className="icon" title="Lazy">★</span>
                                                         <span className="icon" title="Chill">★</span>
@@ -1184,11 +1190,11 @@ class AnimalWindow extends Component {
                                                         </Tooltip>
                                                     </label>
 
-                                                    {/*<Tooltip title="Hyper">*/}
                                                     <label>
                                                         <input type="radio" name="stars" value="hyper"
                                                                onChange={this.handleChangeInput('energyLevel')}
                                                                checked={energyLevel === 'hyper'}
+                                                               disabled={openHelperAnimal}
                                                         />
                                                         <span className="icon" title="Lazy">★</span>
                                                         <span className="icon" title="Chill">★</span>
@@ -1198,7 +1204,6 @@ class AnimalWindow extends Component {
                                                             <span className="icon" title="Hyper">★</span>
                                                         </Tooltip>
                                                     </label>
-                                                    {/*</Tooltip>*/}
                                                 </div>
 
 
@@ -1393,6 +1398,7 @@ class AnimalWindow extends Component {
                                                         <input type="radio" name="stars" value="extra_small"
                                                                onChange={this.handleChangeInput('size', 'appearance')}
                                                                checked={size === 'extra_small'}
+                                                               disabled={openHelperAnimal}
                                                         />
                                                         <Tooltip title="Extra small">
 
@@ -1407,6 +1413,7 @@ class AnimalWindow extends Component {
                                                         <input type="radio" name="stars" value="small"
                                                                onChange={this.handleChangeInput('size', 'appearance')}
                                                                checked={size === 'small'}
+                                                               disabled={openHelperAnimal}
                                                         />
                                                         <span className="icon" title="Lazy">
                         <FontAwesomeIcon style={{fontSize: '20px'}}
@@ -1425,6 +1432,7 @@ class AnimalWindow extends Component {
                                                         <input type="radio" name="stars" value="medium"
                                                                onChange={this.handleChangeInput('size', 'appearance')}
                                                                checked={size === 'medium'}
+                                                               disabled={openHelperAnimal}
                                                         />
                                                         <span className="icon" title="Lazy">
                         <FontAwesomeIcon style={{fontSize: '20px'}}
@@ -1447,6 +1455,7 @@ class AnimalWindow extends Component {
                                                         <input type="radio" name="stars" value="large"
                                                                onChange={this.handleChangeInput('size', 'appearance')}
                                                                checked={size === 'large'}
+                                                               disabled={openHelperAnimal}
                                                         />
                                                         <span className="icon" title="Lazy">
                         <FontAwesomeIcon style={{fontSize: '20px'}}
@@ -1472,6 +1481,7 @@ class AnimalWindow extends Component {
                                                         <input type="radio" name="stars" value="extra_large"
                                                                onChange={this.handleChangeInput('size', 'appearance')}
                                                                checked={size === 'extra_large'}
+                                                               disabled={openHelperAnimal}
                                                         />
                                                         <span className="icon" title="Lazy">
                         <FontAwesomeIcon style={{fontSize: '20px'}}

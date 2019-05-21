@@ -14,6 +14,7 @@ import {formatPhoneNumberIntl} from "react-phone-number-input";
 import PhoneInput from 'react-phone-number-input'
 import * as Actions from 'app/auth/store/actions';
 import ImageUploader from 'react-images-upload';
+import {NotificationManager} from "react-notifications";
 
 const styles = theme => ({
     layoutRoot: {},
@@ -64,6 +65,7 @@ class OrganizationProfile extends Component {
         await organizationService.updateOrganization(organization);
         await this.props.setUserData();
         await this.props.setOrganizationData();
+        NotificationManager.success('Information Saved');
 
         this.setState({
             uploadImg: false
@@ -75,7 +77,7 @@ class OrganizationProfile extends Component {
             this.setState({
                 logoImage: result,
                 uploadImg: true
-            }, () => this.handleUpdateUser());
+            });
         });
 
     };
@@ -126,7 +128,8 @@ class OrganizationProfile extends Component {
                                 <div className="general-title">
                                     Organization Profile
 
-                                    <button className='save-btn' onClick={this.handleUpdateUser}>Save</button>
+                                    {user.userType === 'super_admin' ?
+                                        <button className='save-btn' onClick={this.handleUpdateUser}>Save</button> : ''}
                                 </div>
 
                                 <section className='first-section'>
@@ -140,6 +143,7 @@ class OrganizationProfile extends Component {
                                             <TextField
                                                 id="name"
                                                 type="text"
+                                                disabled={user.userType !== 'super_admin'}
                                                 value={name}
                                                 onChange={this.handleChangeInput('name')}
                                             />
@@ -150,6 +154,7 @@ class OrganizationProfile extends Component {
                                             <TextField
                                                 id="name"
                                                 type="text"
+                                                disabled={user.userType !== 'super_admin'}
                                                 value={email}
                                                 onChange={this.handleChangeInput('email')}
                                             />
@@ -160,6 +165,7 @@ class OrganizationProfile extends Component {
                                             <PhoneInput
                                                 placeholder=""
                                                 value={phoneNumber}
+                                                disabled={user.userType !== 'super_admin'}
                                                 onChange={(phoneNumber, e) => {
                                                     this.setState({phoneNumber: formatPhoneNumberIntl(phoneNumber)})
                                                 }}/>
@@ -179,6 +185,7 @@ class OrganizationProfile extends Component {
                                                 id="name"
                                                 type="text"
                                                 value={address}
+                                                disabled={user.userType !== 'super_admin'}
                                                 onChange={this.handleChangeInput('address')}
                                             />
                                         </div>
@@ -190,14 +197,17 @@ class OrganizationProfile extends Component {
                                 <Avatar className="photo" alt="contact avatar"
                                         src={logoImage ? logoImage : 'assets/images/avatars/avatar.svg'}/>
 
-                                <ImageUploader
-                                    withIcon={true}
-                                    buttonText='Choose images'
-                                    onChange={this.onDrop}
-                                    imgExtension={['.jpg', '.gif', '.png']}
-                                    maxFileSize={5242880}
-                                    singleImage={true}
-                                />
+                                {user.userType === 'super_admin' ?
+                                    <ImageUploader
+                                        withIcon={true}
+                                        buttonText='Choose images'
+                                        onChange={this.onDrop}
+                                        imgExtension={['.jpg', '.gif', '.png']}
+                                        maxFileSize={5242880}
+                                        singleImage={true}
+                                    />
+                                    : ''
+                                }
 
                                 <div className='name'
                                      style={{color: '#32ADFF'}}>{this.state.firstName ? this.state.firstName : (name ? name : 'Organization')}</div>

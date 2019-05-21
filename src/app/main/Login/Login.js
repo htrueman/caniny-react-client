@@ -74,6 +74,7 @@ class Login extends Component {
                     })
                 } else {
                     this.props.getUser();
+                    this.props.getCompany();
                     this.props.history.push('/animals')
                 }
             })
@@ -333,6 +334,7 @@ const mapStateToProps = () => {
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
+        getCompany: Actions.setOrganizationData,
         getUser: Actions.setUserData,
         defaultLogin: authActions.defaultLogin,
         googleLogin: authActions.googleLogin,

@@ -104,7 +104,6 @@ export function setOrganizationData() {
     return (dispatch) =>
         organizationService.getOrganizationInfo()
             .then((res) => {
-                    console.log(res);
                     return dispatch({
                         type: SET_ORGANIZATION_DATA,
                         payload: res
