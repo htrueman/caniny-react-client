@@ -139,8 +139,7 @@ class Users extends Component {
 
     handleFilterUser = (filter) => {
         const filtersArr = filter.map(item => {
-
-            console.log(item.value.filterValue)
+            console.log(item.id);
             if (item.value.type === 'date') {
                 return {
                     type: item.value.type,
@@ -148,12 +147,20 @@ class Users extends Component {
                     filterType: item.value.filterType,
                     filterValue: item.value.filterValue
                 }
+            } else if(item.id === 'phoneNumber') {
+                return {
+                    type: item.value.type,
+                    column: item.id,
+                    filterType: item.value.filterType,
+                    filterValue: window.btoa(unescape(encodeURIComponent(item.value.filterValue)))
+                }
+
             } else {
                 return {
                     type: item.value.type,
                     column: item.id,
                     filterType: item.value.filterType,
-                    filterValue: window.btoa(item.value.filterValue)
+                    filterValue: item.value.filterValue
                 }
             }
 
