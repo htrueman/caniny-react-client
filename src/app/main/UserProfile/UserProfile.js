@@ -94,6 +94,7 @@ class UserProfile extends Component {
 
     onResetPass = async (pass) => {
         await jwtService.resetPassword(pass);
+        NotificationManager.success('Password Changed');
         this.form.reset();
     };
 
@@ -242,6 +243,8 @@ class UserProfile extends Component {
                                     ref={(form) => this.form = form}
                                     className="flex flex-col justify-center reset-block ml-36"
                                 >
+                                    <input style={{display: 'none'}} type="password" name="oldPassword" autoComplete="oldPassword"/>
+
                                     <TextFieldFormsy
                                         className="mb-16"
                                         type="text"
@@ -257,6 +260,8 @@ class UserProfile extends Component {
                                             shrink: true,
                                         }}
                                     />
+
+                                    <input style={{display: 'none'}} type="password" name="password1" autoComplete="password1"/>
 
                                     <TextFieldFormsy
                                         className="mb-16"
@@ -311,7 +316,9 @@ class UserProfile extends Component {
                                     className='name'>{this.state.firstName ? this.state.firstName : (firstName ? firstName : 'User')} {this.state.lastName ? this.state.lastName : lastName}</div>
                                 <div className='role'>{userTypes[userType]}</div>
 
-                                <button className='delete-account-btn' onClick={() => this.setState({openRemove: true})}>Delete Account</button>
+                                <button className='delete-account-btn'
+                                        onClick={() => this.setState({openRemove: true})}>Delete Account
+                                </button>
                             </div>
                         </div>
                     }
