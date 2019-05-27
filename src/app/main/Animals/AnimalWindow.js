@@ -212,7 +212,7 @@ class AnimalWindow extends Component {
 
 
         this.setState({
-            disabledSave: true,
+            disabledSave: false,
             animal: {
                 ...animalFields
             }
