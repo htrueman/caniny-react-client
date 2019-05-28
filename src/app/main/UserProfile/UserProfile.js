@@ -93,7 +93,7 @@ class UserProfile extends Component {
     };
 
     onResetPass = async (pass) => {
-        await jwtService.resetPassword(pass);
+        await jwtService.changePassword(pass);
         NotificationManager.success('Password Changed');
         this.form.reset();
     };

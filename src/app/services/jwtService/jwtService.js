@@ -228,11 +228,22 @@ class jwtService extends FuseUtils.EventEmitter {
 
     resetPassword = (pass) => {
         return new Promise((resolve, reject) => {
+            axios.patch(`${baseUrl}profile/password-reset/`, pass)
+                .then(response => {
+                    resolve(response.data);
+                })
+                .catch(error => {
+                    this.handleError(error);
+                    reject(error.response.data);
+                });
+        });
+    };
+
+    changePassword = (pass) => {
+        return new Promise((resolve, reject) => {
             axios.patch(`${baseUrl}profile/change_password/`, pass)
                 .then(response => {
-                    if (response.data) {
-                        resolve(response.data);
-                    }
+                    resolve(response.data);
                 })
                 .catch(error => {
                     this.handleError(error);
