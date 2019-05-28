@@ -366,3 +366,10 @@ form button[disabled] {
     height: max-content;
     margin: auto 0 auto 5px;
 }
+
+.rt-thead .rt-th > div {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

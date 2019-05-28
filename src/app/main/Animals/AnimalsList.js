@@ -1124,6 +1124,7 @@ class ContactsList extends PureComponent {
                     manual
                     data={data}
                     page={page}
+                    resizable={false}
                     pages={Math.ceil(count / pageSize)}
                     onPageChange={(pageIndex) => {
                         onChangePagination(pageIndex);
