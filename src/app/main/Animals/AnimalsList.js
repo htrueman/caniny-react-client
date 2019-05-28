@@ -333,6 +333,12 @@ const energyLevelParams = {
     'energetic': 'Energetic',
     'hyper': 'Hyper'
 };
+const fosterParams = {
+    'yes': 'Yes',
+    'no': 'No',
+    'to_be': 'To Be',
+    'hold': 'Hold',
+};
 
 
 class ContactsList extends PureComponent {
@@ -511,6 +517,7 @@ class ContactsList extends PureComponent {
                         onChange={changeFilterValue}
                         placeholder="Filter"
                         type='number'
+                        inputProps={{ min: "0"}}
                         style={{
                             width: '100%',
                             height: '40px',
@@ -742,6 +749,11 @@ class ContactsList extends PureComponent {
                     Filter: ({filter, onChange}) => (
                         this.customFilter(filter, onChange, item)
                     ),
+                    Cell: row => {
+                        return (
+                            <span>{fosterParams[row.original.forFoster]}</span>
+                        )
+                    }
                 })
             } else if (item === 'tag_id') {
                 return ({
