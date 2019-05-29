@@ -34,7 +34,7 @@ echo
 
 
 echo "### Starting nginx ..."
-docker-compose up --force-recreate -d server
+docker-compose up --force-recreate -d react_server
 echo
 
 echo "### Deleting dummy certificate for $domains ..."
