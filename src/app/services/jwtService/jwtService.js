@@ -5,7 +5,7 @@ import jwtDecode from 'jwt-decode';
 import FuseUtils from '@fuse/FuseUtils';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 
-const baseUrl = 'http://api.caniny.com/api/v1/';
+const baseUrl = 'https://api.caniny.com/api/v1/';
 
 (function () {
     const token = sessionStorage.getItem('token');

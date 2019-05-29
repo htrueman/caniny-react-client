@@ -154,7 +154,7 @@ class Register extends Component {
         const code = new URL(url_string).searchParams.get("code");
 
         const res = await
-            axios.get('http://api.caniny.com/api/v1/organizations/');
+            axios.get('https://api.caniny.com/api/v1/organizations/');
 
         this.setState({
             organizations: res.data

@@ -4,7 +4,7 @@ import axios from 'axios';
 import FuseUtils from '@fuse/FuseUtils';
 import {NotificationManager} from 'react-notifications';
 
-const baseUrl = 'http://api.caniny.com/api/v1/';
+const baseUrl = 'https://api.caniny.com/api/v1/';
 
 (function () {
     const token = sessionStorage.getItem('token');
