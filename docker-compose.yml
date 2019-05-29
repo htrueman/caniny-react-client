@@ -18,6 +18,7 @@ services:
       - .:/home/node/app
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
+    working_dir: /home/node/app
     ports:
       - '8000:8000'
       - '444:444'
