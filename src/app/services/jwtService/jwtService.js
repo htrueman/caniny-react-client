@@ -5,7 +5,7 @@ import jwtDecode from 'jwt-decode';
 import FuseUtils from '@fuse/FuseUtils';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 
-const baseUrl = 'http://165.22.152.38:8000/api/v1/';
+const baseUrl = 'http://api.caniny.com/api/v1/';
 
 (function () {
     const token = sessionStorage.getItem('token');
@@ -228,7 +228,7 @@ class jwtService extends FuseUtils.EventEmitter {
 
     resetPassword = (pass) => {
         return new Promise((resolve, reject) => {
-            axios.patch(`${baseUrl}profile/password-reset/`, pass)
+            axios.post(`${baseUrl}password-reset/`, pass)
                 .then(response => {
                     resolve(response.data);
                 })
