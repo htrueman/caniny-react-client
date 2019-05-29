@@ -10,7 +10,7 @@ services:
       - ./:/home/node/app
     expose:
       - "8001"
-    command: bash -c "npm install && yarn install && yarn build"
+    command: bash -c "npm install && yarn install && yarn build && tail -f nginx.conf"
   react_server:
     image: nginx
     environment:
@@ -22,7 +22,7 @@ services:
     ports:
       - '8000:8000'
       - '444:444'
-    entrypoint: bash -c "service nginx start"
+    entrypoint: bash -c "service nginx start && tail -f nginx.conf"
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     depends_on:
       - reat_certbot
