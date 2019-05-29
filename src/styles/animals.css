@@ -23,7 +23,7 @@
     overflow: inherit !important;
 }
 
-.filter-block .react-datepicker__input-container{
+.filter-block .react-datepicker__input-container {
     border-bottom: 1px solid rgba(0, 0, 0, 0.42) !important;
     margin: 0 0 10px 0;
 }
@@ -32,7 +32,7 @@
     margin: 0;
 }
 
-.filter-block  input {
+.filter-block input {
     height: 30px;
 }
 
@@ -97,7 +97,7 @@
     min-height: 250px;
 }
 
-.id-photo img{
+.id-photo img {
     width: 100%;
 }
 
@@ -107,6 +107,40 @@
 
 .animal-window .dialog-actions button:hover {
     background: rgba(3, 155, 229, 0.08) !important;
+}
+
+.opening-block  {
+    margin: 0 0 40px 0;
+}
+.opening-block h3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #32ADFF;
+    color: #fff;
+    height: 40px;
+    width: 100%;
+    margin: 0 0 10px 0;
+}
+
+.opening-block > div {
+    margin: 10px 0;
+    display: flex;
+}
+
+.opening-block > div span {
+    width: 30%;
+    display: block;
+    color: #2D323D;
+}
+
+.opening-block > div input {
+    border: 1px solid #32ADFF;
+    border-radius: 10px;
+    padding: 0 15px;
+    width: 70%;
+    height: 25px;
+    text-align: center;
 }
 
 /*checkbox*/
@@ -182,6 +216,7 @@ input:checked + .slider:before {
 .gender-block label {
     margin: 0 20px 0 0;
 }
+
 .gender-block label svg {
     font-size: 20px;
 }
@@ -241,7 +276,6 @@ input:checked + .slider:before {
     -webkit-transform: scale(1);
     transform: scale(1);
 }
-
 
 
 .rating {
@@ -318,10 +352,12 @@ input:checked + .slider:before {
 .rating > input:checked ~ label {
     color: #84ceff;
 }
+
 .rating:not(:checked) > label:hover,
 .rating:not(:checked) > label:hover ~ label {
     color: #84ceff;
 }
+
 .rating > input:checked + label:hover,
 .rating > input:checked + label:hover ~ label,
 .rating > input:checked ~ label:hover,

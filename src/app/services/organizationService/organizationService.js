@@ -56,6 +56,19 @@ class organizationService extends FuseUtils.EventEmitter {
                 });
         });
     };
+
+    removeOrgProfile = () => {
+        return new Promise((resolve, reject) => {
+            axios.delete(`${baseUrl}organizations/managed/`)
+                .then(response => {
+                    resolve(response.data);
+                })
+                .catch(error => {
+                    this.handleError(error);
+                    reject(error.response.data);
+                });
+        });
+    };
 }
 
 const

@@ -15,6 +15,10 @@ import PhoneInput from 'react-phone-number-input'
 import * as Actions from 'app/auth/store/actions';
 import ImageUploader from 'react-images-upload';
 import {NotificationManager} from "react-notifications";
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
     layoutRoot: {},
@@ -42,7 +46,16 @@ const userTypes = {
 
 class OrganizationProfile extends Component {
     state = {
-        uploadImg: false
+        uploadImg: false,
+        openRemove: false,
+
+        scheduleMonday: '',
+        scheduleTuesday: '',
+        scheduleWednesday: '',
+        scheduleThursday: '',
+        scheduleFriday: '',
+        scheduleSaturday: '',
+        scheduleSunday: '',
     };
 
     handleChangeInput = (name) => ({target: {value}}) => {
@@ -93,6 +106,13 @@ class OrganizationProfile extends Component {
         };
     }
 
+    handleRemoveUser = () => {
+        organizationService.removeOrgProfile();
+        window.scroll(0, 0);
+        sessionStorage.removeItem('token');
+        this.props.history.push('/');
+    };
+
     componentDidMount() {
         organizationService.getOrganizationInfo()
             .then(res => {
@@ -107,7 +127,16 @@ class OrganizationProfile extends Component {
                 email,
                 address,
                 logoImage,
-                phoneNumber
+                phoneNumber,
+                openRemove,
+
+                scheduleMonday,
+                scheduleTuesday,
+                scheduleWednesday,
+                scheduleThursday,
+                scheduleFriday,
+                scheduleSaturday,
+                scheduleSunday,
             } = this.state;
 
 
@@ -212,10 +241,106 @@ class OrganizationProfile extends Component {
                                 <div className='name'
                                      style={{color: '#32ADFF'}}>{this.state.firstName ? this.state.firstName : (name ? name : 'Organization')}</div>
 
+                                <div className="opening-block">
+                                    <h3>Opening Hours</h3>
+
+                                    <div>
+                                        <span>Monday</span>
+                                        <input
+                                            type="text"
+                                            value={scheduleMonday}
+                                            disabled={user.userType !== 'super_admin'}
+                                            onChange={this.handleChangeInput('scheduleMonday')}
+                                        />
+                                    </div>
+                                    <div>
+                                        <span>Tuesday</span>
+                                        <input
+                                            type="text"
+                                            value={scheduleTuesday}
+                                            disabled={user.userType !== 'super_admin'}
+                                            onChange={this.handleChangeInput('scheduleTuesday')}
+                                        />
+                                    </div>
+                                    <div>
+                                        <span>Wednesday</span>
+                                        <input
+                                            type="text"
+                                            value={scheduleWednesday}
+                                            disabled={user.userType !== 'super_admin'}
+                                            onChange={this.handleChangeInput('scheduleWednesday')}
+                                        />
+                                    </div>
+                                    <div>
+                                        <span>Thursday</span>
+                                        <input
+                                            type="text"
+                                            value={scheduleThursday}
+                                            disabled={user.userType !== 'super_admin'}
+                                            onChange={this.handleChangeInput('scheduleThursday')}
+                                        />
+                                    </div>
+                                    <div>
+                                        <span>Friday</span>
+                                        <input
+                                            type="text"
+                                            value={scheduleFriday}
+                                            disabled={user.userType !== 'super_admin'}
+                                            onChange={this.handleChangeInput('scheduleFriday')}
+                                        />
+                                    </div>
+                                    <div>
+                                        <span>Saturday</span>
+                                        <input
+                                            type="text"
+                                            value={scheduleSaturday}
+                                            disabled={user.userType !== 'super_admin'}
+                                            onChange={this.handleChangeInput('scheduleSaturday')}
+                                        />
+                                    </div>
+                                    <div>
+                                        <span>Sunday</span>
+                                        <input
+                                            type="text"
+                                            value={scheduleSunday}
+                                            disabled={user.userType !== 'super_admin'}
+                                            onChange={this.handleChangeInput('scheduleSunday')}
+                                        />
+                                    </div>
+                                </div>
+
+                                {user.userType === 'super_admin' ? <button className='delete-account-btn'
+                                                                           onClick={() => this.setState({openRemove: true})}>Delete
+                                        Organization
+                                    </button>
+                                    : ''}
                             </div>
                         </div>
                     }
                 />
+
+                <Dialog
+                    open={openRemove}
+                    onClose={() => this.setState({openRemove: false})}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle
+                        id="alert-dialog-title">{"Are you sure you want to delete your organization?"}</DialogTitle>
+
+                    <DialogActions>
+                        <Button onClick={this.handleRemoveUser} style={{color: '#33ADFF'}} autoFocus>
+                            Yes
+                        </Button>
+
+                        <Button style={{color: '#b61423'}}
+                                onClick={() => this.setState({openRemove: false})} color="primary">
+                            No
+                        </Button>
+
+                    </DialogActions>
+                </Dialog>
+
             </Fragment>
         )
     }

@@ -64,7 +64,6 @@ class LP extends Component {
 
 
     onSubmit = (model) => {
-        console.log(model);
         this.props.defaultLogin(model)
             .then(res => {
                 this.props.getUser();
@@ -231,7 +230,7 @@ class LP extends Component {
                                 color="primary"
                                 className="w-full mx-auto mt-16 normal-case"
                                 aria-label="LOG IN"
-                                disabled={!canSubmit}
+                                // disabled={!canSubmit}
                                 value="legacy"
                             >
                                 Login
@@ -269,7 +268,7 @@ class LP extends Component {
                                     <h2 className="text-uppercase">WELCOME TO</h2>
                                     <h1 className="text-uppercase">Caniny</h1>
                                     <p className="text-white sub-head">
-                                        We are seeking to enhance the animal's lives by <br/>
+                                        We are seeking to enhance the animal’s lives by<br/>
                                         organizing and managing their information
                                     </p>
 

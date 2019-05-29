@@ -35,6 +35,11 @@ const styles = theme => ({
         width: '100%',
         margin: '20px 0'
     },
+    formControlAddressHide: {
+        opacity: '0',
+        position: 'absolute',
+        left: '-100vw'
+    }
 });
 
 
@@ -48,6 +53,7 @@ const userTypes = {
 class UserProfile extends Component {
     state = {
         openRemove: false,
+
     };
 
     handleChangeInput = (name) => ({target: {value}}) => {
@@ -86,10 +92,10 @@ class UserProfile extends Component {
     }
 
     handleRemoveUser = () => {
-        console.log('egeg')
         jwtService.removeUserProfile();
-        this.props.history.push('/');
+        window.scroll(0, 0);
         sessionStorage.removeItem('token');
+        this.props.history.push('/');
     };
 
     onResetPass = async (pass) => {
@@ -122,7 +128,9 @@ class UserProfile extends Component {
                 userType,
                 phoneNumber
             } = this.props.user,
-            {openRemove} = this.state;
+            {
+                openRemove,
+            } = this.state;
 
 
         return (
@@ -240,10 +248,67 @@ class UserProfile extends Component {
                                     onValidSubmit={this.onResetPass}
                                     onValid={this.enableButton}
                                     onInvalid={this.disableButton}
+                                    // onSubmit={this.onResetPass}
+                                    autocomplete={false}
                                     ref={(form) => this.form = form}
                                     className="flex flex-col justify-center reset-block ml-36"
                                 >
-                                    <input style={{display: 'none'}} type="password" name="oldPassword" autoComplete="oldPassword"/>
+                                    <div className={classes.formControlAddressHide}>
+                                        <InputLabel htmlFor="name">Current Password</InputLabel>
+                                        <TextField
+                                            id="name"
+                                            type="text"
+                                            required
+                                            autocomplete={false}
+                                        />
+                                    </div>
+                                    <div className={classes.formControlAddressHide}>
+                                        <InputLabel htmlFor="name">New Password</InputLabel>
+                                        <TextField
+                                            id="name"
+                                            type="password"
+                                            required
+                                            autocomplete={false}
+                                        />
+                                    </div>
+
+
+                                    {/*<div className={classes.formControlAddress}>*/}
+                                    {/*<InputLabel htmlFor="name">Current Password</InputLabel>*/}
+                                    {/*<TextField*/}
+                                    {/*id="name"*/}
+                                    {/*type="text"*/}
+                                    {/*required*/}
+                                    {/*autocomplete={false}*/}
+                                    {/*value={oldPassword}*/}
+                                    {/*onChange={this.handleChangeInput('oldPassword')}*/}
+                                    {/*/>*/}
+                                    {/*</div>*/}
+
+                                    {/*<div className={classes.formControlAddress}>*/}
+                                    {/*<InputLabel htmlFor="name">New Password</InputLabel>*/}
+                                    {/*<TextField*/}
+                                    {/*id="name"*/}
+                                    {/*type="password"*/}
+                                    {/*required*/}
+                                    {/*autocomplete={false}*/}
+                                    {/*value={password1}*/}
+                                    {/*onChange={this.handleChangeInput('password1')}*/}
+                                    {/*/>*/}
+                                    {/*</div>*/}
+
+                                    {/*<div className={classes.formControlAddress}>*/}
+                                    {/*<InputLabel htmlFor="name">Confirm Password</InputLabel>*/}
+                                    {/*<TextField*/}
+                                    {/*id="name"*/}
+                                    {/*type="password"*/}
+                                    {/*autocomplete={false}*/}
+                                    {/*required*/}
+                                    {/*value={password2}*/}
+                                    {/*onChange={this.handleChangeInput('password2')}*/}
+                                    {/*/>*/}
+                                    {/*</div>*/}
+
 
                                     <TextFieldFormsy
                                         className="mb-16"
@@ -261,7 +326,6 @@ class UserProfile extends Component {
                                         }}
                                     />
 
-                                    <input style={{display: 'none'}} type="password" name="password1" autoComplete="password1"/>
 
                                     <TextFieldFormsy
                                         className="mb-16"

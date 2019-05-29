@@ -430,6 +430,7 @@ class ContactsList extends PureComponent {
             <div className="filter-block">
                 <div className='filter-input'>
                     <DatePicker
+                        showYearDropdown
                         placeholderText="Filter"
                         selected={filterValue5}
                         onChange={changeFilterValue}
@@ -473,7 +474,7 @@ class ContactsList extends PureComponent {
             } = this.state,
 
             userTypes = {
-                helper: 'Assistance',
+                helper: 'Assistant',
                 admin: 'Staff',
                 super_admin: 'Admin',
                 django_admin: 'Django admin'

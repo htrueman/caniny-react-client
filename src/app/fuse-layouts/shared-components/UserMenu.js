@@ -6,7 +6,7 @@ import {bindActionCreators} from 'redux';
 import {Link} from 'react-router-dom';
 
 const userTypes = {
-    helper: 'Assistance',
+    helper: 'Assistant',
     admin: 'Staff',
     super_admin: 'Admin',
     django_admin: 'Django admin'
