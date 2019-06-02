@@ -9,6 +9,7 @@
 @import 'users.css';
 @import 'animals.css';
 @import 'profile.css';
+@import 'terms.css';
 
 * {
     outline: none !important;

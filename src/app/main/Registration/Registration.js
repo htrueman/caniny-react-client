@@ -4,7 +4,7 @@ import {
     Card,
     CardContent,
     Typography,
-    FormControl,
+    FormControl, FormControlLabel, Checkbox,
 } from '@material-ui/core';
 import Autosuggest from 'react-autosuggest';
 
@@ -255,6 +255,19 @@ class Register extends Component {
                                             </span>
                                     ) : ''}
 
+                                    <FormControl>
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    name="remember"
+                                                    required={true}
+                                                    // checked={remember}
+                                                    onChange={this.handleChange}/>
+                                            }
+                                            label={<span>I accept and agree to the <Link className="terms-link"
+                                                                                         to="/terms-service">Terms of Use</Link></span>}
+                                        />
+                                    </FormControl>
 
                                     <Button
                                         type="submit"

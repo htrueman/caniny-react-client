@@ -11,6 +11,7 @@ import {UsersConfig} from 'app/main/Users/UsersConfig';
 import {AnimalsConfig} from 'app/main/Animals/AnimalsConfig';
 import {UserProfileConfig} from 'app/main/UserProfile/UserProfileConfig';
 import {OrganizationProfileConfig} from 'app/main/OrganizationProfile/OrganizationProfileConfig';
+import {TermsConfig} from 'app/main/Terms/TermsConfig';
 
 
 const logging = () => {
@@ -29,7 +30,8 @@ const routeConfigs =  [
     UsersConfig,
     AnimalsConfig,
     UserProfileConfig,
-    OrganizationProfileConfig
+    OrganizationProfileConfig,
+    TermsConfig
 ];
 
 

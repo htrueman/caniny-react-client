@@ -229,6 +229,11 @@ html {
     color: #fab700;
 }
 
+.terms-link {
+    color: #32ADFF;
+    text-decoration: underline;
+}
+
 @media (max-width: 800px) {
     .landing-page .login-form {
         position: relative !important;

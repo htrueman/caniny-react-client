@@ -1,0 +1,17 @@
+.terms-service-page {
+    max-width: 1400px;
+    width: 100%;
+    margin: 50px auto;
+}
+
+.terms-service-page h1{
+   text-align: center;
+    font-size: 40px;
+    color: #32ADFF;
+    margin: 0 0 30px 0;
+}
+.terms-service-page p {
+    font-size: 16px;
+    margin: 0 0 20px 0;
+    letter-spacing: 1px;
+}
