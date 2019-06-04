@@ -9,8 +9,11 @@ const baseUrl = 'https://api.caniny.com/api/v1/';
 
 (function () {
     const token = sessionStorage.getItem('token');
+    console.log('ttttt')
     if (token) {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+    } else {
+        delete axios.defaults.headers.common["Authorization"];
     }
 })();
 

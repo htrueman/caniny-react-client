@@ -19,6 +19,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import {NotificationManager} from 'react-notifications';
+import axios from "axios";
 
 
 const styles = theme => ({
@@ -95,6 +96,7 @@ class UserProfile extends Component {
         jwtService.removeUserProfile();
         window.scroll(0, 0);
         sessionStorage.removeItem('token');
+        delete axios.defaults.headers.common["Authorization"];
         this.props.history.push('/');
     };
 
