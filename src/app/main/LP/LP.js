@@ -72,6 +72,44 @@ class LP extends Component {
             })
     };
 
+    responseGoogle = res => {
+        const user = {
+            googleKey: res.tokenObj.login_hint,
+        };
+
+        this.props.googleLogin(user)
+            .then(() => {
+                this.props.getUser();
+                this.props.history.push('/animals')
+            })
+    };
+
+    responseFacebook = res => {
+        const url_string = window.location.href;
+        const code = new URL(url_string).searchParams.get("code");
+        if (!code) {
+            const user = {
+                facebookKey: res.accessToken,
+            };
+
+            this.props.facebookLogin(user)
+                .then(() => {
+                    this.props.getUser();
+                    this.props.history.push('/animals')
+                })
+        }
+    };
+
+    responseInstagram = res => {
+        console.log(res);
+        this.props.instagramLogin({
+            token: res
+        })
+        // .then(() => {
+        //     this.props.history.push('/animals')
+        // })
+    };
+
     componentDidMount() {
         let link = document.querySelector('.login-link');
         if (link) {
