@@ -127,9 +127,9 @@ class AnimalWindow extends Component {
     handleSaveAnimal = async (e) => {
         e.preventDefault();
         const {animal} = this.state;
-       this.setState({
-           disabledSave: true
-       });
+        this.setState({
+            disabledSave: true
+        });
 
         if (animal.id) {
             let newAnimal = {};
@@ -168,7 +168,13 @@ class AnimalWindow extends Component {
             if (animal.joinDate) newAnimal.joinDate = moment(animal.joinDate).format('YYYY-MM-DD');
             if (animal.owners[0]) if (animal.owners[0].registrationDate) newAnimal.owners[0].registrationDate = moment(animal.owners[0].registrationDate).format('YYYY-MM-DD');
 
-            await animalsService.updateAnimal(newAnimal, animal.id)
+            try {
+                await animalsService.updateAnimal(newAnimal, animal.id)
+            } catch (e) {
+                this.setState({
+                    disabledSave: false,
+                });
+            }
         } else {
             let newAnimal = {};
 
@@ -205,9 +211,15 @@ class AnimalWindow extends Component {
             newAnimal.joinDate = animal.joinDate ? moment(animal.joinDate).format('YYYY-MM-DD') : '';
             if (animal.owners[0]) if (animal.owners[0].registrationDate) newAnimal.owners[0].registrationDate = moment(animal.owners[0].registrationDate).format('YYYY-MM-DD');
 
-            await animalsService.createNewAnimal(
-                newAnimal
-            );
+            try {
+                await animalsService.createNewAnimal(
+                    newAnimal
+                );
+            } catch (e) {
+                this.setState({
+                    disabledSave: false,
+                });
+            }
         }
 
 
@@ -1083,7 +1095,8 @@ class AnimalWindow extends Component {
                                         Cancel
                                     </Button>
 
-                                    <Button type='submit' color="secondary" className={classes.button} disabled={disabledSave}>
+                                    <Button type='submit' color="secondary" className={classes.button}
+                                            disabled={disabledSave}>
                                         Save
                                     </Button>
                                 </DialogActions>
@@ -1354,7 +1367,8 @@ class AnimalWindow extends Component {
                                         Cancel
                                     </Button>
 
-                                    <Button type='submit' color="secondary" className={classes.button} disabled={disabledSave}>
+                                    <Button type='submit' color="secondary" className={classes.button}
+                                            disabled={disabledSave}>
                                         Save
                                     </Button>
                                 </DialogActions> : ''}
@@ -1705,7 +1719,8 @@ class AnimalWindow extends Component {
                                         Cancel
                                     </Button>
 
-                                    <Button type='submit' color="secondary" className={classes.button} disabled={disabledSave}>
+                                    <Button type='submit' color="secondary" className={classes.button}
+                                            disabled={disabledSave}>
                                         Save
                                     </Button>
                                 </DialogActions> : ''}
@@ -1821,7 +1836,8 @@ class AnimalWindow extends Component {
                                         Cancel
                                     </Button>
 
-                                    <Button type='submit' color="secondary" className={classes.button} disabled={disabledSave}>
+                                    <Button type='submit' color="secondary" className={classes.button}
+                                            disabled={disabledSave}>
                                         Save
                                     </Button>
                                 </DialogActions> : ''}
@@ -2119,7 +2135,8 @@ class AnimalWindow extends Component {
                                         Cancel
                                     </Button>
 
-                                    <Button type='submit' color="secondary" className={classes.button} disabled={disabledSave}>
+                                    <Button type='submit' color="secondary" className={classes.button}
+                                            disabled={disabledSave}>
                                         Save
                                     </Button>
                                 </DialogActions> : ''}
@@ -2196,7 +2213,8 @@ class AnimalWindow extends Component {
                                         Cancel
                                     </Button>
 
-                                    <Button type='submit' color="secondary" className={classes.button} disabled={disabledSave}>
+                                    <Button type='submit' color="secondary" className={classes.button}
+                                            disabled={disabledSave}>
                                         Save
                                     </Button>
                                 </DialogActions> : ''}
@@ -2408,7 +2426,8 @@ class AnimalWindow extends Component {
                                         Cancel
                                     </Button>
 
-                                    <Button type='submit' color="secondary" className={classes.button} disabled={disabledSave}>
+                                    <Button type='submit' color="secondary" className={classes.button}
+                                            disabled={disabledSave}>
                                         Save
                                     </Button>
                                 </DialogActions> : ''}
@@ -2625,7 +2644,8 @@ class AnimalWindow extends Component {
                                         Cancel
                                     </Button>
 
-                                    <Button type='submit' color="secondary" className={classes.button} disabled={disabledSave}>
+                                    <Button type='submit' color="secondary" className={classes.button}
+                                            disabled={disabledSave}>
                                         Save
                                     </Button>
                                 </DialogActions> : ''}
@@ -2692,7 +2712,8 @@ class AnimalWindow extends Component {
                                         Cancel
                                     </Button>
 
-                                    <Button type='submit' color="secondary" className={classes.button} disabled={disabledSave}>
+                                    <Button type='submit' color="secondary" className={classes.button}
+                                            disabled={disabledSave}>
                                         Save
                                     </Button>
                                 </DialogActions> : ''}

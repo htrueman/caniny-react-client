@@ -234,6 +234,15 @@ html {
     text-decoration: underline;
 }
 
+.terms-link-lp {
+    font-size: 20px;
+    position: absolute;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
 @media (max-width: 800px) {
     .landing-page .login-form {
         position: relative !important;
@@ -243,7 +252,7 @@ html {
     }
 
     .landing-page .login-form .social-login {
-       display: none;
+        display: none;
     }
 
     .landing-page .about {
@@ -254,6 +263,7 @@ html {
     .landing-page .images {
         flex-wrap: wrap;
     }
+
     .landing-page .banner-area {
         height: calc(50vh - 64px);
     }

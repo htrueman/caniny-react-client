@@ -116,8 +116,8 @@ class Register extends Component {
                     if (res.type === 'REGISTER_SUCCESS') {
                         this.props.showMessage({
                             message: 'Your request has\n' +
-                            'been sent to the\n' +
-                            'administrator',
+                                'been sent to the\n' +
+                                'administrator',
                             variant: 'success'
                         });
                         setTimeout(() => {
@@ -143,7 +143,8 @@ class Register extends Component {
                 .then((res) => {
                     if (res.type === 'REGISTER_SUCCESS') {
                         this.props.showMessage({
-                            message: 'Email sent. Check your inbox.',
+                            message: 'Email sent. Check your inbox or\n' +
+                                'your spam folder.',
                             variant: 'success'
                         });
                         setTimeout(() => {

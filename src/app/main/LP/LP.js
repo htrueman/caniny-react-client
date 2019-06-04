@@ -147,7 +147,6 @@ class LP extends Component {
                             <div className='social-login'>
                                 <GoogleLogin
                                     clientId="901607497184-hacbsio74tfqtub0cmn3karb4jrhpmgk.apps.googleusercontent.com"
-                                    // buttonText=""
                                     onSuccess={this.responseGoogle}
                                     onFailure={this.responseGoogle}
                                     cookiePolicy={'single_host_origin'}
@@ -383,6 +382,7 @@ class LP extends Component {
                     </div>
                 </section>
 
+                <Link className="terms-link-lp" to="/terms-service">Terms of Use</Link>
 
                 <footer className="footer-area">
                     {/*<div className="container">*/}
