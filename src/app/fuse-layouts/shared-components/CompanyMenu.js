@@ -57,7 +57,7 @@ class CompanyMenu extends Component {
                     <React.Fragment>
                         <MenuItem component={Link} to="/organization" onClick={this.userMenuClose}>
                             <ListItemIcon>
-                                <Icon>account_circle</Icon>
+                                <Avatar style={{width: '24px', height: '24px'}} className="" src='assets/images/avatars/company2.svg'/>
                             </ListItemIcon>
                             <ListItemText className="pl-0" primary="Organization Profile"/>
                         </MenuItem>
