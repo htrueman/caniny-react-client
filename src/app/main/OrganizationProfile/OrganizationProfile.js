@@ -42,7 +42,7 @@ const userTypes = {
     helper: 'Assistance',
     admin: 'Staff',
     super_admin: 'Admin',
-    django_admin: 'Django admin'
+    django_admin: 'Django adm in'
 };
 
 class OrganizationProfile extends Component {

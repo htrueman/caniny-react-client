@@ -122,7 +122,7 @@ class UserProfile extends Component {
         const {classes} = this.props,
             {
                 firstName,
-                lastName,
+                 lastName,
                 email,
                 address,
 

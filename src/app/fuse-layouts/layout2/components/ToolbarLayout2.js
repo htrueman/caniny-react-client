@@ -30,6 +30,8 @@ class ToolbarLayout2 extends Component {
     };
 
     async componentDidMount() {
+        const token = sessionStorage.getItem('token');
+
         Events.scrollEvent.register('begin', function (to, element) {
             console.log("begin", arguments);
         });
@@ -39,8 +41,11 @@ class ToolbarLayout2 extends Component {
         });
 
         scrollSpy.update();
-        this.getUser();
-        this.getOrganization();
+
+        if (token) {
+            this.getUser();
+            this.getOrganization();
+        }
     };
 
     getUser = async () => {
