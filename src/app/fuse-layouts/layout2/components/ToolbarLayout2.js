@@ -11,7 +11,6 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faUser, faPaw} from '@fortawesome/free-solid-svg-icons'
 import * as Actions from 'app/auth/store/actions';
 import {bindActionCreators} from "redux";
-
 import {Link, DirectLink, Events, scrollSpy, scroller} from 'react-scroll'
 
 
@@ -93,6 +92,21 @@ class ToolbarLayout2 extends Component {
         Events.scrollEvent.remove('end');
 
     };
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        const token = sessionStorage.getItem('token');
+
+        if (token) {
+            var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/5ced7841a667a0210d59debd/default';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        }
+    }
 
     render() {
         const {classes, settings, toolbarTheme, login} = this.props;

@@ -275,6 +275,9 @@ class Register extends Component {
                         validationErrors={{
                             isEmail: 'Please enter a valid email'
                         }}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                         InputProps={{
                             endAdornment: <InputAdornment position="end"><Icon className="text-20"
                                                                                color="action">email</Icon></InputAdornment>
@@ -292,6 +295,9 @@ class Register extends Component {
                         validationErrors={{
                             equalsField: 'Passwords do not match'
                         }}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                         InputProps={{
                             endAdornment: <InputAdornment position="end"><Icon className="text-20"
                                                                                color="action">vpn_key</Icon></InputAdornment>
@@ -308,6 +314,9 @@ class Register extends Component {
                         validations="equalsField:password1"
                         validationErrors={{
                             equalsField: 'Passwords do not match'
+                        }}
+                        InputLabelProps={{
+                            shrink: true,
                         }}
                         InputProps={{
                             endAdornment: <InputAdornment position="end"><Icon className="text-20"
@@ -342,6 +351,9 @@ class Register extends Component {
                         validationErrors={{
                             isEmail: 'Please enter a name'
                         }}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                         InputProps={{
                             endAdornment: <InputAdornment position="end"><Icon className="text-20"
                                                                                color="action">perm_identity</Icon></InputAdornment>
@@ -359,6 +371,9 @@ class Register extends Component {
                         validationErrors={{
                             isEmail: 'Please enter a valid email'
                         }}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                         InputProps={{
                             endAdornment: <InputAdornment position="end"><Icon className="text-20"
                                                                                color="action">email</Icon></InputAdornment>
@@ -371,6 +386,9 @@ class Register extends Component {
                         className="mb-16 w-full"
                         type="text"
                         rows={7}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                         multiline={true}
                         name="description"
                         label="Tell us about yourself (Optional)"
